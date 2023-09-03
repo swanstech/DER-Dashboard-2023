@@ -5,6 +5,7 @@ import {
     BrandGithub,
     BrandDiscord
 } from 'tabler-icons-react';
+import { signIn } from 'next-auth/react';
 
 
 export function GoogleButton(props: ButtonProps) {
@@ -48,6 +49,7 @@ export function DiscordButton(props: ButtonProps) {
 export function GithubButton(props: ButtonProps) {
   return (
     <Button
+      onClick={()=>signIn('github')}
       {...props}
       leftIcon={<BrandGithub size="1rem" />}
       sx={(theme) => ({

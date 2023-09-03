@@ -11,8 +11,9 @@ import {
     Button,
   } from '@mantine/core';
 import { SocialButtons } from 'n/components/SocialButtons/SocialButtons';
+
   
-  export default function AuthenticationTitle() {
+  export default function LoginPage() {
     return (
       <Container size={420} my={40}>
         <Title
@@ -30,7 +31,7 @@ import { SocialButtons } from 'n/components/SocialButtons/SocialButtons';
             <PasswordInput label="Password" placeholder="Your password" required mt="md" />
             <SocialButtons/>
             <Button fullWidth mt="xl">
-                Sign in
+                Login
             </Button>
         </Paper>
       </Container>
