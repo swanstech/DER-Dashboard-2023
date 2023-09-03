@@ -1,0 +1,55 @@
+import React from 'react';
+import { Accordion, useMantineTheme, rem } from '@mantine/core';
+import {
+    Tool,
+    ServerCog,
+    Apps,
+    FileAnalytics,
+  } from "tabler-icons-react";
+import HardwareInfoTable from './HardwareInformation';
+import NetworkInfoTable from './NetworkInfomation';
+import SoftwareInfoTable from './SoftwareInformation';
+
+
+export default function InformationAccordion(){
+    const theme = useMantineTheme();
+    const getColor = (color: string) => theme.colors[color][theme.colorScheme === 'dark' ? 5 : 7];
+
+    return (
+
+        <Accordion variant="filled" radius="xs" chevronPosition="right" transitionDuration={700}>
+        <Accordion.Item value="deviceHardware">
+        <Accordion.Control icon={<Tool size={rem(20)} color={getColor('red')} />} title="Hardware Information">
+            Hardware Information
+        </Accordion.Control>
+        <Accordion.Panel>
+            <HardwareInfoTable/>
+        </Accordion.Panel>
+        </Accordion.Item>
+
+        <Accordion.Item value="deviceNetwork">
+        <Accordion.Control icon={<ServerCog size={rem(20)} color={getColor('yellow')} />}>
+            Network Information
+        </Accordion.Control>
+        <Accordion.Panel>
+            <NetworkInfoTable/>
+        </Accordion.Panel>
+        </Accordion.Item>
+
+        <Accordion.Item value="deviceSoftware">
+        <Accordion.Control icon={<Apps size={rem(20)} color={getColor('blue')} />}>
+            Software Information
+        </Accordion.Control>
+        <Accordion.Panel>
+            <SoftwareInfoTable/>
+        </Accordion.Panel>
+        </Accordion.Item>
+
+        <Accordion.Item value="deviceCompliance">
+        <Accordion.Control icon={<FileAnalytics size={rem(20)} color={getColor('violet')} />}>
+            Compliance Information
+        </Accordion.Control>
+        <Accordion.Panel>Here is some device compliance information...</Accordion.Panel>
+        </Accordion.Item>
+    </Accordion>
+    )}
