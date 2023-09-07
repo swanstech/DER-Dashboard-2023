@@ -4,18 +4,6 @@ import InverterCommandCenter from '../components/CommandCenterComponents/Command
 import InformationAccordion from '../components/SetupComponents/DeviceInformation';
 
 export default function Settings() {
-
-  async function fetchData() {
-    try {
-      const response = await fetch('/api/networkInfo');
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-  fetchData();
-
   return (
     <div className="page-layout">
       <div className="top">
