@@ -1,3 +1,4 @@
+import VoltageInformation from 'n/components/VoltageDataComponents/VoltageInfoComponent';
 import React from 'react';
 import {BatteryAutomotive, ChartCandle} from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
@@ -15,7 +16,7 @@ export default function Settings() {
           <InformationAccordion />
         </div>
         <div className="right">
-          Voltage Information
+          <VoltageInformation/>
         </div>
       </div>
       <div className="bottom">
