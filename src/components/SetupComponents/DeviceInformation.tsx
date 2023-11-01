@@ -9,6 +9,7 @@ import {
 import HardwareInfoTable from './HardwareInformation';
 import NetworkInfoTable from './NetworkInfomation';
 import SoftwareInfoTable from './SoftwareInformation';
+import ComplianceInfoTable from './ComplianceInformation';
 
 
 export default function InformationAccordion(){
@@ -49,7 +50,9 @@ export default function InformationAccordion(){
         <Accordion.Control icon={<FileAnalytics size={rem(20)} color={getColor('violet')} />}>
             Compliance Information
         </Accordion.Control>
-        <Accordion.Panel>Here is some device compliance information...</Accordion.Panel>
+        <Accordion.Panel>
+            <ComplianceInfoTable/>
+        </Accordion.Panel>
         </Accordion.Item>
     </Accordion>
     )}

@@ -109,7 +109,7 @@ export default function InverterCommandCenter() {
         <label className="slider-label">
             Set Reactive Power <CloudStorm size="1rem"/>
         </label>
-        <RangeSlider size="xs" disabled={!editMode} defaultValue={[50, 100]} onChange={setReactivePower} step={10} min={0} max={200} color="green" marks={reactivePowerMarks}/>
+        <RangeSlider size="xs" disabled={!editMode} defaultValue={[50, 100]} onChange={setReactivePower} step={10} min={0} max={200} color="yellow" marks={reactivePowerMarks}/>
         <div className="value-display-range">
             <div className="value-display">Min: {reactivePower[0]}</div>
             <div className="value-display">Max: {reactivePower[1]}</div>
@@ -119,7 +119,7 @@ export default function InverterCommandCenter() {
         <label className="slider-label">
             Set Max Charge Rate <BatteryCharging size="1rem"/>
         </label>
-        <RangeSlider size="xs" disabled={!editMode} defaultValue={[50, 100]} onChange={setMaxChargeRate} step={10} min={0} max={200} color="blue" marks={maxChargeRateMarks} />
+        <RangeSlider size="xs" disabled={!editMode} defaultValue={[50, 100]} onChange={setMaxChargeRate} step={10} min={0} max={200} color="yellow" marks={maxChargeRateMarks} />
         <div className="value-display-range">
             <div className="value-display">Min: {maxChargeRate[0]}</div>
             <div className="value-display">Max: {maxChargeRate[1]}</div>
@@ -129,7 +129,7 @@ export default function InverterCommandCenter() {
         <label className="slider-label">
             Set Max Discharge Rate <Battery size="1rem"/>
         </label>
-        <RangeSlider size="xs" disabled={!editMode} defaultValue={[50, 100]} onChange={setMaxDischargeRate} step={10} min={0} max={200} color="red" marks={maxDischargeRateMarks}/>
+        <RangeSlider size="xs" disabled={!editMode} defaultValue={[50, 100]} onChange={setMaxDischargeRate} step={10} min={0} max={200} color="yellow" marks={maxDischargeRateMarks}/>
         <div className="value-display-range">
             <div className="value-display">Min: {maxDischargeRate[0]}</div>
             <div className="value-display">Max: {maxDischargeRate[1]}</div>
@@ -139,26 +139,27 @@ export default function InverterCommandCenter() {
         <label className="slider-label">
             Set Storage Capacity <CircleHalf size="1rem"/>
         </label>
-        <Slider size="xs" disabled={!editMode} value={storageCapacity} onChange={setStorageCapacity} min={0} max={200} color="purple" marks={storageCapacityMarks}/>
+        <Slider size="xs" disabled={!editMode} value={storageCapacity} onChange={setStorageCapacity} min={0} max={200} color="yellow" marks={storageCapacityMarks}/>
         <div className="value-display">Value: {storageCapacity}</div>
       </div>
       <style jsx>{`
         .command-center {
             margin: 0px;
-            padding: 50px;
+            padding: 15px;
             height: 100%;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
         }
         .slider {
             margin: 10px;
-            width: 80%; /* Adjust as needed */
-            margin-top: 20px;
+            width: 90%; /* Adjust as needed */
+            margin-top: 0px;
             pointerEvents: editMode ? 'auto' : 'none';
         }
         .slider-label {
             display: block;
-            margin-bottom: 5px;
-            font-size: 18px;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 12px;
             display: flex;
         }
         .value-display-range {
@@ -169,7 +170,6 @@ export default function InverterCommandCenter() {
         .value-display {
             display: none;
             padding: 10px;
-            margin: 5px;
             margin-top: 15px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
             border-radius: 10px;

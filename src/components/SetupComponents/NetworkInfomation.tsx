@@ -22,17 +22,24 @@ export default function NetworkInfoTable() {
     async function fetchData() {
       try {
         const response = await fetch('/api/networkInfo');
-        const data = await response.json() as NetworkData;
-        setNetworkData(data);
+        if (!response.ok) {
+          console.error("HTTP error", response.status);
+          return;
+        }
+        const rawData = await response.json();
+        const parsedData = JSON.parse(rawData.body);  // Parsing the 'body' string to JSON
+        setNetworkData(parsedData);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
     fetchData();
   }, []);
+  
 
   useEffect(() => {
-    if (networkData) {
+    if (networkData && networkData.data) {
+      console.log(networkData.data);
       const filtered = networkData.data.filter(item => {
         const rowData = Object.values(item)[0];
         if (rowData === undefined) {

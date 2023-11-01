@@ -1,21 +1,10 @@
+import VoltageInformation from 'n/components/VoltageDataComponents/VoltageInfoComponent';
 import React from 'react';
-import {BatteryAutomotive, ChartCandle} from 'tabler-icons-react';
+import {BatteryAutomotive, ChartCandle, Activity} from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
 import InformationAccordion from '../components/SetupComponents/DeviceInformation';
 
 export default function Settings() {
-
-  async function fetchData() {
-    try {
-      const response = await fetch('/api/networkInfo');
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  }
-  fetchData();
-
   return (
     <div className="page-layout">
       <div className="top">
@@ -27,7 +16,11 @@ export default function Settings() {
           <InformationAccordion />
         </div>
         <div className="right">
-          Voltage Information
+        <div className="right-heading"> 
+            <Activity size="3rem" color='green'/>
+            <h3>Voltage Reading</h3>
+          </div>
+          <VoltageInformation/>
         </div>
       </div>
       <div className="bottom">
@@ -57,7 +50,7 @@ export default function Settings() {
           display: flex;
           flex-direction: column;
           flex: 1;
-          padding: 8px;
+          padding: 2px;
           justify-content: space-between;
         }
         .left, .right {
@@ -69,7 +62,7 @@ export default function Settings() {
           display: flex;
           flex-direction: column;
         }
-        .left-heading, .bottom-heading {
+        .left-heading, .bottom-heading, .right-heading {
           display: flex;
           align-items: center;
           font-size: 24px;

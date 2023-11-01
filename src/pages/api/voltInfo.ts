@@ -9,7 +9,7 @@ const API_KEY = process.env.API_KEY || "";
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
 
   try {
-    const response = await axios.get(`${API_URL}/network_data`, {
+    const response = await axios.get(`${API_URL}/nameplate`, {
       headers: {
         'x-api-key': API_KEY
       }
