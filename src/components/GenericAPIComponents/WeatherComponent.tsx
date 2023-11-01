@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table } from '@mantine/core';
+import { Table, Loader } from '@mantine/core';
 
 interface WeatherComponentProps {
   latitude: number;
@@ -42,7 +42,7 @@ const WeatherComponent: React.FC<WeatherComponentProps> = ({ latitude, longitude
     fetchWeatherData();
   }, [latitude, longitude]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className='loader'><Loader color="blue" type="bars" /></div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
