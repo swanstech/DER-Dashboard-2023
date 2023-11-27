@@ -1,0 +1,31 @@
+---
+- name: Setup DER-dashboard using Docker
+  hosts: all
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: Install Docker
+      apt:
+        name: docker.io
+        state: latest
+
+    - name: Clone the repository
+      git:
+        repo: 'https://github.com/swanstech/DER-Dashboard-2023.git'
+        dest: /home/innesa/swanstech/der-dashboard
+
+    - name: Build Docker image
+      docker_image:
+        source: build
+        build:
+          path: /home/innesa/swanstech/der-dashboard
+        name: der_dashboard
+        tag: latest
+
+    - name: Run Docker container
+      docker_container:
+        name: der_dashboard
+        image: der_dashboard:latest
+        ports:
+          - "80:3000"
