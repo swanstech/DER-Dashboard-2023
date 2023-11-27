@@ -10,6 +10,9 @@ COPY . .
 # Install any needed packages specified in package.json
 RUN npm install
 
+# Build the Next.js application
+RUN npm run build
+
 # Make port 3000 available to the world outside this container
 EXPOSE 3000
 
