@@ -29,3 +29,15 @@
         image: der_dashboard:latest
         ports:
           - "8080:3000"
+        environment:
+          DATABASE_URL: postgresql://swansmasteruser:Swans2023@swans-database-instance.cshqtfl0i9jc.ap-southeast-2.rds.amazonaws.com:5432/SWANS_DATABASE
+          NEXTAUTH_SECRET: 4asH9Zvj6kPiyZPPY7iMmuiXqA04giLG6AwNr4Qa2C1NU5XN
+          DISCORD_CLIENT_ID: 
+          DISCORD_CLIENT_SECRET: 
+          GITHUB_CLIENT_ID: 3f863254df1cb93845ed
+          GITHUB_CLIENT_SECRET: 0d2023b15e381488173787ea2fd3dc5a5ae1f9ee
+          NEXT_PUBLIC_API_URL: https://57gmrwz863.execute-api.ap-southeast-2.amazonaws.com/Test
+          API_KEY: 4BjKWhneKq2byqMJ7bT3R89G39P9FqpS6xGZORre
+          GOOGLE_MAPS_API_KEY: AIzaSyBUDint2L3vIZI9juEw2ecSG37Frt5aT24
+
+
