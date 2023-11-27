@@ -99,7 +99,7 @@ export default function ComplianceInfoTable() {
   useEffect(() => {
     if (deviceData.device_security_certificate_expdate) {
       console.log(deviceData.device_security_certificate_expdate);
-      const status = checkDateStatus(deviceData.device_security_certificate_expdate);
+      const status = checkDateStatus(deviceData.device_security_certificate_expdate.toISOString());
       console.log(status);
       if (status === 'expired') {
         setIsExpired(true);

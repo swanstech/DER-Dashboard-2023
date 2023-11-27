@@ -14,8 +14,9 @@ import ComplianceInfoTable from './ComplianceInformation';
 
 export default function InformationAccordion(){
     const theme = useMantineTheme();
-    const getColor = (color: string) => theme.colors[color][theme.colorScheme === 'dark' ? 5 : 7];
-
+    const getColor = (color: string) => {
+        return theme.colors?.[color]?.[theme.colorScheme === 'dark' ? 5 : 7] ?? 'inherit';
+    };
     return (
 
         <Accordion variant="filled" radius="xs" chevronPosition="right" transitionDuration={700}>
