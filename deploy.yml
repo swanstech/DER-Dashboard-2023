@@ -31,6 +31,7 @@
           - "8080:3000"
         env:
           DATABASE_URL: "postgresql://swansmasteruser:Swans2023@swans-database-instance.cshqtfl0i9jc.ap-southeast-2.rds.amazonaws.com:5432/SWANS_DATABASE"
+          NEXTAUTH_URL: "http://localhost:3000"
           NEXTAUTH_SECRET: "4asH9Zvj6kPiyZPPY7iMmuiXqA04giLG6AwNr4Qa2C1NU5XN"
           DISCORD_CLIENT_ID: ""
           DISCORD_CLIENT_SECRET: ""
