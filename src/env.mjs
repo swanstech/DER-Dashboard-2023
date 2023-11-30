@@ -43,8 +43,8 @@ export const env = createEnv({
     NODE_ENV: process.env.NODE_ENV,
     NEXTAUTH_SECRET: "4asH9Zvj6kPiyZPPY7iMmuiXqA04giLG6AwNr4Qa2C1NU5XN",
     NEXTAUTH_URL: "http://localhost:3000",
-    DISCORD_CLIENT_ID: z.string().min(1),
-    DISCORD_CLIENT_SECRET:z.string().min(1),
+    DISCORD_CLIENT_ID="",
+    DISCORD_CLIENT_SECRET="",
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation.
