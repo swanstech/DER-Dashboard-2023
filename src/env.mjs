@@ -39,10 +39,10 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    DATABASE_URL: 'postgresql://swansmasteruser:Swans2023@swans-database-instance.cshqtfl0i9jc.ap-southeast-2.rds.amazonaws.com:5432/SWANS_DATABASE',
+    DATABASE_URL: process.env.DATABASE_URL,
     NODE_ENV: process.env.NODE_ENV,
-    NEXTAUTH_SECRET: "4asH9Zvj6kPiyZPPY7iMmuiXqA04giLG6AwNr4Qa2C1NU5XN",
-    NEXTAUTH_URL: "http://localhost:3000",
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
     DISCORD_CLIENT_ID="",
     DISCORD_CLIENT_SECRET="",
   },
