@@ -21,6 +21,7 @@
     "@t3-oss/env-nextjs": "^0.6.0",
     "@tabler/icons-react": "^2.32.0",
     "axios": "^1.5.0",
+    "echarts": "^5.4.3",
     "keycloak": "^1.2.0",
     "keycloak-js": "^23.0.1",
     "n": "^9.1.0",
