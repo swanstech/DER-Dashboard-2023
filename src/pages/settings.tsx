@@ -1,6 +1,6 @@
 import VoltageInformation from 'n/components/VoltageDataComponents/VoltageInfoComponent';
 import React from 'react';
-import {BatteryAutomotive, ChartCandle, Activity} from 'tabler-icons-react';
+import { BatteryAutomotive, ChartCandle, Activity } from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
 import InformationAccordion from '../components/SetupComponents/DeviceInformation';
 
@@ -9,26 +9,26 @@ export default function Settings() {
     <div className="page-layout">
       <div className="top">
         <div className="left">
-          <div className="left-heading"> 
-            <BatteryAutomotive size="3rem" color='green'/>
+          <div className="left-heading">
+            <BatteryAutomotive size="3rem" color='green' />
             <h2>Inverter Information</h2>
           </div>
           <InformationAccordion />
         </div>
         <div className="right">
-        <div className="right-heading"> 
-            <Activity size="3rem" color='green'/>
+          <div className="right-heading">
+            <Activity size="3rem" color='green' />
             <h3>Voltage Reading</h3>
           </div>
-          <VoltageInformation/>
+          <VoltageInformation />
         </div>
       </div>
       <div className="bottom">
-        <div className="bottom-heading"> 
-          <ChartCandle size="3rem" color='green'/>
+        <div className="bottom-heading">
+          <ChartCandle size="3rem" color='green' />
           <h2>Command Centre</h2>
         </div>
-        <InverterCommandCenter/>
+        <InverterCommandCenter />
       </div>
       <style jsx>{`
         .page-layout {

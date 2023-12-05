@@ -22,11 +22,6 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/security-monitoring": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/security-monitoring.js"
-    ],
     "/security-ops-monitoring": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
