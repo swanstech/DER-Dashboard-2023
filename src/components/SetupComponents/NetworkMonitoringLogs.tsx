@@ -31,7 +31,7 @@ export default function NetworkMonitoringLogs() {
   };
 
   return (
-    <div style={{ marginTop: '-170px' }}>
+    <div style={{ marginTop: '-250px' }}>
       <div>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
           <thead>

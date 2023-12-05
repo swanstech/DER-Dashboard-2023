@@ -57,6 +57,9 @@ export default function Settings() {
           padding: 2px;
           justify-content: space-between;
         }
+        .bottom-b{
+          margin: 2px;
+        }
         .left, .right {
           flex: 1;
           margin: 8px;
