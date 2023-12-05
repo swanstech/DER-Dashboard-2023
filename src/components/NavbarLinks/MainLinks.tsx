@@ -26,6 +26,12 @@ const data = [
     to: "/security-monitoring",
   },
   {
+    icon: <Terminal2 size="1rem" />,
+    color: "violet",
+    label: "Security Ops Monitoring",
+    to: "/security-ops-monitoring",
+  },
+  {
     icon: <Bolt size="1rem" />,
     color: "grape",
     label: "Energy Monitoring",
