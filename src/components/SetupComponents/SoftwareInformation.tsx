@@ -1,28 +1,109 @@
-import { Table } from '@mantine/core';
+import React, { useState, useEffect } from 'react';
+
+interface DeviceData {
+  der_id?: string;
+  software_version?: string;
+  software_activation_date? : string;
+  firmware_version?: string;
+  firmware_activation_date? : string;
+  uptodate?: boolean;
+  last_update?: string;
+  next_update?: string;
+  
+}
+
+interface SoftwareData {
+  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string, string, string] }[];
+}
 
 export default function SoftwareInfoTable() {
-  const softwareData = {
-    software_version: '11.3.1',
-    uptodate: true,
-    last_update: "11/06/2023",
-    next_update: "25/07/2023",
-  };
+  const [softwareData, setSoftwareData] = useState<SoftwareData| null>(null);
+  const [deviceData, setDeviceData] = useState<DeviceData>({});
+  const deviceId = "DER_1";
 
-  const rows = [
-    ['Software Version', softwareData.software_version],
-    ['Up-to-date', softwareData.uptodate ? 'Yes' : 'No'],
-    ['Last Update Run', softwareData.last_update],
-    ['Next Update Due', softwareData.next_update],
-  ].map(([key, value]) => (
-    <tr key={key}>
-      <td>{key}</td>
-      <td>{value}</td>
-    </tr>
-  ));
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const response = await fetch('/api/deviceInfo');
+
+        if (!response.ok) {
+          console.error("HTTP error", response.status);
+          return;
+        }
+
+        const rawData = await response.json();
+
+        if (typeof rawData.body === 'string') {
+          const parsedData = JSON.parse(rawData.body);
+          setSoftwareData(parsedData);
+        } else {
+          setSoftwareData(rawData);
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (softwareData && softwareData.data) {
+      const filteredData = softwareData.data.find(item => {
+        const [derId] = Object.values(item);
+        return derId[0] === deviceId;
+      });
+
+      if (filteredData) {
+        const [der_id ,
+          der_name ,
+          der_type ,
+          manufacturer_id,
+          manufacturer_serial_number ,
+          manufacture_date ,
+          manufacturer_hw_version ,
+          manufacturer_info ,
+          manufacturer_model_number ,
+          latest_sw_version,
+  latest_sw_release_date,
+  latest_firmware_version,
+  latest_firmware_release_date ,location] = filteredData[Object.keys(filteredData)[0]];
+       
+        // Using the softwareData values for demonstration
+       
+        
+        setDeviceData({
+          der_id: der_id,
+          software_version: latest_sw_version,
+          software_activation_date: latest_sw_release_date,
+          firmware_version : latest_firmware_version,
+          firmware_activation_date: latest_sw_release_date,
+          uptodate: true,
+          last_update: "11/06/2023",
+          next_update: "25/07/2023",
+        });
+      }
+    }
+  }, [softwareData, deviceId]);
 
   return (
-    <Table>
-      <tbody>{rows}</tbody>
-    </Table>
+    <div>
+      {deviceData.der_id ? (
+        <>
+          <p><strong>DER ID:</strong> {deviceData.der_id}</p>
+          {/* Display only softwareData values */}
+          <p><strong>S/W Version:</strong> {deviceData.software_version}</p>
+          {/* <p><strong>Up-to-date:</strong> {deviceData.uptodate ? 'Yes' : 'No'}</p> */}
+          
+          <p><strong>Release:</strong> {deviceData.software_activation_date}</p>
+          <p><strong>F/W Version:</strong> {deviceData.firmware_version}</p>
+          <p><strong>Release:</strong> {deviceData.firmware_activation_date}</p>
+          {/* <p><strong>Last Update Run:</strong> {deviceData.last_update}</p>
+          <p><strong>Next Update Due:</strong> {deviceData.next_update}</p> */}
+        </>
+      ) : (
+        <p>No data available for the specified device ID.</p>
+      )}
+    </div>
   );
 }
