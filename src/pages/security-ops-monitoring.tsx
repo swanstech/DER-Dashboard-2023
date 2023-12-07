@@ -2,9 +2,9 @@ import VoltageInformation from 'n/components/VoltageDataComponents/VoltageInfoCo
 import React from 'react';
 import { BatteryAutomotive, ChartCandle, Activity } from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
-import InformationAccordion from '../components/SetupComponents/DerTechnicalSpecifications';
-import DerCompliance from 'n/components/SetupComponents/DerCompliance';
+import TechnicalSpecifications from '../components/SetupComponents/TechnicalSpecifications';
 import NetworkMonitoringLogs from 'n/components/SetupComponents/NetworkMonitoringLogs';
+import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInformation';
 
 export default function Settings() {
   return (
@@ -15,14 +15,14 @@ export default function Settings() {
             <BatteryAutomotive size="3rem" color='green' />
             <h3>DER Technical Specifications</h3>
           </div>
-          <InformationAccordion />
+          <TechnicalSpecifications />
         </div>
         <div className="right">
           <div className="right-heading">
             <Activity size="3rem" color='green' />
             <h3>Compliance Specifications</h3>
           </div>
-          <DerCompliance />
+          <ComplianceInfoTable />
         </div>
       </div>
       <div className="bottom">

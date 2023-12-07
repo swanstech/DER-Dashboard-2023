@@ -11,14 +11,14 @@ export default function Settings() {
         <div className="left">
           <div className="left-heading"> 
             <BatteryAutomotive size="3rem" color='green'/>
-            <h2>Inverter Information</h2>
+            <h2>DER Information</h2>
           </div>
           <InformationAccordion />
         </div>
         <div className="right">
         <div className="right-heading"> 
             <Activity size="3rem" color='green'/>
-            <h3>Voltage Reading</h3>
+            <h3>DER Critical Points</h3>
           </div>
           <VoltageInformation/>
         </div>

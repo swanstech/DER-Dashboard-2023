@@ -12,18 +12,12 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 
 const data = [
-  { icon: <HomeBolt size="1rem" />, color: "blue", label: "Home", to: "/" },
+  { icon: <HomeBolt size="1rem" />, color: "blue", label: "Home", to: "/home" },
   {
     icon: <BoxSeam size="1rem" />,
     color: "red",
     label: "Asset Security Status",
     to: "/asset-security",
-  },
-  {
-    icon: <Terminal2 size="1rem" />,
-    color: "violet",
-    label: "Security Monitoring",
-    to: "/security-monitoring",
   },
   {
     icon: <Terminal2 size="1rem" />,

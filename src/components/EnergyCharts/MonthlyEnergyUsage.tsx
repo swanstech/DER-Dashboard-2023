@@ -52,40 +52,6 @@ const MonthlyEnergyUsage = () => {
                   {type: 'average', name: 'Average'}
               ]
             },
-            // markArea: {
-            //     itemStyle: {
-            //         color: 'rgba(255, 173, 177, 0.4)',
-            //       },
-            //     data: [
-            //       [
-            //         {
-            //           name: 'Q1',
-            //           xAxis: '1'
-            //         },
-            //         {
-            //           xAxis: '10'
-            //         }
-            //       ],
-            //       [
-            //         {
-            //           name: '2Q',
-            //           xAxis: '11'
-            //         },
-            //         {
-            //           xAxis: '20'
-            //         }
-            //       ],
-            //       [
-            //         {
-            //           name: '3Q',
-            //           xAxis: '21'
-            //         },
-            //         {
-            //           xAxis: '31'
-            //         }
-            //       ],
-            //     ],
-            //   },
           },
         ],
       };
