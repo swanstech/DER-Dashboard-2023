@@ -1,6 +1,6 @@
 import VoltageInformation from 'n/components/VoltageDataComponents/VoltageInfoComponent';
 import React from 'react';
-import { BatteryAutomotive, ChartCandle, Activity } from 'tabler-icons-react';
+import { BatteryAutomotive, ChartCandle, FileAnalytics } from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
 import TechnicalSpecifications from '../components/SetupComponents/TechnicalSpecifications';
 import NetworkMonitoringLogs from 'n/components/SetupComponents/NetworkMonitoringLogs';
@@ -19,7 +19,7 @@ export default function Settings() {
         </div>
         <div className="right">
           <div className="right-heading">
-            <Activity size="3rem" color='green' />
+            <FileAnalytics size="3rem" color='violet' />
             <h3>Compliance Specifications</h3>
           </div>
           <ComplianceInfoTable />
