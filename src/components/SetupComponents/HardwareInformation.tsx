@@ -6,14 +6,14 @@ interface DeviceData {
   der_id?: string;
   der_name?: string;
   der_type?: string;
+  manufacturer_model_number?: string;
   manufacturer_serial_number?: string;
-  manufacture_date?: string;
   manufacturer_hw_version?: string;
   location?: string;
 }
 
 interface HardwareData {
-  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string] }[];
+  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string, string, string] }[];
 }
 
 // Main function component
@@ -76,15 +76,17 @@ export default function HardwareInfoTable() {
         manufacturer_hw_version ,
         manufacturer_info ,
         manufacturer_model_number ,
-        sw_activation_date ,
-        sw_version, location] = filteredData[Object.keys(filteredData)[0]];
+        latest_sw_version,
+latest_sw_release_date,
+latest_firmware_version,
+latest_firmware_release_date ,location] = filteredData[Object.keys(filteredData)[0]];
 
         setDeviceData({
           der_id: der_id,
           der_name: der_name,
           der_type: der_type,
+          manufacturer_model_number: manufacturer_model_number,
           manufacturer_serial_number: manufacturer_serial_number,
-          manufacture_date: manufacture_date,
           manufacturer_hw_version: manufacturer_hw_version,
           location: location,
         });
@@ -100,8 +102,8 @@ export default function HardwareInfoTable() {
           <p><strong>DER ID:</strong> {deviceData.der_id}</p>
           <p><strong>Name:</strong> {deviceData.der_name}</p>
           <p><strong>Type:</strong> {deviceData.der_type}</p>
-          <p><strong>Serial No.:</strong> {deviceData.manufacturer_serial_number}</p>
-          <p><strong>MFG Date:</strong> {deviceData.manufacture_date}</p>
+          <p><strong>MFG Model No.:</strong> {deviceData.manufacturer_model_number}</p>
+          <p><strong>MFG Serial No.:</strong> {deviceData.manufacturer_serial_number}</p>
           <p><strong>HW Version:</strong> {deviceData.manufacturer_hw_version}</p>
           <p><strong>Location:</strong> {deviceData.location}</p>
         </>

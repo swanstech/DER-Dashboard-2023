@@ -4,6 +4,8 @@ interface DeviceData {
   der_id?: string;
   software_version?: string;
   software_activation_date? : string;
+  firmware_version?: string;
+  firmware_activation_date? : string;
   uptodate?: boolean;
   last_update?: string;
   next_update?: string;
@@ -11,7 +13,7 @@ interface DeviceData {
 }
 
 interface SoftwareData {
-  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string] }[];
+  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string, string, string] }[];
 }
 
 export default function SoftwareInfoTable() {
@@ -53,7 +55,8 @@ export default function SoftwareInfoTable() {
       });
 
       if (filteredData) {
-        const [der_id ,der_name ,
+        const [der_id ,
+          der_name ,
           der_type ,
           manufacturer_id,
           manufacturer_serial_number ,
@@ -61,16 +64,20 @@ export default function SoftwareInfoTable() {
           manufacturer_hw_version ,
           manufacturer_info ,
           manufacturer_model_number ,
-          sw_activation_date ,
-          sw_version, location] = filteredData[Object.keys(filteredData)[0]];
+          latest_sw_version,
+  latest_sw_release_date,
+  latest_firmware_version,
+  latest_firmware_release_date ,location] = filteredData[Object.keys(filteredData)[0]];
        
         // Using the softwareData values for demonstration
        
         
         setDeviceData({
           der_id: der_id,
-          software_version: sw_version,
-          software_activation_date: sw_activation_date,
+          software_version: latest_sw_version,
+          software_activation_date: latest_sw_release_date,
+          firmware_version : latest_firmware_version,
+          firmware_activation_date: latest_sw_release_date,
           uptodate: true,
           last_update: "11/06/2023",
           next_update: "25/07/2023",
@@ -85,10 +92,14 @@ export default function SoftwareInfoTable() {
         <>
           <p><strong>DER ID:</strong> {deviceData.der_id}</p>
           {/* Display only softwareData values */}
-          <p><strong>Software Version:</strong> {deviceData.software_version}</p>
-          <p><strong>Up-to-date:</strong> {deviceData.uptodate ? 'Yes' : 'No'}</p>
-          <p><strong>Last Update Run:</strong> {deviceData.last_update}</p>
-          <p><strong>Next Update Due:</strong> {deviceData.next_update}</p>
+          <p><strong>S/W Version:</strong> {deviceData.software_version}</p>
+          {/* <p><strong>Up-to-date:</strong> {deviceData.uptodate ? 'Yes' : 'No'}</p> */}
+          
+          <p><strong>Release:</strong> {deviceData.software_activation_date}</p>
+          <p><strong>F/W Version:</strong> {deviceData.firmware_version}</p>
+          <p><strong>Release:</strong> {deviceData.firmware_activation_date}</p>
+          {/* <p><strong>Last Update Run:</strong> {deviceData.last_update}</p>
+          <p><strong>Next Update Due:</strong> {deviceData.next_update}</p> */}
         </>
       ) : (
         <p>No data available for the specified device ID.</p>
