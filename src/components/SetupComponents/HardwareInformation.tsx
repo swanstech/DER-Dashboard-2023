@@ -1,26 +1,27 @@
 // Importing required dependencies and components
 import React, { useState, useEffect } from 'react';
-import { Table } from '@mantine/core';
 
 // Declare interfaces for types
 interface DeviceData {
-  device_id?: number;
-  nameplate_id?: number;
-  device_name?: string;
-  device_model_number?: string;
-  device_location?: string;
+  der_id?: string;
+  der_name?: string;
+  der_type?: string;
+  manufacturer_serial_number?: string;
+  manufacture_date?: string;
+  manufacturer_hw_version?: string;
+  location?: string;
 }
 
 interface HardwareData {
-  data: Array<{[key: string]: [number, number, string, string, string, string]}>;
+  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string] }[];
 }
 
 // Main function component
 export default function HardwareInfoTable() {
   // Using React Hooks to manage state
-  const [HardwareData, setHardwareData] = useState<HardwareData | null>(null);
+  const [hardwareData, setHardwareData] = useState<HardwareData | null>(null);
   const [deviceData, setDeviceData] = useState<DeviceData>({});
-  const deviceId = "1";  // Placeholder for actual device ID
+  const deviceId = "DER_1";  // Placeholder for actual device ID
 
   // Fetching data with useEffect (Runs when the component mounts)
   useEffect(() => {
@@ -28,16 +29,16 @@ export default function HardwareInfoTable() {
       try {
         // Fetching data from the API
         const response = await fetch('/api/deviceInfo');
-        
+
         // Handling HTTP errors
         if (!response.ok) {
           console.error("HTTP error", response.status);
           return;
         }
-        
+
         // Parsing the JSON response
         const rawData = await response.json();
-        
+
         // Check if rawData.body is a string that needs to be parsed
         if (typeof rawData.body === 'string') {
           const parsedData = JSON.parse(rawData.body);
@@ -58,67 +59,55 @@ export default function HardwareInfoTable() {
 
   // Filtering the fetched data based on device ID
   useEffect(() => {
-    if (HardwareData && HardwareData.data) {
-      const filtered = HardwareData.data.filter(item => {
-        const rowData = Object.values(item)[0];
-        
-        // Type checking and casting
-        if (rowData) {
-          const typedRowData = rowData as [number, number, string, string, string, string];
-          return typedRowData[1] === parseInt(deviceId, 10);
-        }
-        return false;
+    if (hardwareData && hardwareData.data) {
+      const filteredData = hardwareData.data.find(item => {
+        const [derId] = Object.values(item);
+        return derId[0] === deviceId;
       });
-      
+
       // Updating the deviceData state based on filtered data
-      if (filtered.length > 0) {
-        const firstFilteredItem = filtered[0];
-        const rowData = firstFilteredItem ? Object.values(firstFilteredItem)[0] : null;
-      
-        if (rowData) {
-          const [device_id, nameplate_id, device_name, device_model_number, device_location] = rowData as [number, number, string, string, string, string];
-          setDeviceData({
-            nameplate_id: nameplate_id,
-            device_name: device_name,
-            device_model_number: device_model_number,
-            device_location: device_location,
-          });
-        }
+      if (filteredData) {
+        const [der_id ,
+        der_name ,
+        der_type ,
+        manufacturer_id,
+        manufacturer_serial_number ,
+        manufacture_date ,
+        manufacturer_hw_version ,
+        manufacturer_info ,
+        manufacturer_model_number ,
+        sw_activation_date ,
+        sw_version, location] = filteredData[Object.keys(filteredData)[0]];
+
+        setDeviceData({
+          der_id: der_id,
+          der_name: der_name,
+          der_type: der_type,
+          manufacturer_serial_number: manufacturer_serial_number,
+          manufacture_date: manufacture_date,
+          manufacturer_hw_version: manufacturer_hw_version,
+          location: location,
+        });
       }
     }
-  }, [HardwareData]); // Re-run when HardwareData changes
-
-  // Preparing table rows
-  const rows = deviceData ? [
-    ["Nameplate ID", deviceData.nameplate_id],
-    ["Device Name", deviceData.device_name],
-    ["Device Model Number", deviceData.device_model_number],
-    ["Device Location", deviceData.device_location],
-  ].map(([key, value]) => (
-    <tr key={key}>
-      <td>{key}</td>
-      <td>{value}</td>
-    </tr>
-  )) : null;
+  }, [hardwareData, deviceId]);
 
   // Return JSX for rendering
   return (
-    <Table>
-      <tbody>{rows}</tbody>
-    </Table>
+    <div>
+      {deviceData.der_id ? (
+        <>
+          <p><strong>DER ID:</strong> {deviceData.der_id}</p>
+          <p><strong>Name:</strong> {deviceData.der_name}</p>
+          <p><strong>Type:</strong> {deviceData.der_type}</p>
+          <p><strong>Serial No.:</strong> {deviceData.manufacturer_serial_number}</p>
+          <p><strong>MFG Date:</strong> {deviceData.manufacture_date}</p>
+          <p><strong>HW Version:</strong> {deviceData.manufacturer_hw_version}</p>
+          <p><strong>Location:</strong> {deviceData.location}</p>
+        </>
+      ) : (
+        <p>No data available for the specified device ID.</p>
+      )}
+    </div>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,37 +1,46 @@
-import React from 'react';
-import { useMantineTheme, rem } from '@mantine/core';
-import { Tool, Apps } from 'tabler-icons-react';
-
-// Assume these are your data values
-const rowsData = [
-  {
-    sourceIP: '192.168.1.1',
-    destinationIP: '192.168.1.2',
-    sourcePort: '12345',
-    destinationPort: '54321',
-    protocol: 'TCP',
-    data: 'Lorem ipsum',
-    timeStamp: '2023-12-05 12:34:56',
-  },
-  {
-    sourceIP: '192.168.2.1',
-    destinationIP: '192.168.2.2',
-    sourcePort: '54321',
-    destinationPort: '12345',
-    protocol: 'UDP',
-    data: 'Dolor sit amet',
-    timeStamp: '2023-12-05 13:45:00',
-  },
-];
+import React, { useState, useEffect } from 'react';
+import { useMantineTheme, Container, Pagination } from '@mantine/core'; // Import Pagination component from Mantine
 
 export default function NetworkMonitoringLogs() {
   const theme = useMantineTheme();
-  const getColor = (color) => {
-    return theme.colors?.[color]?.[theme.colorScheme === 'dark' ? 5 : 7] ?? 'inherit';
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(10); // Adjust the number of items per page as needed
+  const [totalPages, setTotalPages] = useState(1);
+  const [rowsData, setRowsData] = useState([]);
+  const [expandedRows, setExpandedRows] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, pageSize]);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`/api/networklogs?page=${currentPage}&pageSize=${pageSize}`);
+      if (response.ok) {
+        const { data, totalPages } = await response.json();
+        setRowsData(data);
+        setTotalPages(totalPages);
+      } else {
+        console.error('Failed to fetch data from the API');
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
+  const toggleRow = (index) => {
+    setExpandedRows((prev) => {
+      const isExpanded = prev.includes(index);
+      return isExpanded ? prev.filter((item) => item !== index) : [...prev, index];
+    });
+  };
+
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
   };
 
   return (
-    <div style={{ marginTop: '-250px' }}>
+    <Container style={{ marginTop: '-30px', marginLeft: '-10px' }}>
       <div>
         <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'center' }}>
           <thead>
@@ -47,19 +56,39 @@ export default function NetworkMonitoringLogs() {
           </thead>
           <tbody>
             {rowsData.map((rowData, rowIndex) => (
-              <tr key={rowIndex}>
-                <td>{rowData.sourceIP}</td>
-                <td>{rowData.destinationIP}</td>
-                <td>{rowData.sourcePort}</td>
-                <td>{rowData.destinationPort}</td>
-                <td>{rowData.protocol}</td>
-                <td>{rowData.data}</td>
-                <td>{rowData.timeStamp}</td>
-              </tr>
+              <React.Fragment key={rowIndex}>
+                <tr>
+                  <td>{rowData.sourceIP}</td>
+                  <td>{rowData.destinationIP}</td>
+                  <td>{rowData.sourcePort}</td>
+                  <td>{rowData.destinationPort}</td>
+                  <td>{rowData.protocol}</td>
+                  <td style={{ cursor: 'pointer' }} onClick={() => toggleRow(rowIndex)}>
+                    {expandedRows.includes(rowIndex) ? '▲' : '▼'}
+                  </td>
+                  <td>{rowData.timeStamp}</td>
+                </tr>
+                {expandedRows.includes(rowIndex) && (
+                  <tr>
+                    <td colSpan={7} style={{ textAlign: 'left', padding: '10px' }}>
+                      {rowData.data}
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
             ))}
           </tbody>
         </table>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+        <Pagination
+          total={totalPages}
+          value={currentPage}
+          onChange={handlePageChange}
+          size="lg"
+          withControls
+        />
       </div>
-    </div>
+      </div>
+    </Container>
   );
 }
