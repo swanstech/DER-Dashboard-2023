@@ -70,11 +70,11 @@ export default function InverterCommandCenter() {
   return (
     <div className='command-center'>
 
-      <div className="edit-button">
+      {/* <div className="edit-button">
         <Button variant="outline" onClick={handleEditSaveButton}>
           {editMode ? "Save" : "Edit"}
         </Button>
-      </div>
+      </div> */}
 
       {alertVisible && <Alert icon={<AlertCircle size="1rem" />} title="Safety Alert!" color="red">
         You are going to make changes to the inverter settings. Please make sure you know what you are doing.

@@ -1,0 +1,11 @@
+{
+  "/_error": "pages/_error.js",
+  "/_app": "pages/_app.js",
+  "/_document": "pages/_document.js",
+  "/settings": "pages/settings.js",
+  "/api/networkInfo": "pages/api/networkInfo.js",
+  "/api/complianceInfo": "pages/api/complianceInfo.js",
+  "/security-monitoring": "pages/security-monitoring.js",
+  "/api/deviceInfo": "pages/api/deviceInfo.js",
+  "/api/weather": "pages/api/weather.js"
+}
