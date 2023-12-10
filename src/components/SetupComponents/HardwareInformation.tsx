@@ -13,7 +13,7 @@ interface DeviceData {
 }
 
 interface HardwareData {
-  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string, string, string] }[];
+  data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string, string, string,string,string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string] }[];
 }
 
 // Main function component
@@ -67,19 +67,19 @@ export default function HardwareInfoTable() {
 
       // Updating the deviceData state based on filtered data
       if (filteredData) {
-        const [der_id ,
-        der_name ,
-        der_type ,
-        manufacturer_id,
-        manufacturer_serial_number ,
-        manufacture_date ,
-        manufacturer_hw_version ,
-        manufacturer_info ,
-        manufacturer_model_number ,
-        latest_sw_version,
-latest_sw_release_date,
-latest_firmware_version,
-latest_firmware_release_date ,location] = filteredData[Object.keys(filteredData)[0]];
+        const [der_id,
+          der_name,
+          der_type,
+          manufacturer_id,
+          manufacturer_serial_number,
+          manufacture_date,
+          manufacturer_hw_version,
+          manufacturer_info,
+          manufacturer_model_number,
+          latest_sw_version,
+          latest_sw_release_date,
+          latest_firmware_version,
+          latest_firmware_release_date, location,setting_id, der_id_set, set_max_ac_current, set_max_usable_energy_storage, set_minpf_overexcited_limit, set_minpf_underexcited_limit, set_max_apparent_power, set_max_reactive_power_tx, set_max_reactive_power_rx, set_max_active_power_tx, set_max_energy_storage, set_min_ac_voltage, set_max_ac_voltage, current_sw_version, sw_last_update_date, current_firmware_version, firmware_last_update_date] = filteredData[Object.keys(filteredData)[0]];
 
         setDeviceData({
           der_id: der_id,

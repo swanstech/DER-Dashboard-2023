@@ -5,6 +5,7 @@ import ExpiredNotification from '../UtilComponents/ExpiredNotification';
 import CloseExpiryNotification from '../UtilComponents/CloseExpiryNotification';
 
 import { checkDateStatus } from '../../utils/expDateUtils';
+import { FileAnalytics } from 'tabler-icons-react';
 
 
 
@@ -130,6 +131,10 @@ export default function ComplianceInfoTable() {
     // Return JSX for rendering
     return (
       <div>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '8px' }}>
+                <FileAnalytics size="1.5rem" color="violet" style={{ marginRight: '8px' }} />
+                <div style={{ fontWeight: 'bold', marginRight: '8px' }}>Compliance Information</div>
+            </div>
       <Table>
         <tbody>{rows}</tbody>
       </Table>
