@@ -1,104 +1,123 @@
 import React from 'react';
-import { Container, Paper, Box, Button, Title, Text } from '@mantine/core';
-import { Activity, CloudStorm, Map2, ChartBar } from 'tabler-icons-react';
+import { Tabs } from '@mantine/core';
+import { Activity, CloudStorm, Map2 } from 'tabler-icons-react';
+import GoogleMapComponent from '../components/GenericAPIComponents/GoogleMapsComponent';
 import WeatherComponent from '../components/GenericAPIComponents/WeatherComponent';
-import EnergyMonitoringChart from '../components/EnergyCharts/DailyEnergyUsage'; // Your energy monitoring chart component
-import GoogleMapComponent from '../components/GenericAPIComponents/GoogleMapsComponent'; // Your Google Maps component
+import DailyEnergyUsage from '../components/EnergyCharts/DailyEnergyUsage';
+import FrequencyReading from '../components/EnergyCharts/FrequencyReading';
+import MonthlyEnergyUsage from '../components/EnergyCharts/MonthlyEnergyUsage';
+import VoltageReading from '../components/EnergyCharts/VoltageReading';
+import WeeklyEnergyUsage from '../components/EnergyCharts/WeeklyEnergyUsage';
+import YearlyEnergyUsage from '../components/EnergyCharts/YearlyEnergyUsage';
 
-const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY;
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
 const Home: React.FC = () => {
   return (
     <div className="page-layout">
-      {/* Grid Layout */}
-      <div className="grid-layout">
-        {/* Energy Monitoring Card */}
-        <Paper className="card energy-monitoring-card" shadow="sm" p="md">
-          <Box className="card-header">
+      <div className="top">
+        <div className="left">
+          {/* Top-left section (Placeholder) */}
+          <div className="left-heading">
             <Activity size="3rem" color='green'/>
-            <Title order={3} className="card-title">Energy Monitoring</Title>
-          </Box>
-          <EnergyMonitoringChart />
-          <Button variant="outline" color="green" component="a" href="/energy-monitoring">
-            View Details
-          </Button>
-        </Paper>
-
-        {/* System Analytics Card */}
-        <Paper className="card system-analytics-card" shadow="sm" p="md">
-          <Box className="card-header">
-            <ChartBar size="3rem" color='green'/>
-            <Title order={3} className="card-title">System Analytics</Title>
-          </Box>
-          
-          <Button variant="outline" color="green" component="a" href="/analytics">
-            View Details
-          </Button>
-        </Paper>
-
-        {/* Weather Forecast Card */}
-        <Paper className="card weather-forecast-card" shadow="sm" p="md">
-          <Box className="card-header">
+            <h6>Placeholder Title</h6>
+          </div>
+        </div>
+        <div className="right">
+          {/* Top-right section with Tabs */}
+          <div className="right-heading">
+            <Activity size="3rem" color='green'/>
+            <h6>Energy Charts</h6>
+          </div>
+          <Tabs defaultValue='daily'>
+            <Tabs.List>
+              <Tabs.Tab value="daily">Daily</Tabs.Tab>
+              <Tabs.Tab value="monthly">Monthly</Tabs.Tab>
+              <Tabs.Tab value="weekly">Weekly</Tabs.Tab>
+              <Tabs.Tab value="yearly">Yearly</Tabs.Tab>
+            </Tabs.List>
+          <Tabs.Panel value="daily" pt="xs">
+            <div className="chart-container"><DailyEnergyUsage /></div>
+          </Tabs.Panel>
+          <Tabs.Panel value="weekly" pt="xs">
+            <div className="chart-container"><WeeklyEnergyUsage /></div>
+          </Tabs.Panel>
+          <Tabs.Panel value="monthly" pt="xs">
+            <div className="chart-container"><MonthlyEnergyUsage /></div>
+          </Tabs.Panel>
+          <Tabs.Panel value="yearly" pt="xs">
+            <div className="chart-container"><YearlyEnergyUsage /></div>
+          </Tabs.Panel>
+ 
+          </Tabs>
+        </div>
+      </div>
+      <div className="bottom">
+        <div className="left">
+          {/* Bottom-left section (Weather API data) */}
+          <div className="left-heading">
             <CloudStorm size="3rem" color='green'/>
-            <Title order={3} className="card-title">Weather Forecast</Title>
-          </Box>
+            <h6>Weather Forecast</h6>
+          </div>
           <WeatherComponent latitude={-33.833} longitude={150.52808} />
-        </Paper>
-
-        {/* Google Maps Card */}
-        <Paper className="card google-maps-card" shadow="sm" p="md">
-          <Box className="card-header">
+        </div>
+        <div className="right">
+          {/* Bottom-right section (Google Maps) */}
+          <div className="right-heading">
             <Map2 size="3rem" color='green'/>
-            <Title order={3} className="card-title">Google Maps</Title>
-          </Box>
+            <h6>Google Maps</h6>
+          </div>
           <GoogleMapComponent
             center={{ lat: 37.7749, lng: -122.4194 }}
             zoom={10}
             googleMapsApiKey={googleMapsApiKey}
-            markers={[{ lat: 37.7749, lng: -122.4194, label: 'A' }]}
+            markers={[
+              { lat: 37.7749, lng: -122.4194, label: 'A' },
+            ]}
           />
-        </Paper>
+        </div>
       </div>
-
       {/* Styles */}
       <style jsx>{`
         .page-layout {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
           height: 100vh;
-          padding: 0;
-          margin: 0;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-        }
-        .grid-layout {
-          display: grid;
-          grid-template-columns: repeat(2, 1fr); /* Two columns */
-          grid-gap: 16px;
-          padding: 16px;
-          height: 100%;
-        }
-        .card {
-          display: flex;
-          flex-direction: column;
-          border-radius: 8px;
-          padding: 16px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          height: calc(50vh - 20px); /* 50% of the viewport height minus gap */
+          padding: 8px;
           box-sizing: border-box;
         }
-        .card-header {
+        .top, .bottom {
+          display: flex;
+          flex: 1;
+          justify-content: space-between;
+          align-items: stretch;
+          padding: 8px;
+        }
+        .left, .right {
+          flex: 1;
+          margin: 8px;
+          padding: 16px;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
+        }
+        .right {
+          width: 50%; // Adjust the width of the right section
+        }
+        .left-heading, .right-heading {
           display: flex;
           align-items: center;
+          font-size: 24px;
+          color: #555555;
           margin-bottom: 16px;
         }
-        .card-title {
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: #333;
-          margin-left: 8px;
-        }
-        .energy-monitoring-card, .system-analytics-card {
-          grid-column: span 2; /* Make these cards span two columns */
+        .chart-container {
+          width: 100%; // Chart container takes full width of its parent
+          max-height: 400px;
+          margin: 0 auto;
+          overflow: hidden; // Ensures the chart does not overflow its container
         }
       `}</style>
     </div>

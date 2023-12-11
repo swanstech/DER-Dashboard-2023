@@ -46,10 +46,10 @@ const FrequencyChart = () => {
   }, []);
 
   return (
-    <div
+<div
       ref={chartRef}
       style={{
-        width: '80vw',
+        width: '100%', // Adjusted width to be 100% of the parent container
         height: '400px',
       }}
     />
