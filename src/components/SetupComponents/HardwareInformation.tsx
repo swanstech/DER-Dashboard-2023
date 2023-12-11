@@ -17,11 +17,11 @@ interface HardwareData {
 }
 
 // Main function component
-export default function HardwareInfoTable() {
+export default function HardwareInfoTable({derId}) {
   // Using React Hooks to manage state
   const [hardwareData, setHardwareData] = useState<HardwareData | null>(null);
   const [deviceData, setDeviceData] = useState<DeviceData>({});
-  const deviceId = "DER_1";  // Placeholder for actual device ID
+  const deviceId = derId || "DER_1";  // Placeholder for actual device ID
 
   // Fetching data with useEffect (Runs when the component mounts)
   useEffect(() => {

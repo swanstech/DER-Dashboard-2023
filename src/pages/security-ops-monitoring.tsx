@@ -6,7 +6,7 @@ import TechnicalSpecifications from '../components/SetupComponents/TechnicalSpec
 import NetworkMonitoringLogs from 'n/components/SetupComponents/NetworkMonitoringLogs';
 import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInformation';
 
-export default function Settings() {
+export default function SecOpsMonitoring() {
   return (
     <div className="page-layout">
       <div className="top">

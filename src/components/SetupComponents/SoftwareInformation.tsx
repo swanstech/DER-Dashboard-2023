@@ -16,11 +16,11 @@ interface SoftwareData {
   data: { [key: string]: [string, string, string, string, string, string, string, string, string, string, string, string, string, string,string,string, string, string, string, string, string, string, string, string, string, string, string, string, string, string, string] }[];
 }
 
-export default function SoftwareInfoTable() {
+export default function SoftwareInfoTable({derId}) {
   const [softwareData, setSoftwareData] = useState<SoftwareData| null>(null);
   const [deviceData, setDeviceData] = useState<DeviceData>({});
   const [isUpToDate, setIsUpToDate] = useState<boolean | null>(null);
-  const deviceId = "DER_1";
+  const deviceId = derId || "DER_1";
 
   useEffect(() => {
     async function fetchData() {
