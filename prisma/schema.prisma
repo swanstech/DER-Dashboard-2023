@@ -40,6 +40,7 @@ model der_information {
   latest_firmware_release_date DateTime?           @db.Timestamp(6)
   location                     String?             @db.VarChar(50)
   der_capability               der_capability[]
+  der_control                  der_control[]
   der_networkstatus            der_networkstatus[]
   der_setting                  der_setting[]
 }
@@ -73,5 +74,21 @@ model der_setting {
   sw_last_update_date           DateTime?        @db.Timestamp(6)
   current_firmware_version      String?          @db.VarChar(10)
   firmware_last_update_date     DateTime?        @db.Timestamp(6)
+  der_information               der_information? @relation(fields: [der_id], references: [der_id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model der_control {
+  control_id                    String           @id @db.VarChar(10)
+  der_id                        String?          @db.VarChar(10)
+  max_active_power              Decimal?         @db.Decimal(6, 2)
+  min_active_power              Decimal?         @db.Decimal(6, 2)
+  max_reactive_power            Decimal?         @db.Decimal(6, 2)
+  min_reactive_power            Decimal?         @db.Decimal(6, 2)
+  max_apparent_power            Decimal?         @db.Decimal(6, 2)
+  min_apparent_power            Decimal?         @db.Decimal(6, 2)
+  set_max_pf_overexcited_limit  Decimal?         @db.Decimal(6, 2)
+  set_min_pf_overexcited_limit  Decimal?         @db.Decimal(6, 2)
+  set_max_pf_underexcited_limit Decimal?         @db.Decimal(6, 2)
+  set_min_pf_underexcited_limit Decimal?         @db.Decimal(6, 2)
   der_information               der_information? @relation(fields: [der_id], references: [der_id], onDelete: NoAction, onUpdate: NoAction)
 }

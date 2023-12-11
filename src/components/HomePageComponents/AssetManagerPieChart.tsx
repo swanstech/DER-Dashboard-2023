@@ -24,7 +24,7 @@ const AssetManagerPieChart = () => {
           {
             name: 'Assets',
             type: 'pie',
-            radius: '50%',
+            radius: '75%',
             data: [
               { value: 15, name: 'Total Asset' },
               { value: 9, name: 'Up', itemStyle: { color: 'green' } },
@@ -47,7 +47,7 @@ const AssetManagerPieChart = () => {
       // Attach the click event listener
       chartInstance.on('click', () => {
         // Redirect to the 'der-list' page on any pie chart section click
-        window.location.href = '/der-list'; // Or use your routing method here
+        window.location.href = '/asset-security'; // Or use your routing method here
       });
     }
   }, []);

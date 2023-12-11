@@ -26,7 +26,7 @@ const Home: React.FC = () => {
           {/* Top-right section with Tabs */}
           <div className="right-heading">
             <Activity size="3rem" color='green'/>
-            <h6>Energy Charts</h6>
+            <h6>DER Energy Monitoring</h6>
           </div>
           <Tabs defaultValue='daily'>
             <Tabs.List>
@@ -56,7 +56,7 @@ const Home: React.FC = () => {
           {/* Bottom-left section (Weather API data) */}
           <div className="left-heading">
             <CloudStorm size="3rem" color='green'/>
-            <h6>Weather Forecast</h6>
+            <h6>DER Weather Forecast</h6>
           </div>
           <WeatherComponent latitude={-33.833} longitude={150.52808} />
         </div>
@@ -64,7 +64,7 @@ const Home: React.FC = () => {
           {/* Bottom-right section (Google Maps) */}
           <div className="right-heading">
             <Map2 size="3rem" color='green'/>
-            <h6>Google Maps</h6>
+            <h6>DER Maps</h6>
           </div>
           <GoogleMapComponent
             center={{ lat: 37.7749, lng: -122.4194 }}
