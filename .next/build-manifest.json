@@ -22,6 +22,11 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
+    "/listDer": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/listDer.js"
+    ],
     "/security-monitoring": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",

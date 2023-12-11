@@ -44,6 +44,12 @@ const data = [
     to: "/notifications",
   },
   {
+    icon: <BellRinging size="1rem" />,
+    color: "blue",
+    label: "DerList",
+    to: "/listDer",
+  },
+  {
     icon: <ReportAnalytics size="1rem" />,
     color: "violet",
     label: "Report",

@@ -1,8 +1,8 @@
 import cx from 'clsx';
-// import { useState } from 'react';
 import { Table} from '@mantine/core';
-import classes from './der.css';
+import { useState } from 'react';
 
+export default function listDer(){
 
 const data = [
   {
@@ -49,23 +49,24 @@ const data = [
   },
 ];
 
-export function TableScrollArea() {
-  const rows = data.map((row) => (
-    <Table.Tr key={row.der_id}>
-      <Table.Td>{row.der_id}</Table.Td>
-      <Table.Td>{row.der_name}</Table.Td>
-      <Table.Td>{row.der_type}</Table.Td>
-      <Table.Td>{row.manufacturer_id}</Table.Td>
-      <Table.Td>{row.manufacturer_serial_number}</Table.Td>
-      <Table.Td>{row.manufacture_date}</Table.Td>
-      <Table.Td>{row.manufacturer_hw_version}</Table.Td>
-      <Table.Td>{row.manufacturer_info}</Table.Td>
-      <Table.Td>{row.manufacturer_model_number}</Table.Td>
-      <Table.Td>{row.sw_activation_date}</Table.Td>
-      <Table.Td>{row.sw_version}</Table.Td>
-      <Table.Td>{row.location}</Table.Td>
-    </Table.Tr>
-  ));
+
+export function rowTable() {
+const rows = data.map((row) => (
+  <Table.Tr key={row.der_id}>
+    <Table.Td>{row.der_id}</Table.Td>
+    <Table.Td>{row.der_name}</Table.Td>
+    <Table.Td>{row.der_type}</Table.Td>
+    <Table.Td>{row.manufacturer_id}</Table.Td>
+    <Table.Td>{row.manufacturer_serial_number}</Table.Td>
+    <Table.Td>{row.manufacture_date}</Table.Td>
+    <Table.Td>{row.manufacturer_hw_version}</Table.Td>
+    <Table.Td>{row.manufacturer_info}</Table.Td>
+    <Table.Td>{row.manufacturer_model_number}</Table.Td>
+    <Table.Td>{row.sw_activation_date}</Table.Td>
+    <Table.Td>{row.sw_version}</Table.Td>
+    <Table.Td>{row.location}</Table.Td>
+  </Table.Tr>
+));
 
   return (
       <Table miw={700}>
@@ -89,3 +90,23 @@ export function TableScrollArea() {
       </Table>
   );
 }
+
+{/* <StyleSheet>
+.header {
+  position: sticky;
+  top: 0;
+  background-color: var(--mantine-color-body);
+  transition: box-shadow 150ms ease;
+
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-bottom: rem(1px) solid
+      light-dark(var(--mantine-color-gray-2), var(--mantine-color-dark-3));
+  }
+}
+</StyleSheet> */}
+
