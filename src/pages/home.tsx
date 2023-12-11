@@ -4,11 +4,10 @@ import { Activity, CloudStorm, Map2 } from 'tabler-icons-react';
 import GoogleMapComponent from '../components/GenericAPIComponents/GoogleMapsComponent';
 import WeatherComponent from '../components/GenericAPIComponents/WeatherComponent';
 import DailyEnergyUsage from '../components/EnergyCharts/DailyEnergyUsage';
-import FrequencyReading from '../components/EnergyCharts/FrequencyReading';
 import MonthlyEnergyUsage from '../components/EnergyCharts/MonthlyEnergyUsage';
-import VoltageReading from '../components/EnergyCharts/VoltageReading';
 import WeeklyEnergyUsage from '../components/EnergyCharts/WeeklyEnergyUsage';
 import YearlyEnergyUsage from '../components/EnergyCharts/YearlyEnergyUsage';
+import AssetManagerPieChart from 'n/components/HomePageComponents/AssetManagerPieChart';
 
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
@@ -17,11 +16,11 @@ const Home: React.FC = () => {
     <div className="page-layout">
       <div className="top">
         <div className="left">
-          {/* Top-left section (Placeholder) */}
           <div className="left-heading">
             <Activity size="3rem" color='green'/>
-            <h6>Placeholder Title</h6>
+            <h6>DER Asset Manager</h6>
           </div>
+          <AssetManagerPieChart/>
         </div>
         <div className="right">
           {/* Top-right section with Tabs */}
