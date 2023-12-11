@@ -57,6 +57,15 @@ const MonthlyEnergyUsage = () => {
       };
 
       chartInstance.setOption(option);
+
+      // Resize chart on window resize
+      const resizeChart = () => {
+        chartInstance.resize();
+      };
+      window.addEventListener('click', resizeChart);
+
+      // Cleanup
+      return () => window.removeEventListener('resize', resizeChart);
     }
   }, []);
 
@@ -64,8 +73,10 @@ const MonthlyEnergyUsage = () => {
     <div
       ref={chartRef}
       style={{
-        width: '80vw',
+        width: '100%',
+        minWidth: '300px', // Set a minimum width
         height: '400px',
+        margin: '0 auto'
       }}
     />
   );

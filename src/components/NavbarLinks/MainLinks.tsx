@@ -16,7 +16,7 @@ const data = [
   {
     icon: <BoxSeam size="1rem" />,
     color: "red",
-    label: "Asset Security Status",
+    label: "Asset Manager",
     to: "/asset-security",
   },
   {
