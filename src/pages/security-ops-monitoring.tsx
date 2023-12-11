@@ -19,7 +19,7 @@ export default function Settings() {
         </div>
         <div className="right">
           <div className="right-heading">
-            <FileAnalytics size="3rem" color='violet' />
+            <FileAnalytics size="3rem" color='green' />
             <h3>Compliance Specifications</h3>
           </div>
           <ComplianceInfoTable />
