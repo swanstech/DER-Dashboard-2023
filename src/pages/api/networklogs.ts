@@ -14,10 +14,12 @@ interface DataItem {
 }
 
 const getDataFromCSV = async (
-  page: number = 1,
-  pageSize: number = 10
+  page: number ,
+  pageSize: number ,
+  derId :string
 ): Promise<{ data: DataItem[]; totalPages: number }> => {
-  const filePath = path.join(process.cwd(), 'logs/nwlogs.csv');
+  const filePath = path.join(process.cwd(), `logs/${derId}_nwlogs.csv`);
+  console.log(filePath);
 
   return new Promise((resolve, reject) => {
     const data: DataItem[] = [];
@@ -67,10 +69,10 @@ const getDataFromCSV = async (
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method === 'GET') {
-    const { page = 1, pageSize = 10 } = req.query;
+    const { page =1, pageSize =10, derId = "DER_1"} = req.query;
 
     try {
-      const { data, totalPages } = await getDataFromCSV(Number(page), Number(pageSize));
+      const { data, totalPages } = await getDataFromCSV(Number(page), Number(pageSize),derId as string);
       res.status(200).json({ data, totalPages });
     } catch (error) {
       res.status(500).json({ error: 'Internal Server Error' });

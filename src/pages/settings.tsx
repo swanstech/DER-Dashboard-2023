@@ -3,8 +3,11 @@ import React from 'react';
 import {BatteryAutomotive, ChartCandle, Activity} from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
 import InformationAccordion from '../components/SetupComponents/DeviceInformation';
+import { useRouter } from 'next/router';
 
 export default function Settings() {
+  const router = useRouter();
+  const { derId } = router.query;
   return (
     <div className="page-layout">
       <div className="top">
@@ -13,7 +16,7 @@ export default function Settings() {
             <BatteryAutomotive size="3rem" color='green'/>
             <h2>DER Information</h2>
           </div>
-          <InformationAccordion />
+          <InformationAccordion derId={derId} />
         </div>
         <div className="right">
         <div className="right-heading"> 

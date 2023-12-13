@@ -12,7 +12,7 @@ import SoftwareInfoTable from './SoftwareInformation';
 import ComplianceInfoTable from './ComplianceInformation';
 
 
-export default function InformationAccordion(){
+export default function InformationAccordion({derId}){
     const theme = useMantineTheme();
     const getColor = (color: string) => {
         return theme.colors?.[color]?.[theme.colorScheme === 'dark' ? 5 : 7] ?? 'inherit';
@@ -25,7 +25,7 @@ export default function InformationAccordion(){
             Hardware Information
         </Accordion.Control>
         <Accordion.Panel>
-            <HardwareInfoTable/>
+            <HardwareInfoTable derId={derId}/>
         </Accordion.Panel>
         </Accordion.Item>
 
@@ -43,7 +43,7 @@ export default function InformationAccordion(){
             Software Information
         </Accordion.Control>
         <Accordion.Panel>
-            <SoftwareInfoTable/>
+            <SoftwareInfoTable derId={derId}/>
         </Accordion.Panel>
         </Accordion.Item>
 

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table } from '@mantine/core';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+const API_KEY = process.env.API_KEY || "";
 
 type DERData = {
   der_id: string;
@@ -41,13 +44,14 @@ const styles = {
   };
 
 export const DERTable: React.FC = () => {
+  const router = useRouter();
   const [data, setData] = useState<DERData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/api/deviceInfo', {
-          headers: {'x-api-key': '4BjKWhneKq2byqMJ7bT3R89G39P9FqpS6xGZORre'}
+          headers: {'x-api-key': API_KEY}
         });
 
         const processedData = response.data.data.map((item: any) => {
@@ -79,8 +83,32 @@ export const DERTable: React.FC = () => {
 
   const rows = data.map((row) => (
     <tr key={row.der_id}>
-      <td>{row.der_id}</td>
-      <td>{row.der_name}</td>
+      <td>
+        <Link
+          href={{
+            pathname: '/settings',
+            query: {
+              derId: row.der_id,
+            },
+          }}
+          passHref
+        >
+          <span onClick={() => router.push(`/settings?derId=${row.der_id}`)}>{row.der_id}</span>
+        </Link>
+      </td>
+      <td>
+        <Link
+          href={{
+            pathname: '/settings',
+            query: {
+              derId: row.der_id,
+            },
+          }}
+          passHref
+        >
+          <span onClick={() => router.push(`/settings?derId=${row.der_id}`)}>{row.der_name}</span>
+        </Link>
+      </td>
       <td>{row.der_type}</td>
       <td>{row.manufacturer_id}</td>
       <td>{row.manufacturer_serial_number}</td>

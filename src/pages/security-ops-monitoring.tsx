@@ -5,8 +5,11 @@ import InverterCommandCenter from '../components/CommandCenterComponents/Command
 import TechnicalSpecifications from '../components/SetupComponents/TechnicalSpecifications';
 import NetworkMonitoringLogs from 'n/components/SetupComponents/NetworkMonitoringLogs';
 import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInformation';
+import { useRouter } from 'next/router';
 
-export default function Settings() {
+export default function SecOpsMonitoring() {
+  const router = useRouter();
+  const { derId } = router.query;
   return (
     <div className="page-layout">
       <div className="top">
@@ -15,7 +18,7 @@ export default function Settings() {
             <BatteryAutomotive size="3rem" color='green' />
             <h3>DER Technical Specifications</h3>
           </div>
-          <TechnicalSpecifications />
+          <TechnicalSpecifications derId={derId} />
         </div>
         <div className="right">
           <div className="right-heading">
@@ -31,7 +34,7 @@ export default function Settings() {
           <h2>Network Monitoring and logs</h2>
         </div>
         <div className='bottom-b'>
-          <NetworkMonitoringLogs />
+          <NetworkMonitoringLogs derId={derId ? (derId as string) : 'DER_1'} />
         </div>
       </div>
       <style jsx>{`

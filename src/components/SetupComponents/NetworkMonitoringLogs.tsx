@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useMantineTheme, Container, Pagination } from '@mantine/core'; // Import Pagination component from Mantine
 
-export default function NetworkMonitoringLogs() {
+export default function NetworkMonitoringLogs({derId}) {
   const theme = useMantineTheme();
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10); // Adjust the number of items per page as needed
@@ -15,7 +15,7 @@ export default function NetworkMonitoringLogs() {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/networklogs?page=${currentPage}&pageSize=${pageSize}`);
+      const response = await fetch(`/api/networklogs?page=${currentPage}&pageSize=${pageSize}&derId=${derId}`);
       if (response.ok) {
         const { data, totalPages } = await response.json();
         setRowsData(data);
