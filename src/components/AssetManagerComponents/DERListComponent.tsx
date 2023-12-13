@@ -99,14 +99,14 @@ export const DERTable: React.FC = () => {
       <td>
         <Link
           href={{
-            pathname: '/security-ops-monitoring',
+            pathname: '/settings',
             query: {
               derId: row.der_id,
             },
           }}
           passHref
         >
-          <span onClick={() => router.push(`/security-ops-monitoring?derId=${row.der_id}`)}>{row.der_name}</span>
+          <span onClick={() => router.push(`/settings?derId=${row.der_id}`)}>{row.der_name}</span>
         </Link>
       </td>
       <td>{row.der_type}</td>
