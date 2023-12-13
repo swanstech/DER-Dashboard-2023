@@ -49,6 +49,13 @@ const data = [
     label: "Report",
     to: "/report",
   },
+
+  {
+    icon: <Bolt size="1rem" />,
+  color: "grape",
+  label: "Penetration testing",
+  to: "/pentetration-testing",
+},
 ];
 
 interface MainLinkProps {
