@@ -22,8 +22,8 @@ const formatDate = (dateStr: string): string => {
   return new Date(dateStr).toLocaleDateString();
 };
 
-const handleStatusClick = () => {
-  router.push('/security-ops-monitoring');
+const handleStatusClick = (derId: string) => {
+  router.push(`/security-ops-monitoring?derId=${derId}`);
 };
 
 const handleRowClick = (derId: string) => {
@@ -109,7 +109,7 @@ export const DERTable: React.FC = () => {
       <td>{row.manufacturer_hw_version}</td>
       <td>{row.location}</td>
       <td>
-        <OperationalStatusIcon status={row.operationalStatus} onClick={handleStatusClick} />
+        <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
     </tr>
   ));

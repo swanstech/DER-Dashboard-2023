@@ -1,3 +1,4 @@
+import { Table } from '@mantine/core';
 import React, { useState, useEffect } from 'react';
 
 interface DeviceData {
@@ -101,32 +102,38 @@ export default function SoftwareInfoTable({derId}) {
     }
   };
 
+  // Preparing table rows
+  const rows = deviceData ? [
+    ['DER ID', deviceData.der_id],
+    ['S/W Version', deviceData.software_version, deviceData.uptodate],
+    ['Release', deviceData.software_activation_date],
+    ['F/W Version', deviceData.firmware_version],
+    ['Release', deviceData.firmware_activation_date],
+  ].map(([key, value, isUpToDate]) => (
+    <tr key={key + "-row"}>
+      <td>{key}</td>
+      <td>
+        {value}
+        {key === 'S/W Version' && isUpToDate !== undefined ? (
+          isUpToDate ? (
+            <span style={{ color: 'green', fontSize: '1.5em', marginLeft: '5px' }}>🟢</span>
+          ) : (
+            <a onClick={handleIconClick}>
+              <span style={{ color: 'red', fontSize: '1.5em', marginLeft: '5px', cursor: 'pointer' }}>⚠️</span>
+            </a>
+          )
+        ) : null}
+      </td>
+    </tr>
+  )) : null;
+
+
   return (
     <div>
-      {deviceData.der_id ? (
-        <>
-          <p><strong>DER ID:</strong> {deviceData.der_id}</p>
-          <p>
-            <strong>S/W Version:</strong> {deviceData.software_version}
-            {isUpToDate !== null ? (
-              <>
-                {isUpToDate ? (
-                  <span style={{ color: 'green', fontSize: '1.5em', marginLeft: '5px' }}>🟢</span>
-                ) : (
-                  <a onClick={handleIconClick}>
-                    <span style={{ color: 'red', fontSize: '1.5em', marginLeft: '5px', cursor: 'pointer' }}>⚠️</span>
-                  </a>
-                )}
-              </>
-            ) : null}
-          </p>
-          <p><strong>Release:</strong> {deviceData.software_activation_date}</p>
-          <p><strong>F/W Version:</strong> {deviceData.firmware_version}</p>
-          <p><strong>Release:</strong> {deviceData.firmware_activation_date}</p>
-        </>
-      ) : (
-        <p>No data available for the specified device ID.</p>
-      )}
+      <Table>
+        <tbody>{rows}</tbody>
+      </Table>
+      {!deviceData.der_id && <p>No data available for the specified device ID.</p>}
     </div>
   );
-}
+  }
