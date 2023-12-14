@@ -1,4 +1,5 @@
 // Importing required dependencies and components
+import { Table } from '@mantine/core';
 import React, { useState, useEffect } from 'react';
 
 // Declare interfaces for types
@@ -94,22 +95,28 @@ export default function HardwareInfoTable({derId}) {
     }
   }, [hardwareData, deviceId]);
 
-  // Return JSX for rendering
+  // Prepare table rows from deviceData
+  const rows = deviceData ? [
+    ['DER ID', deviceData.der_id],
+    ['Name', deviceData.der_name],
+    ['Type', deviceData.der_type],
+    ['MFG Model No.', deviceData.manufacturer_model_number],
+    ['MFG Serial No.', deviceData.manufacturer_serial_number],
+    ['HW Version', deviceData.manufacturer_hw_version],
+    ['Location', deviceData.location],
+  ].map(([key, value]) => (
+    <tr key={key}>
+      <td>{key}</td>
+      <td>{value}</td>
+    </tr>
+  )) : null;
+
   return (
     <div>
-      {deviceData.der_id ? (
-        <>
-          <p><strong>DER ID:</strong> {deviceData.der_id}</p>
-          <p><strong>Name:</strong> {deviceData.der_name}</p>
-          <p><strong>Type:</strong> {deviceData.der_type}</p>
-          <p><strong>MFG Model No.:</strong> {deviceData.manufacturer_model_number}</p>
-          <p><strong>MFG Serial No.:</strong> {deviceData.manufacturer_serial_number}</p>
-          <p><strong>HW Version:</strong> {deviceData.manufacturer_hw_version}</p>
-          <p><strong>Location:</strong> {deviceData.location}</p>
-        </>
-      ) : (
-        <p>No data available for the specified device ID.</p>
-      )}
+      <Table>
+        <tbody>{rows}</tbody>
+      </Table>
+      {!deviceData.der_id && <p>No data available for the specified device ID.</p>}
     </div>
   );
 }
