@@ -2,46 +2,60 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Table } from '@mantine/core';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import router, { useRouter } from 'next/router';
+
 const API_KEY = process.env.API_KEY || "";
 
 type DERData = {
   der_id: string;
   der_name: string;
   der_type: string;
-  manufacturer_id: string;
-  manufacturer_serial_number: string;
   manufacture_date: string;
   manufacturer_info: string;
   manufacturer_model_number: string;
   manufacturer_hw_version: string;
-  sw_version: string;
-  sw_activation_date: string;
   location: string;
+  operationalStatus: 'up' | 'down' | 'amber';
 };
 
 const formatDate = (dateStr: string): string => {
   return new Date(dateStr).toLocaleDateString();
 };
 
+const handleStatusClick = () => {
+  router.push('/security-ops-monitoring');
+};
+
+const handleRowClick = (derId: string) => {
+  router.push(`/settings?derId=${derId}`);
+};
+
 const getColorForDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   const currentDate = new Date();
-  const threeMonthsAgo = new Date(currentDate.setMonth(currentDate.getMonth() - 3));
+  const threeMonthsAgo = new Date();
+  threeMonthsAgo.setMonth(currentDate.getMonth() - 3);
   
-  if (date < currentDate) return 'red';
-  if (date < threeMonthsAgo) return 'amber';
-  return '';
+  if (date < threeMonthsAgo) return 'red';
+  if (date >= threeMonthsAgo && date <= currentDate) return 'orange';
+  return 'green';
 };
 
-const styles = {
-    red: {
-      color: 'red',
-    },
-    amber: {
-      color: 'orange',
-    },
+const getRandomOperationalStatus = (): 'up' | 'down' | 'amber' => {
+  const statuses: ('up' | 'down' | 'amber')[] = ['up', 'down', 'amber'];
+  return statuses[Math.floor(Math.random() * statuses.length)];
+};
+
+const OperationalStatusIcon: React.FC<{ status: 'up' | 'down' | 'amber', onClick: () => void }> = ({ status, onClick }) => {
+  const style = {
+    cursor: 'pointer',
+    color: status === 'up' ? 'green' : status === 'down' ? 'red' : 'orange'
   };
+
+  const symbol = status === 'up' ? '↑' : status === 'down' ? '↓' : '●';
+
+  return <span style={style} onClick={onClick}>{symbol}</span>;
+};
 
 export const DERTable: React.FC = () => {
   const router = useRouter();
@@ -51,7 +65,7 @@ export const DERTable: React.FC = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/api/deviceInfo', {
-          headers: {'x-api-key': API_KEY}
+          headers: { 'x-api-key': API_KEY }
         });
 
         const processedData = response.data.data.map((item: any) => {
@@ -69,6 +83,7 @@ export const DERTable: React.FC = () => {
             sw_version: values[9],
             sw_activation_date: values[10],
             location: values[11],
+            operationalStatus: getRandomOperationalStatus(),
           };
         });
 
@@ -83,66 +98,40 @@ export const DERTable: React.FC = () => {
 
   const rows = data.map((row) => (
     <tr key={row.der_id}>
-      <td>
-        <Link
-          href={{
-            pathname: '/settings',
-            query: {
-              derId: row.der_id,
-            },
-          }}
-          passHref
-        >
-          <span onClick={() => router.push(`/settings?derId=${row.der_id}`)}>{row.der_id}</span>
-        </Link>
+      <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
+        {row.der_id}
       </td>
-      <td>
-        <Link
-          href={{
-            pathname: '/settings',
-            query: {
-              derId: row.der_id,
-            },
-          }}
-          passHref
-        >
-          <span onClick={() => router.push(`/settings?derId=${row.der_id}`)}>{row.der_name}</span>
-        </Link>
-      </td>
+      <td>{row.der_name}</td>
       <td>{row.der_type}</td>
-      <td>{row.manufacturer_id}</td>
-      <td>{row.manufacturer_serial_number}</td>
       <td>{formatDate(row.manufacture_date)}</td>
-      <td>{row.manufacturer_hw_version}</td>
       <td>{row.manufacturer_info}</td>
       <td>{row.manufacturer_model_number}</td>
-      <td style={{ color: getColorForDate(row.sw_activation_date) }}>
-        {formatDate(row.sw_activation_date)}
-      </td>
-      <td>{row.sw_version}</td>
+      <td>{row.manufacturer_hw_version}</td>
       <td>{row.location}</td>
+      <td>
+        <OperationalStatusIcon status={row.operationalStatus} onClick={handleStatusClick} />
+      </td>
     </tr>
   ));
 
   return (
-    <Table width={700}>
+    <Table width={700} style={{ border: '1px solid #ddd', borderRadius: '8px' }}>
       <thead>
-        <tr>
+        <tr style={{ backgroundColor: '#f5f5f5', textAlign: 'left' }}>
           <th>DER ID</th>
           <th>Name</th>
           <th>Type</th>
-          <th>Manufacturer ID</th>
-          <th>Serial Number</th>
           <th>Manufacture Date</th>
-          <th>HW Version</th>
           <th>Manufacturer Info</th>
           <th>Model Number</th>
-          <th>SW Activation Date</th>
-          <th>SW Version</th>
+          <th>HW Version</th>
           <th>Location</th>
+          <th>Operational Status</th>
         </tr>
       </thead>
-      <tbody>{rows}</tbody>
+      <tbody>
+        {rows}
+      </tbody>
     </Table>
   );
 };
