@@ -6,6 +6,7 @@ import {
   Network,
   BellRinging,
   ReportAnalytics,
+  Settings,
 } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import { useRouter } from "next/router";
@@ -49,6 +50,12 @@ const data = [
     label: "Report",
     to: "/report",
   },
+  { 
+    icon: <Settings size="1rem" />, 
+    color: 'lime', 
+    label: 'Settings', 
+    to: "/settings" },
+
 ];
 
 interface MainLinkProps {

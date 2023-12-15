@@ -14,13 +14,13 @@ interface NetworkStatus {
 
 export default function NetworkInfoTable() {
   const router = useRouter();
-  const derId = router.query.derId || 'DER_1'; // Get der_id from the URL
+  const derId = router.query.derId; // Get der_id from the URL
   const [networkStatus, setNetworkStatus] = useState<NetworkStatus | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch(`/api/networkInfo?derId=${derId}`);
+        const response = await fetch('/api/networkInfo');
         if (!response.ok) {
           console.error("HTTP error", response.status);
           return;
@@ -28,17 +28,18 @@ export default function NetworkInfoTable() {
         const rawData = await response.json();
         const parsedData = JSON.parse(rawData.body); // Parsing the 'body' string to JSON
 
-        // Filter data based on der_id
-        const filteredData = parsedData.data.find(item => item.row0[1] === derId);
-        if (filteredData) {
+        const allRows = parsedData.data.flatMap(item => Object.values(item));
+        const matchedRow = allRows.find(row => row[1] === derId);
+
+        if (matchedRow) {
           setNetworkStatus({
-            netstat_id: filteredData.row0[0],
-            der_id: filteredData.row0[1],
-            ip_address: filteredData.row0[2],
-            mac_address: filteredData.row0[3],
-            network_name: filteredData.row0[4],
-            port_number: filteredData.row0[5],
-            connection_type: filteredData.row0[6]
+            netstat_id: matchedRow[0],
+            der_id: matchedRow[1],
+            ip_address: matchedRow[2],
+            mac_address: matchedRow[3],
+            network_name: matchedRow[4],
+            port_number: matchedRow[5],
+            connection_type: matchedRow[6]
           });
         }
       } catch (error) {
@@ -49,9 +50,18 @@ export default function NetworkInfoTable() {
     if (derId) {
       fetchData();
     }
-  }, [derId]); // Dependency array includes derId to re-fetch when it changes
+  }, [derId]);
 
-  const rows = networkStatus ? Object.entries(networkStatus).map(([key, value]) => (
+  // Prepare table rows from networkStatus
+  const rows = networkStatus ? [
+    ['Netstat ID', networkStatus.netstat_id],
+    ['DER ID', networkStatus.der_id],
+    ['IP Address', networkStatus.ip_address],
+    ['MAC Address', networkStatus.mac_address],
+    ['Network Name', networkStatus.network_name],
+    ['Port Number', networkStatus.port_number],
+    ['Connection Type', networkStatus.connection_type],
+  ].map(([key, value]) => (
     <tr key={key}>
       <td>{key}</td>
       <td>{value}</td>
@@ -59,8 +69,11 @@ export default function NetworkInfoTable() {
   )) : null;
 
   return (
-    <Table>
-      <tbody>{rows}</tbody>
-    </Table>
+    <div>
+      <Table>
+        <tbody>{rows}</tbody>
+      </Table>
+      {!networkStatus && <p>No network data available for the specified DER ID.</p>}
+    </div>
   );
 }
