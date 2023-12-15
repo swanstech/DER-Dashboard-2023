@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table } from '@mantine/core';
+import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 
@@ -28,6 +28,11 @@ const handleStatusClick = (derId: string) => {
 
 const handleRowClick = (derId: string) => {
   router.push(`/settings?derId=${derId}`);
+};
+
+const handleVulnerabilityScanClick = (derId: string) => {
+  // Redirect to the vulnerability scan page for the specific derId
+  router.push(`/vulnerability-scan?derId=${derId}`);
 };
 
 const getColorForDate = (dateStr: string): string => {
@@ -111,6 +116,14 @@ export const DERTable: React.FC = () => {
       <td>
         <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
+      <td>
+        <Button 
+          onClick={() => handleVulnerabilityScanClick(row.der_id)} 
+          size="xs"
+        >
+          Scan
+        </Button>
+      </td>
     </tr>
   ));
 
@@ -127,6 +140,7 @@ export const DERTable: React.FC = () => {
           <th>HW Version</th>
           <th>Location</th>
           <th>Operational Status</th>
+          <th>Vulnerability Scan</th>
         </tr>
       </thead>
       <tbody>

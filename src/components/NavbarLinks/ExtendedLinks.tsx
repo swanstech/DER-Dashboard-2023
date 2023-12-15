@@ -3,8 +3,7 @@ import { ThemeIcon, UnstyledButton, Group, Text } from '@mantine/core';
 import Link from "next/link";
 
 const data = [
-  { icon: <Settings size="1rem" />, color: 'lime', label: 'Settings', to: "/settings" },
-  { icon: <Mailbox size="1rem" />, color: 'grape', label: 'ContactUs', to: "/contact" },
+  { icon: <Mailbox size="1rem" />, color: 'grape', label: 'Support', to: "/contact" },
 ];
 
 interface MainLinkProps {
