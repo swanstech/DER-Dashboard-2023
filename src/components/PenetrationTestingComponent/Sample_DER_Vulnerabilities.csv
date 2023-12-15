@@ -1,0 +1,11 @@
+Priority,Risk Level,Vulnerability,Status,Discovered,Discovered By,Resolution,Tags
+High,Critical,False Data Injection,Open,2/12/2023,Swans Team,"Secure communication protocols, encryption, and authentication mechanisms","EVCS, Charging Data, Integrity"
+Medium,High,Man-in-the-Middle,Closed,1/12/2023,Unknown,"Robust encryption, authentication mechanisms, and secure communication protocols","EVCS, Data Transmission, Integrity, Confidentiality"
+High,High,Denial of Service,Open,3/12/2023,Unknown,"Traffic filtering, rate limiting, and anomaly detection techniques","EVCS, Network Functionality, Reliability"
+High,High,Malware Injections,Open,10/12/2023,Unknown,Regular security testing and assessment of EVSEs,"EVCS, EVSEs, Integrity"
+Medium,High,Physical Attack,Closed,1/12/2023,Unknown,"Surveillance systems, access controls, and tamper-resistant designs for the charging equipment","EVCS, Physical Security"
+Medium,Medium,Unauthorized Client,Open,14-12-2023,Unknown,Secure communication protocols,"DER, Communication"
+Low,Medium,Invalid Packet,Open,11/12/2023,Unknown,Secure communication protocols,"DER, Communication"
+High,Medium,Spoof TCP Handshake,Open,15-12-2023,Unknown,Secure communication protocols,"DER, Communication"
+Medium,Medium,Man-in-the-Middle Denial-of-Service,Open,12/12/2023,Unknown,"Robust encryption, authentication mechanisms, and secure communication protocols","DER, Data Transmission, Integrity, Confidentiality"
+High,Medium,Man-in-the-Middle Data Spoof,Closed,3/12/2023,Unknown,"Robust encryption, authentication mechanisms, and secure communication protocols","DER, Data Transmission, Integrity, Confidentiality"
