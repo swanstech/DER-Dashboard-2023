@@ -41,16 +41,9 @@ const data = [
   {
     icon: <BellRinging size="1rem" />,
     color: "teal",
-    label: "Notifications",
+    label: "Alarms",
     to: "/notifications",
   },
-  {
-    icon: <ReportAnalytics size="1rem" />,
-    color: "violet",
-    label: "Report",
-    to: "/report",
-  },
-
   {
     icon: <Bolt size="1rem" />,
     color: "grape",
