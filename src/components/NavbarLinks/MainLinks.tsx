@@ -53,9 +53,9 @@ const data = [
 
   {
     icon: <Bolt size="1rem" />,
-  color: "grape",
-  label: "Vulnerability Scan",
-  to: "/pentetration-testing",
+    color: "grape",
+    label: "Vulnerability Scan",
+    to: "/penetration-testing",
 },
   { 
     icon: <Settings size="1rem" />, 
