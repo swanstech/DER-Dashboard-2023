@@ -30,6 +30,10 @@ const handleRowClick = (derId: string) => {
   router.push(`/settings?derId=${derId}`);
 };
 
+const handlePentestClick = (derId: string) => {
+  router.push(`/penetration-testing?derId=${derId}`);
+};
+
 const getColorForDate = (dateStr: string): string => {
   const date = new Date(dateStr);
   const currentDate = new Date();
