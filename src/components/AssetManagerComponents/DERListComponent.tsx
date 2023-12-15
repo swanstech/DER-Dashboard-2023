@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table } from '@mantine/core';
+import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 
@@ -127,6 +127,14 @@ export const DERTable: React.FC = () => {
       <td>
         <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
+      <td>
+        <Button 
+          onClick={() => handleVulnerabilityScanClick(row.der_id)} 
+          size="xs"
+        >
+          Scan
+        </Button>
+      </td>
     </tr>
   ));
 
@@ -143,6 +151,7 @@ export const DERTable: React.FC = () => {
           <th>HW Version</th>
           <th>Location</th>
           <th>Operational Status</th>
+          <th>Vulnerability Scan</th>
         </tr>
       </thead>
       <tbody>

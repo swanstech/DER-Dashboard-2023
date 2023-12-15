@@ -26,7 +26,6 @@ const AssetManagerPieChart = () => {
             type: 'pie',
             radius: '75%',
             data: [
-              { value: 15, name: 'Total Asset' },
               { value: 9, name: 'Up', itemStyle: { color: 'green' } },
               { value: 2, name: 'Down', itemStyle: { color: 'red' } },
               { value: 3, name: 'Maintenance', itemStyle: { color: '#FFBF00' } }, // Amber color
