@@ -54,7 +54,7 @@ const data = [
   {
     icon: <Bolt size="1rem" />,
   color: "grape",
-  label: "Penetration testing",
+  label: "Vulnerability Scan",
   to: "/pentetration-testing",
 },
   { 

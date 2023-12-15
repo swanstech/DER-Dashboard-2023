@@ -30,7 +30,7 @@ const handleRowClick = (derId: string) => {
   router.push(`/settings?derId=${derId}`);
 };
 
-const handlePentestClick = (derId: string) => {
+const handleVulnerabilityScanClick = (derId: string) => {
   router.push(`/penetration-testing?derId=${derId}`);
 };
 
@@ -105,18 +105,8 @@ export const DERTable: React.FC = () => {
       <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
         {row.der_id}
       </td>
-      <td>
-        <Link
-          href={{
-            pathname: '/pentetration-testing',
-            query: {
-              derId: row.der_id,
-            },
-          }}
-          passHref
-        >
-          <span onClick={() => router.push(`/pentetration-testing?derId=${row.der_id}`)}>{row.der_name}</span>
-        </Link>
+      <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
+        {row.der_name}
       </td>
       <td>{row.der_type}</td>
       <td>{formatDate(row.manufacture_date)}</td>
