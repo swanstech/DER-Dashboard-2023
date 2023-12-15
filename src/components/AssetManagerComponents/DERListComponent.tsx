@@ -31,8 +31,7 @@ const handleRowClick = (derId: string) => {
 };
 
 const handleVulnerabilityScanClick = (derId: string) => {
-  // Redirect to the vulnerability scan page for the specific derId
-  router.push(`/vulnerability-scan?derId=${derId}`);
+  router.push(`/penetration-testing?derId=${derId}`);
 };
 
 const getColorForDate = (dateStr: string): string => {
@@ -106,7 +105,9 @@ export const DERTable: React.FC = () => {
       <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
         {row.der_id}
       </td>
-      <td>{row.der_name}</td>
+      <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
+        {row.der_name}
+      </td>
       <td>{row.der_type}</td>
       <td>{formatDate(row.manufacture_date)}</td>
       <td>{row.manufacturer_info}</td>

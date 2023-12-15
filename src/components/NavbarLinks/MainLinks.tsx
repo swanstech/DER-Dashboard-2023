@@ -50,6 +50,13 @@ const data = [
     label: "Report",
     to: "/report",
   },
+
+  {
+    icon: <Bolt size="1rem" />,
+  color: "grape",
+  label: "Vulnerability Scan",
+  to: "/pentetration-testing",
+},
   { 
     icon: <Settings size="1rem" />, 
     color: 'lime', 
