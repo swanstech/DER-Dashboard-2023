@@ -8,19 +8,19 @@ type GoogleMapProps = {
   };
   zoom: number;
   markers?: { lat: number; lng: number; label?: string }[];
-  googleMapsApiKey: string;
 };
 
 const mapContainerStyle = {
   width: '100%',
-  height: '400px'
+  height: '400px',
 };
+
+const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY; // Ensure this is the correct env variable
 
 const GoogleMapComponent: React.FC<GoogleMapProps> = ({
   center,
   zoom,
-  markers = [],
-  googleMapsApiKey
+  markers = []
 }) => {
   const [isClient, setIsClient] = useState(false);
 
@@ -28,7 +28,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({
     setIsClient(true);  // component has mounted on the client side
   }, []);
 
-  return isClient ? (
+  return isClient && googleMapsApiKey ? (
     <LoadScriptNext googleMapsApiKey={googleMapsApiKey}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
