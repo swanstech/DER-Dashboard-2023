@@ -21,6 +21,10 @@ export default function penetrationTesting() {
           </div>
           <PenTest derId={derId ? (derId as string) : 'DER_1'} />
         </div>
+       
+      </div>
+      <div className="footer">
+        <p>Powered by <img src="/images/SwansForesight.jpg" alt="./Swanforesight Logo" /></p>
       </div>
       <style jsx>{`
         .page-layout {
@@ -31,6 +35,11 @@ export default function penetrationTesting() {
           padding: 8px;
           box-sizing: border-box;
         }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+         }
         .top {
           display: flex;
           flex: 1;

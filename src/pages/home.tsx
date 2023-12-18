@@ -75,6 +75,10 @@ const Home: React.FC = () => {
             ]}
           />
         </div>
+        
+      </div>
+      <div className="footer">
+        <p>Powered by <img src="/images/SwansForesight.jpg" alt="Swanforesight Logo" /></p>
       </div>
       {/* Styles */}
       <style jsx>{`
@@ -86,6 +90,11 @@ const Home: React.FC = () => {
           padding: 8px;
           box-sizing: border-box;
         }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+         }
         .top, .bottom {
           display: flex;
           flex: 1;

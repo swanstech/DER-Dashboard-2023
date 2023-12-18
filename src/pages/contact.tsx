@@ -67,6 +67,9 @@ export default function ContactUs() {
           </Group>
         </div>
       </SimpleGrid>
+      <div className="footer">
+        <p>Powered by <img src="/images/SwansForesight.jpg" alt="Swanforesight Logo" /></p>
+      </div>
     </div>
   );
 }
