@@ -36,6 +36,9 @@ export default function SecOpsMonitoring() {
         <div className='bottom-b'>
           <NetworkMonitoringLogs derId={derId ? (derId as string) : 'DER_1'} />
         </div>
+        <div className="footer">
+        <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
+      </div>
       </div>
       <style jsx>{`
         .page-layout {
@@ -46,6 +49,11 @@ export default function SecOpsMonitoring() {
           padding: 8px;
           box-sizing: border-box;
         }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+         }
         .top {
           display: flex;
           flex: 1;

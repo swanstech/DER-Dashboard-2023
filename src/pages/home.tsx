@@ -69,12 +69,16 @@ const Home: React.FC = () => {
           <GoogleMapComponent
             center={{ lat: 37.7749, lng: -122.4194 }}
             zoom={10}
-            googleMapsApiKey={googleMapsApiKey}
+            // googleMapsApiKey={googleMapsApiKey}
             markers={[
               { lat: 37.7749, lng: -122.4194, label: 'A' },
             ]}
           />
         </div>
+        
+      </div>
+      <div className="footer">
+        <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px"  alt="Swanforesight Logo" /></p>
       </div>
       {/* Styles */}
       <style jsx>{`
@@ -86,6 +90,11 @@ const Home: React.FC = () => {
           padding: 8px;
           box-sizing: border-box;
         }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+         }
         .top, .bottom {
           display: flex;
           flex: 1;

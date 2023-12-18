@@ -25,6 +25,9 @@ export default function Settings() {
           </div>
           <VoltageInformation/>
         </div>
+        <div className="logo-container">
+          <img src="/path/to/smart-energy-lab-logo.png" alt="Smart Energy Lab Logo" />
+        </div>
       </div>
       <div className="bottom">
         <div className="bottom-heading"> 
@@ -33,7 +36,19 @@ export default function Settings() {
         </div>
         <InverterCommandCenter/>
       </div>
+      <div className="footer">
+        <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
+      </div>
       <style jsx>{`
+        .logo-container {
+          margin-right: 16px;
+          align-self: center;
+        }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+         }
         .page-layout {
           display: flex;
           flex-direction: column;
