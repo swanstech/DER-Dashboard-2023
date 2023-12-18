@@ -37,7 +37,7 @@ export default function Settings() {
         <InverterCommandCenter/>
       </div>
       <div className="footer">
-        <p>Powered by <img src="/images/SwansForesight.jpg" alt="Swanforesight Logo" /></p>
+        <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
       </div>
       <style jsx>{`
         .logo-container {

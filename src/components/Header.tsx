@@ -9,7 +9,7 @@ import {
   useMantineColorScheme,
   ActionIcon,
   Box,
-  Flex,
+  Flex,Image
 } from "@mantine/core";
 import UserMenu from "./UserMenu";
 
@@ -21,7 +21,7 @@ function HeaderComponent() {
   const dark = useMemo(() => colorScheme === "dark", [colorScheme]);
   return (
     <Header height={{ base: 50, md: 70 }} p="md">
-      <Flex justify="space-between" align="center">
+      <Flex justify="space-between" align="center" >
         <Box>
           <MediaQuery largerThan="lg" styles={{ display: "none" }}>
             <Burger
@@ -32,11 +32,22 @@ function HeaderComponent() {
               mr="xl"
             />
           </MediaQuery>
-          <Text fz="xl" fw={700}>
+          <Text fz="xl" fw={700} style={{ marginRight: '18px', marginBottom:'35px' }}>
             DER Dashboard
           </Text>
+         
         </Box>
-        <Flex gap={"sm"} align="center">
+        <Box className="logo-container" ml="auto"> {/* ml="auto" to push the logo to the right */}
+        <Image
+            src="/images/SmartEnergyLabNew.png" // Adjust the path based on your actual file structure
+            alt="Smart Energy Lab Logo"
+            width={50} // Set your desired width
+            height={50}
+            style={{ marginRight: '18px', marginBottom:'35px' }}
+             // Set your desired height
+          />
+        </Box>
+        <Flex gap={"sm"} align="center" style={{ marginRight: '18px', marginBottom:'35px' }}>
           <ActionIcon
             variant="outline"
             color={dark ? "yellow" : "blue"}
@@ -48,6 +59,21 @@ function HeaderComponent() {
           <UserMenu />
         </Flex>
       </Flex>
+      
+
+        <style jsx>{`
+        /* ... existing styles ... */
+        .logo-container {
+          margin-right:50px;
+          
+         
+        }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+        }
+      `}</style>
     </Header>
   );
 }

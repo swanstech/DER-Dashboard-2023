@@ -12,7 +12,7 @@ const DERSPage: React.FC = () => {
         <DERList />
       </Paper>
       <div className="footer">
-        <p>Powered by <img src="/images/SwansForesight.jpg" alt="Swanforesight Logo" /></p>
+        <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
       </div>
       <style jsx>{`
         .logo-container {
