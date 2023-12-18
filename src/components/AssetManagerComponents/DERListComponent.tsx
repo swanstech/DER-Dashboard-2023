@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 import router, { useRouter } from 'next/router';
+import { AuthContext } from 'n/contexts/AuthContext';
 
 const API_KEY = process.env.API_KEY || "";
 
@@ -21,6 +22,13 @@ type DERData = {
 const formatDate = (dateStr: string): string => {
   return new Date(dateStr).toLocaleDateString();
 };
+
+const getRandomLastScanTime = (): string => {
+  const date = new Date();
+  const randomDays = Math.floor(Math.random() * 30);
+  date.setDate(date.getDate() - randomDays);
+  return date.toLocaleDateString();
+}
 
 const handleStatusClick = (derId: string) => {
   router.push(`/security-ops-monitoring?derId=${derId}`);
@@ -64,6 +72,9 @@ const OperationalStatusIcon: React.FC<{ status: 'up' | 'down' | 'amber', onClick
 export const DERTable: React.FC = () => {
   const router = useRouter();
   const [data, setData] = useState<DERData[]>([]);
+  const { userRoles } = useContext(AuthContext);
+  const isSecurityAuditor = userRoles.includes('der-security-auditor');
+  console.log('userRoles:', userRoles);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -118,13 +129,14 @@ export const DERTable: React.FC = () => {
         <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
       <td>
-        <Button 
-          onClick={() => handleVulnerabilityScanClick(row.der_id)} 
-          size="xs"
-        >
+      {isSecurityAuditor ? (
+        <Button onClick={() => handleVulnerabilityScanClick(row.der_id)} size="xs">
           Scan
         </Button>
-      </td>
+      ) : (
+        getRandomLastScanTime() // Display last scan time for non-security admins
+      )}
+    </td>
     </tr>
   ));
 

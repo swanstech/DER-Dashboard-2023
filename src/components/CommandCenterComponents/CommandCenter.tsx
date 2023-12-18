@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { RangeSlider, Slider, Button, Alert } from '@mantine/core';
 import {Bolt, FilePower, ChargingPile, CloudStorm, Battery, CircleHalf, BatteryCharging, AlertCircle} from 'tabler-icons-react';
+import { AuthContext } from 'n/contexts/AuthContext';
 
 export default function InverterCommandCenter() {
+
+  const { userRoles } = useContext(AuthContext);
+  const isSecurityAdmin = userRoles.includes('der-engineer');
+
+  
   const [editMode, setEditMode] = useState(false);
   const [alertVisible, setAlertVisible] = useState(false);
 
@@ -69,12 +75,13 @@ export default function InverterCommandCenter() {
   }
   return (
     <div className='command-center'>
-
-      <div className="edit-button">
-        <Button variant="outline" onClick={handleEditSaveButton}>
-          {editMode ? "Save" : "Edit"}
-        </Button>
-      </div>
+      {isSecurityAdmin && (
+        <div className="edit-button">
+          <Button variant="outline" onClick={handleEditSaveButton}>
+            {editMode ? "Save" : "Edit"}
+          </Button>
+        </div>
+      )}
 
       {alertVisible && <Alert icon={<AlertCircle size="1rem" />} title="Safety Alert!" color="red">
         You are going to make changes to the inverter settings. Please make sure you know what you are doing.
