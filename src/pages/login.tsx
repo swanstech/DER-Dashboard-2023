@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import {
   TextInput,
   PasswordInput,
@@ -10,9 +10,13 @@ import {
 } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { initKeycloak } from '../../keycloak-config';
+import { AuthContext } from 'n/contexts/AuthContext';
 
 export default function LoginPage() {
   const router = useRouter();
+
+  // Inside your component
+  const { setRoles } = useContext(AuthContext);
 
   useEffect(() => {
     const keycloak = initKeycloak();
@@ -20,7 +24,13 @@ export default function LoginPage() {
   
     keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false }).then((authenticated) => {
       console.log('Authenticated:', authenticated);
+      
       if (authenticated) {
+        // Get the user's roles
+        const roles = keycloak.realmAccess?.roles 
+        setRoles(roles);
+        console.log('User roles:', roles);
+        
         console.log('Redirecting to settings...');
         router.push('/settings');
       } else {
@@ -32,7 +42,6 @@ export default function LoginPage() {
     });
   }, [router]);
   
-
   // The form elements are no longer needed since Keycloak handles the login
   return (
     <Container size={420} my={40}>

@@ -1,3 +1,4 @@
+import React, { useContext } from 'react';
 import {
   HomeBolt,
   BoxSeam,
@@ -9,8 +10,8 @@ import {
   Settings,
 } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
-import { useRouter } from "next/router";
 import Link from "next/link";
+import { AuthContext } from '../../contexts/AuthContext'; // Adjust the path as necessary
 
 const data = [
   { icon: <HomeBolt size="1rem" />, color: "blue", label: "Home", to: "/home" },
@@ -49,13 +50,14 @@ const data = [
     color: "grape",
     label: "Vulnerability Scan",
     to: "/penetration-testing",
-},
+    roles: ['der-security-auditor'], // Only show for 'der-security-auditor' role
+  },
   { 
     icon: <Settings size="1rem" />, 
     color: 'lime', 
     label: 'Settings', 
-    to: "/settings" },
-
+    to: "/settings" 
+  },
 ];
 
 interface MainLinkProps {
@@ -63,6 +65,7 @@ interface MainLinkProps {
   color: string;
   label: string;
   to: string;
+  roles?: string[];
 }
 
 function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
@@ -76,7 +79,6 @@ function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
           borderRadius: theme.radius.sm,
           color:
             theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-
           "&:hover": {
             backgroundColor:
               theme.colorScheme === "dark"
@@ -89,7 +91,6 @@ function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
           <ThemeIcon color={color} variant="light">
             {icon}
           </ThemeIcon>
-
           <Text size="sm">{label}</Text>
         </Group>
       </UnstyledButton>
@@ -98,8 +99,16 @@ function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
 }
 
 export function MainLinks() {
-  const links = data.map((link) => (
+  const { userRoles } = useContext(AuthContext);
+
+  const links = data.filter(link => {
+    // If 'roles' is not defined, show the link to everyone
+    if (!link.roles) return true;
+    // Otherwise, show the link only if the user has one of the required roles
+    return link.roles.some(role => userRoles.includes(role));
+  }).map((link) => (
     <RenderMainLink {...link} key={link.label} />
   ));
+
   return <div>{links}</div>;
 }

@@ -30,7 +30,7 @@ export default function penetrationTesting() {
         .page-layout {
           display: flex;
           flex-direction: column;
-          justify-content: space-between;
+          justify-content: space-between;a
           height: 100vh; /* full height of the viewport */
           padding: 8px;
           box-sizing: border-box;
