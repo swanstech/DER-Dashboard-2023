@@ -69,7 +69,7 @@ const Home: React.FC = () => {
           <GoogleMapComponent
             center={{ lat: 37.7749, lng: -122.4194 }}
             zoom={10}
-            googleMapsApiKey={googleMapsApiKey}
+            // googleMapsApiKey={googleMapsApiKey}
             markers={[
               { lat: 37.7749, lng: -122.4194, label: 'A' },
             ]}
