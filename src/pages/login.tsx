@@ -1,46 +1,47 @@
 import React, { useContext, useEffect } from 'react';
-import {
-  TextInput,
-  PasswordInput,
-  Paper,
-  Title,
-  Text,
-  Container,
-  Button,
-} from '@mantine/core';
+import { Container, Title, Text, Paper } from '@mantine/core';
 import { useRouter } from 'next/router';
-import { initKeycloak } from '../../keycloak-config';
-import { AuthContext } from 'n/contexts/AuthContext';
+import { AuthContext } from 'n/contexts/AuthContext'; // Adjust the path as necessary
+import { User } from 'tabler-icons-react';
 
 export default function LoginPage() {
   const router = useRouter();
-
-  // Inside your component
-  const { setRoles } = useContext(AuthContext);
+  const { keycloak, setRoles, setUserProfile } = useContext(AuthContext);
 
   useEffect(() => {
-    const keycloak = initKeycloak();
-    console.log('Initializing Keycloak...', keycloak);
-  
-    keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false }).then((authenticated) => {
-      console.log('Authenticated:', authenticated);
-      
-      if (authenticated) {
-        // Get the user's roles
-        const roles = keycloak.realmAccess?.roles 
-        setRoles(roles);
-        console.log('User roles:', roles);
-        
-        console.log('Redirecting to settings...');
-        router.push('/settings');
-      } else {
-        console.log('Redirecting to Keycloak login...');
-        keycloak.login();
-      }
-    }).catch(error => {
-      console.error('Keycloak init error:', error);
-    });
-  }, [router]);
+    if (keycloak && !keycloak.authenticated) {
+      keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false }).then((authenticated) => {
+        console.log('Authenticated:', authenticated);
+
+        if (authenticated) {
+          // Fetch user profile
+          keycloak.loadUserProfile().then(profile => {
+            const userProfile = ({
+              username: profile.username,
+              firstName: profile.firstName,
+              lastName: profile.lastName,
+              // ... other profile fields
+            });
+            setUserProfile(userProfile);
+            console.log('User profile:', userProfile);
+          });
+
+          // Get the user's roles
+          const roles = keycloak.realmAccess?.roles;
+          setRoles(roles);
+          console.log('User roles:', roles);
+
+          console.log('Redirecting to DER Dashboard...');
+          router.push('/home');
+        } else {
+          console.log('Redirecting to Keycloak login...');
+          keycloak.login();
+        }
+      }).catch(error => {
+        console.error('Keycloak init error:', error);
+      });
+    }
+  }, [keycloak, router, setRoles, setUserProfile]); 
   
   // The form elements are no longer needed since Keycloak handles the login
   return (
