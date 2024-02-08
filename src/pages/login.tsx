@@ -1,66 +1,305 @@
-import React, { useContext, useEffect } from 'react';
-import { Container, Title, Text, Paper } from '@mantine/core';
-import { useRouter } from 'next/router';
-import { AuthContext } from 'n/contexts/AuthContext'; // Adjust the path as necessary
-import { User } from 'tabler-icons-react';
+// import React, { useContext, useEffect } from 'react';
+// import { Container, Title, Text, Paper } from '@mantine/core';
+// import { useRouter } from 'next/router';
+// import { AuthContext } from 'n/contexts/AuthContext'; // Adjust the path as necessary
+// import { User } from 'tabler-icons-react';
 
-export default function LoginPage() {
+// export default function LoginPage() {
+//   const router = useRouter();
+//   const { keycloak, setRoles, setUserProfile } = useContext(AuthContext);
+  
+
+//   useEffect(() => {
+//     if (keycloak && !keycloak.authenticated) {
+//       keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false }).then((authenticated) => {
+//         console.log('Authenticated:', authenticated);
+
+//         if (authenticated) {
+//           // Fetch user profile
+//           keycloak.loadUserProfile().then(profile => {
+//             const userProfile = ({
+//               username: profile.username,
+//               firstName: profile.firstName,
+//               lastName: profile.lastName,
+//               // ... other profile fields
+//             });
+//             //setUserProfile(userProfile);
+//             console.log('User profile:', userProfile);
+//           });
+
+//           // Get the user's roles
+//           const roles = keycloak.realmAccess?.roles;
+//           setRoles(roles);
+//           console.log('User roles:', roles);
+
+//           console.log('Redirecting to DER Dashboard...');
+//           router.push('/home');
+//         } else {
+//           console.log('Redirecting to Keycloak login...');
+//           keycloak.login();
+//         }
+//       }).catch(error => {
+//         console.error('Keycloak init error:', error);
+//       });
+//     }
+//   }, [keycloak, router, setRoles, setUserProfile]); 
+  
+//   // The form elements are no longer needed since Keycloak handles the login
+//   return (
+//     <Container size={420} my={40}>
+//       <Title
+//         align="center"
+//         sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
+//       >
+//         DER Dashboard
+//       </Title>
+//       <Text color="dimmed" size="sm" align="center" mt={5}>
+//         One place to manage all your inverters
+//       </Text>
+
+//       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+//         <Text align="center" mt="md">
+//           Redirecting to login...
+//         </Text>
+//       </Paper>
+//     </Container>
+//   );
+// }
+import React, { useEffect, useState } from 'react';
+import { Container, Title, Text, Paper, Tabs } from '@mantine/core';
+import UserMenu from '../components/UserMenu';
+import { useRouter } from 'next/router';
+import { initKeycloak } from '../../keycloak-config';
+import HeaderComponent from 'n/components/Header';
+import AssetManagerPieChart from 'n/components/HomePageComponents/AssetManagerPieChart';
+import { Activity, CloudStorm, Map2 } from 'tabler-icons-react';
+import DailyEnergyUsage from 'n/components/EnergyCharts/DailyEnergyUsage';
+import MonthlyEnergyUsage from 'n/components/EnergyCharts/MonthlyEnergyUsage';
+import WeeklyEnergyUsage from 'n/components/EnergyCharts/WeeklyEnergyUsage';
+import YearlyEnergyUsage from 'n/components/EnergyCharts/YearlyEnergyUsage';
+import GoogleMapComponent from 'n/components/GenericAPIComponents/GoogleMapsComponent';
+import WeatherComponent from 'n/components/GenericAPIComponents/WeatherComponent';
+import { IconLogin } from '@tabler/icons-react';
+
+
+
+
+const Login: React.FC = () => {
   const router = useRouter();
-  const { keycloak, setRoles, setUserProfile } = useContext(AuthContext);
+  const [isAuth, setIsAuth] = useState(false);
+  const [userRoles, setUserRoles] = useState<string[]>([]);
+  const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
+  const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
 
   useEffect(() => {
-    if (keycloak && !keycloak.authenticated) {
-      keycloak.init({ onLoad: 'check-sso', checkLoginIframe: false }).then((authenticated) => {
-        console.log('Authenticated:', authenticated);
+    const initializeKeycloak = async () => {
+      try {
+        // Initialize Keycloak
+        const keycloak = initKeycloak();
 
-        if (authenticated) {
-          // Fetch user profile
-          keycloak.loadUserProfile().then(profile => {
-            const userProfile = ({
-              username: profile.username,
-              firstName: profile.firstName,
-              lastName: profile.lastName,
-              // ... other profile fields
-            });
-            setUserProfile(userProfile);
-            console.log('User profile:', userProfile);
-          });
-
-          // Get the user's roles
-          const roles = keycloak.realmAccess?.roles;
-          setRoles(roles);
-          console.log('User roles:', roles);
-
-          console.log('Redirecting to DER Dashboard...');
-          router.push('/home');
-        } else {
-          console.log('Redirecting to Keycloak login...');
-          keycloak.login();
+        if (!keycloak) {
+          console.error('Keycloak object is null');
+          return;
         }
-      }).catch(error => {
-        console.error('Keycloak init error:', error);
-      });
-    }
-  }, [keycloak, router, setRoles, setUserProfile]); 
-  
-  // The form elements are no longer needed since Keycloak handles the login
-  return (
-    <Container size={420} my={40}>
-      <Title
-        align="center"
-        sx={(theme) => ({ fontFamily: `Greycliff CF, ${theme.fontFamily}`, fontWeight: 900 })}
-      >
-        DER Dashboard
-      </Title>
-      <Text color="dimmed" size="sm" align="center" mt={5}>
-        One place to manage all your inverters
-      </Text>
 
-      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-        <Text align="center" mt="md">
-          Redirecting to login...
-        </Text>
-      </Paper>
-    </Container>
+        await keycloak.init({ onLoad: 'check-sso' });
+
+        if (!keycloak.authenticated) {
+          // If not authenticated, redirect to Keycloak login
+          keycloak.login({ redirectUri: window.location.origin + router.pathname });
+        } else {
+          // Extract user roles from the Keycloak token
+          const roles = keycloak.tokenParsed?.realm_access?.roles || [];
+          setUserRoles(roles);
+          setKeycloak(keycloak);
+
+          if (roles.includes('Engineer') || roles.includes("Auditor") || roles.includes("Security Admin") || roles.includes("General Manager")) {
+
+            // Extract user profile information
+            const fullName = keycloak.tokenParsed?.name || "";
+            const email = keycloak.tokenParsed?.email || "";
+            setUserProfile({ fullName, email });
+
+            // User is authenticated
+            setIsAuth(true);
+
+           // Redirect to Keycloak login every 10 minutes
+           const redirectInterval = setInterval(() => {
+            keycloak.logout(); // Logout and redirect to login page
+          }, 10 * 60 * 1000);
+
+          // Cleanup function to clear the interval when the component is unmounted
+          return () => clearInterval(redirectInterval);
+          }
+
+          // You can now use the roles as needed
+          console.log('User roles:', roles);
+        }
+      } catch (error) {
+        console.error('Keycloak initialization error:', error);
+        // Handle the error appropriately 
+      }
+    };
+
+    initializeKeycloak();
+  }, [router]);
+
+  if (!isAuth ) {
+    return (
+      <><div className="page-layout">
+        <HeaderComponent
+          userRoles={userRoles}
+          userProfile={userProfile}
+          keycloakInstance={keycloakInstance} />
+        <div className="auth-error-message">
+          <p>You are not authenticated.</p>
+          <p>You do not have the required role to access this page.</p>
+          <p>Pls Logout and login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
+        </div>
+      </div>
+        <style jsx>{`
+        .page-layout {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 50vh; /* full height of the viewport */
+          padding: 8px;
+          box-sizing: border-box;
+        }
+  .auth-error-message {
+    text-align: center;
+    margin: auto;
+    max-width: 400px;
+    padding: 30px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+`}</style></>
+    );
+  }
+
+  // The form elements are no longer needed since Keycloak handles the login
+ 
+  return (
+    <div className="page-layout">
+
+      <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
+      <div className="top">
+        <div className="left">
+          <div className="left-heading">
+            <Activity size="3rem" color='green' />
+            <h6>DER Asset Manager</h6>
+          </div>
+          <AssetManagerPieChart />
+        </div>
+        <div className="right">
+          {/* Top-right section with Tabs */}
+          <div className="right-heading">
+            <Activity size="3rem" color='green' />
+            <h6>DER Energy Monitoring</h6>
+          </div>
+          <Tabs defaultValue='daily'>
+            <Tabs.List>
+              <Tabs.Tab value="daily">Daily</Tabs.Tab>
+              <Tabs.Tab value="monthly">Monthly</Tabs.Tab>
+              <Tabs.Tab value="weekly">Weekly</Tabs.Tab>
+              <Tabs.Tab value="yearly">Yearly</Tabs.Tab>
+            </Tabs.List>
+            <Tabs.Panel value="daily" pt="xs">
+              <div className="chart-container"><DailyEnergyUsage /></div>
+            </Tabs.Panel>
+            <Tabs.Panel value="weekly" pt="xs">
+              <div className="chart-container"><WeeklyEnergyUsage /></div>
+            </Tabs.Panel>
+            <Tabs.Panel value="monthly" pt="xs">
+              <div className="chart-container"><MonthlyEnergyUsage /></div>
+            </Tabs.Panel>
+            <Tabs.Panel value="yearly" pt="xs">
+              <div className="chart-container"><YearlyEnergyUsage /></div>
+            </Tabs.Panel>
+          </Tabs>
+        </div>
+      </div>
+      <div className="bottom">
+        <div className="left">
+          {/* Bottom-left section (Weather API data) */}
+          <div className="left-heading">
+            <CloudStorm size="3rem" color='green' />
+            <h6>DER Weather Forecast</h6>
+          </div>
+          <WeatherComponent latitude={-33.833} longitude={150.52808} />
+        </div>
+        <div className="right">
+          {/* Bottom-right section (Google Maps) */}
+          <div className="right-heading">
+            <Map2 size="3rem" color='green' />
+            <h6>DER Maps</h6>
+          </div>
+          <GoogleMapComponent
+            center={{ lat: 37.7749, lng: -122.4194 }}
+            zoom={10}
+            markers={[
+              { lat: 37.7749, lng: -122.4194, label: 'A' },
+            ]}
+          />
+        </div>
+      </div>
+      <div className="footer">
+        {/* Pass userRoles and userProfile to UserMenu */}
+        <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
+      </div>
+      {/* Styles */}
+      <style jsx>{`
+        .page-layout {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: 100vh;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+        .footer {
+          text-align: center;
+          padding: 8px;
+          background-color: #f5f5f5; /* Add a background color to the footer */
+        }
+        .top, .bottom {
+          display: flex;
+          flex: 1;
+          justify-content: space-between;
+          align-items: stretch;
+          padding: 8px;
+        }
+        .left, .right {
+          flex: 1;
+          margin: 8px;
+          padding: 16px;
+          border-radius: 8px;
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+          display: flex;
+          flex-direction: column;
+        }
+        .right {
+          width: 50%; // Adjust the width of the right section
+        }
+        .left-heading, .right-heading {
+          display: flex;
+          align-items: center;
+          font-size: 24px;
+          color: #555555;
+          margin-bottom: 16px;
+        }
+        .chart-container {
+          width: 100%; // Chart container takes full width of its parent
+          max-height: 400px;
+          margin: 0 auto;
+          overflow: hidden; // Ensures the chart does not overflow its container
+        }
+      `}</style>
+    </div>
   );
 }
+
+export default Login;
