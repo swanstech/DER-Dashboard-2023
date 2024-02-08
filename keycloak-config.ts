@@ -1,18 +1,39 @@
-// src/config/keycloak-config.ts
-import Keycloak from 'keycloak-js';
-
-const keycloakConfig = {
-  url: 'http://localhost:8080', // Keycloak server URL
-  realm: 'swanstech', // Replace with your realm
-  clientId: 'der-dashboard', // Replace with your client ID
-};
-
-let keycloak;
+import Keycloak, { KeycloakProfile } from 'keycloak-js';
 
 export const initKeycloak = () => {
-  if (!keycloak) {
-    keycloak = new Keycloak(keycloakConfig);
+  if (!process.browser) {
+    // Skip Keycloak initialization on the server side
+    return null;
   }
-  return keycloak;
+
+  const keycloakConfig = {
+    url: 'http://localhost:8080', // Keycloak server URL without trailing slash
+    realm: 'swanstech', // Replace with your realm
+    clientId: 'frontend-client', // Replace with your client ID
+  };
+
+  return new Keycloak(keycloakConfig);
 };
+
+export const loadUserProfile = async (
+  keycloak: Keycloak.KeycloakInstance
+): Promise<KeycloakProfile | null> => {
+  try {
+    if (keycloak.authenticated) {
+      // Load user profile
+      const userProfile = await keycloak.loadUserProfile();
+      return userProfile;
+    } else {
+      console.warn('User not authenticated');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error loading user profile:', error);
+    return null;
+  }
+};
+
+
+
+
 

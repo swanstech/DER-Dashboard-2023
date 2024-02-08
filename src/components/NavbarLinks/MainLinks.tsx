@@ -49,8 +49,7 @@ const data = [
     icon: <Bolt size="1rem" />,
     color: "grape",
     label: "Vulnerability Scan",
-    to: "/penetration-testing",
-    roles: ['der-security-auditor'], // Only show for 'der-security-auditor' role
+    to: "/penetration-testing"
   },
   { 
     icon: <Settings size="1rem" />, 
@@ -103,9 +102,9 @@ export function MainLinks() {
 
   const links = data.filter(link => {
     // If 'roles' is not defined, show the link to everyone
-    if (!link.roles) return true;
+    if (!link["roles"]) return true;
     // Otherwise, show the link only if the user has one of the required roles
-    return link.roles.some(role => userRoles.includes(role));
+    return link["roles"].some(role => userRoles.includes(role));
   }).map((link) => (
     <RenderMainLink {...link} key={link.label} />
   ));
