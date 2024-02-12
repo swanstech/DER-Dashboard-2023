@@ -63,7 +63,7 @@ export default function penetrationTesting() {
     };
 
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
   if (!isAuth ) {
     return (

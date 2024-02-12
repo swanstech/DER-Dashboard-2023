@@ -62,7 +62,7 @@ const DERSPage: React.FC = () => {
     };
 
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
   if (!isAuth ) {
     return (

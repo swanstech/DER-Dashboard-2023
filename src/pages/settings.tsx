@@ -21,12 +21,10 @@ export default function Settings() {
       try {
         // Initialize Keycloak
         const keycloak = initKeycloak();
-
         if (!keycloak) {
           console.error('Keycloak object is null');
           return;
-        }
-
+      }
         await keycloak.init({ onLoad: 'check-sso' });
 
         if (!keycloak.authenticated) {
@@ -64,7 +62,7 @@ export default function Settings() {
     };
 
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
   if (!isAuth ) {
     return (
@@ -76,7 +74,7 @@ export default function Settings() {
         <div className="auth-error-message">
           <p>You are not authenticated.</p>
           <p>You do not have the required role to access this page.</p>
-          <p>Pls Logout and login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
+          <p>Pls ogin with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
         </div>
       </div>
         <style jsx>{`

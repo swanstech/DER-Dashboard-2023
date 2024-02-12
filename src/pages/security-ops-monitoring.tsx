@@ -65,7 +65,7 @@ export default function SecOpsMonitoring() {
     };
 
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
   if (!isAuth ) {
     return (

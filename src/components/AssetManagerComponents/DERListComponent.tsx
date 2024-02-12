@@ -31,15 +31,26 @@ const getRandomLastScanTime = (): string => {
 }
 
 const handleStatusClick = (derId: string) => {
-  router.push(`/security-ops-monitoring?derId=${derId}`);
+  router.push({
+    pathname: '/security-ops-monitoring',
+    query: { derId: derId },
+  });
+
+  
 };
 
 const handleRowClick = (derId: string) => {
-  router.push(`/settings?derId=${derId}`);
+  router.push({
+    pathname: '/settings',
+    query: { derId: derId },
+  });
 };
 
 const handleVulnerabilityScanClick = (derId: string) => {
-  router.push(`/penetration-testing?derId=${derId}`);
+  router.push({
+    pathname: '/penetration-testing',
+    query: { derId: derId },
+  });
 };
 
 const getColorForDate = (dateStr: string): string => {

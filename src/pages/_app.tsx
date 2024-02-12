@@ -6,7 +6,7 @@ import {
 } from "@mantine/core";
 import { useHotkeys, useLocalStorage } from "@mantine/hooks";
 import BaseAppShell from "../components/BaseAppShell";
-import { AuthProvider } from '../contexts/AuthContext'; // Import AuthProvider
+//import { AuthProvider } from '../contexts/AuthContext'; // Import AuthProvider
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   const [colorScheme, setColorScheme] = useLocalStorage<ColorScheme>({
@@ -29,11 +29,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         withNormalizeCSS
         theme={{ colorScheme }}
       >
-         {/* <AuthProvider>  */}
+         {/* <AuthProvider>   */}
           <BaseAppShell>
             <Component {...pageProps} />
           </BaseAppShell>
-        {/* </AuthProvider> */}
+         {/* </AuthProvider>  */}
       </MantineProvider>
     </ColorSchemeProvider>
   );

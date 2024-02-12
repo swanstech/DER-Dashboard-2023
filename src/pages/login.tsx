@@ -142,7 +142,7 @@ const Login: React.FC = () => {
     };
 
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
   if (!isAuth ) {
     return (

@@ -74,7 +74,7 @@ const Home: React.FC = () => {
     };
 
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
   if (!isAuth ) {
     return (
