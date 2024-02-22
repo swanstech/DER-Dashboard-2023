@@ -99,6 +99,7 @@ function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
 
 export function MainLinks() {
   const { userRoles } = useContext(AuthContext);
+  //console.log("user roles",userRoles);
 
   const links = data.filter(link => {
     // If 'roles' is not defined, show the link to everyone
@@ -111,3 +112,7 @@ export function MainLinks() {
 
   return <div>{links}</div>;
 }
+
+
+
+

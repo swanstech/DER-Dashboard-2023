@@ -7,7 +7,7 @@ const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'
 async function getResourceSet(accessToken) {
     try {
       const response = await axios.get(
-        `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/authz/protection/resource_set?uri=/settings`,
+        `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/authz/protection/resource_set?uri=/assets`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -60,7 +60,7 @@ export default async function handler(req, res) {
     // if (Array.isArray(resourceSet) && resourceSet.length > 0) {
     //   // Extract the first value from the resourceSet as the id
     //   const id = resourceSet[0];
-      const id = "res:settings";
+      const id = "res:assets";
      // console.log(id);
       // Make a POST request to the Keycloak token endpoint with additional information
       const umaTicketResponse = await axios.post(

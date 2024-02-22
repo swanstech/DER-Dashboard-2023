@@ -5,7 +5,7 @@
     "resource": "backend-client",
     "verify-token-audience": true,
     "credentials": {
-      "secret": "JHQXDEIyW3K0C94wdgSeXS6ell3nCWXf",
+      "secret": "rLbU2MS29qqMosgElCne0yR5FpHUgQ1X",
       "//secret":"tQFvZBNksjeWjFsraNCcSgHbNVJEKIUh"
     },
     "bearerOnly": false,
