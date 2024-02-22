@@ -22,6 +22,7 @@
     "@tabler/icons-react": "^2.32.0",
     "axios": "^1.6.2",
     "echarts": "^5.4.3",
+    "fs": "^0.0.1-security",
     "keycloak": "^1.2.0",
     "keycloak-js": "^23.0.1",
     "n": "^9.1.0",
