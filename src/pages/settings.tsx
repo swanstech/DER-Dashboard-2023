@@ -29,8 +29,6 @@ export default function Settings() {
 
     document.addEventListener("mousemove", updateUserActivityTimestamp);
     document.addEventListener("keydown", updateUserActivityTimestamp);
-
-
     // const refreshToken = async (keycloak: Keycloak.KeycloakInstance) => {
     //   try {
     //     const isSessionActive = !keycloak.isTokenExpired(5); // Check if the session is active for the next 5 seconds
@@ -88,9 +86,6 @@ export default function Settings() {
 
             // Make API call to your backend api with access token
             try {
-
-              console.log(keycloak.token);
-
               const response = await axios.post('/api/settings', {
                 // other request data
               }, {

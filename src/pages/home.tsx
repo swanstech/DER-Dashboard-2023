@@ -75,8 +75,6 @@ const Home: React.FC = () => {
           keycloak.login({ redirectUri: window.location.origin + router.pathname });
         } else {
           // Extract user roles from the Keycloak token
-          // console.log(keycloak.token);
-          // console.log(keycloak.tokenParsed);
           const roles = keycloak.tokenParsed?.realm_access?.roles || [];
           setUserRoles(roles);
           setKeycloak(keycloak);
