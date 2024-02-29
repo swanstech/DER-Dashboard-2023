@@ -26,25 +26,6 @@ export default function penetrationTesting() {
     document.addEventListener("mousemove", updateUserActivityTimestamp);
     document.addEventListener("keydown", updateUserActivityTimestamp);
 
-
-    // const refreshToken = async (keycloak: Keycloak.KeycloakInstance) => {
-    //   try {
-    //     const isSessionActive = !keycloak.isTokenExpired(5); // Check if the session is active for the next 5 seconds
-
-    //     if (isSessionActive) {
-    //       await keycloak.updateToken(5); // 5 seconds before the token expires
-    //       const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-    //       setUserRoles(roles);
-
-    //       // You can update user profile or take other actions if needed
-
-    //       console.log('Token refreshed successfully.');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error refreshing token:', error);
-    //     // Handle the error appropriately, e.g., redirect to login
-    //   }
-    // };
     const initializeKeycloak = async () => {
       try {
         // Initialize Keycloak
@@ -55,11 +36,6 @@ export default function penetrationTesting() {
           console.error('Keycloak object is null');
           return;
         }
-
-        // keycloak.onTokenExpired = () => {
-        //   refreshToken(keycloak);
-        // };
-
         await keycloak.init({ onLoad: 'check-sso' });
 
         if (!keycloak.authenticated) {

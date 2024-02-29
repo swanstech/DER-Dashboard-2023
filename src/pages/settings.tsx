@@ -57,11 +57,6 @@ export default function Settings() {
           console.error('Keycloak object is null');
           return;
         }
-
-        // keycloak.onTokenExpired = () => {
-        //   refreshToken(keycloak);
-        // };
-
         await keycloak.init({ onLoad: 'check-sso' });
 
         if (!keycloak.authenticated) {
@@ -69,8 +64,6 @@ export default function Settings() {
           keycloak.login({ redirectUri: window.location.origin + router.pathname });
         } else {
           // Extract user roles from the Keycloak token
-          // console.log(keycloak.token);
-          // console.log(keycloak.tokenParsed);
           const roles = keycloak.tokenParsed?.realm_access?.roles || [];
           setUserRoles(roles);
           setKeycloak(keycloak);
