@@ -26,17 +26,10 @@ export default async function handler(req, res) {
   try {
     const authorizationHeader = req.headers.authorization;
 
-    // Check if the Authorization header is present
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
-
-    // Extract the token from the Authorization header
     const accessToken = authorizationHeader.split(' ')[1];
-
-    // Now you can use the accessToken as needed
-    //console.log('Access token:', accessToken);
-
     const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'));
 
     // const response = await axios.post(
@@ -61,8 +54,6 @@ export default async function handler(req, res) {
     //   // Extract the first value from the resourceSet as the id
     //   const id = resourceSet[0];
       const id = "res:settings";
-     // console.log(id);
-      // Make a POST request to the Keycloak token endpoint with additional information
       const umaTicketResponse = await axios.post(
         `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`,
         `grant_type=urn:ietf:params:oauth:grant-type:uma-ticket&client_id=${keycloakConfig.resource}&client_secret=${keycloakConfig.credentials.secret}&audience=${keycloakConfig.resource}&permission=${id}&response_mode=permissions`,
