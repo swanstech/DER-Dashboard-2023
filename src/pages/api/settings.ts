@@ -53,6 +53,7 @@ export default async function handler(req, res) {
     // if (Array.isArray(resourceSet) && resourceSet.length > 0) {
     //   // Extract the first value from the resourceSet as the id
     //   const id = resourceSet[0];
+      console.log(accessToken);
       const id = "res:settings";
       const umaTicketResponse = await axios.post(
         `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`,

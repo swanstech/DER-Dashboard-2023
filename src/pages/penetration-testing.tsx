@@ -11,6 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import HardwareInfoTable from 'n/components/SetupComponents/HardwareInformation';
 import NewScanForm from 'n/components/NewScanForm';
 
+
 const styles = {
   buttonContainer: {
     display: 'flex',
@@ -242,6 +243,8 @@ const leftContainer = {
 
 const PAGE_SIZE = 5;
 
+const secret ="rLbU2MS29qqMosgElCne0yR5FpHUgQ1X";
+
 const TestResultsTable = ({ testResults }) => {
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -252,6 +255,7 @@ const TestResultsTable = ({ testResults }) => {
   const startIndex = (currentPage - 1) * PAGE_SIZE;
   const endIndex = startIndex + PAGE_SIZE;
   const currentResults = testResults.slice(startIndex, endIndex);
+
 
   const handlePageChange = (newPage) => {
     setCurrentPage(newPage);
@@ -368,35 +372,42 @@ export default function PenetrationTesting() {
   const [data, setData] = useState([]);
 
   const [currentPage, setCurrentPage] = useState(1);
-
-
   const recordsPerPage = 3;
   const totalPages = 5;
+ 
 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (derId) {
+        const accessToken = keycloakInstance.token;
+        
+        const id = "device-api";
+        const response = await fetch(`http://localhost:8080/realms/swanstech/protocol/openid-connect/token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: `grant_type=urn:ietf:params:oauth:grant-type:uma-ticket&client_id=backend-client&client_secret=${secret}&audience=backend-client&permission=${id}&response_mode=permissions`,
+        });
+    
+        const r = await response.json();
+        console.log("token",r);
+        if (r && r.length > 0 ) {
+          // Fetch data from your API using the obtained umaTicketData or any other logic you need
           const response = await fetch(`https://yq9jgzyjta.execute-api.ap-southeast-2.amazonaws.com/test/der/pentest/scan-history`);
           const result = await response.json();
-
+    
           // Filter the results for the specific asset ID
-          const filteredData = result.filter(record => record[11] === derId);
-
+          const filteredData = derId
+            ? result.filter(record => record[11] === derId)
+            : result.filter(record => record[11] === 'DER_1');
+    
           setData(filteredData);
-
-        }
-        else {
-          const response = await fetch(`https://yq9jgzyjta.execute-api.ap-southeast-2.amazonaws.com/test/der/pentest/scan-history`);
-          const result = await response.json();
-
-          // Filter the results for the specific asset ID
-          console.log(result[0][11]);
-         const filteredData = result.filter(record => record[11] ==='DER_1');
-
-          setData(filteredData);
-
+        } else {
+          console.error('Unexpected umaTicketData format:', r);
+          // Handle the case where umaTicketData does not match the expected format
         }
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -406,11 +417,7 @@ export default function PenetrationTesting() {
     fetchData();
   }, [derId]);
 
-
-
-  console.log(data);
   const renderTableRows = () => {
-    console.log(data);
     const startIndex = (currentPage - 1) * recordsPerPage;
     const endIndex = startIndex + recordsPerPage;
     const visibleData = data.slice(startIndex, endIndex);
@@ -788,6 +795,7 @@ export default function PenetrationTesting() {
           const roles = keycloak.tokenParsed?.realm_access?.roles || [];
           setUserRoles(roles);
           setKeycloak(keycloak);
+        
 
           if (roles.includes('General Manager') || roles.includes("Auditor")) {
             const fullName = keycloak.tokenParsed?.name || "";
@@ -807,6 +815,7 @@ export default function PenetrationTesting() {
                 .map(item => item.scopes.map(scope => scope.replace('scopes:', '')))
                 .flat();
               setScopes(scopesArray);
+             
 
             } catch (apiError) {
               console.error('API Error:', apiError);
@@ -838,6 +847,47 @@ export default function PenetrationTesting() {
 
     initializeKeycloak();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const accessToken = keycloakInstance.token;
+        
+        const id = "device-api";
+        const response = await fetch(`http://localhost:8080/realms/swanstech/protocol/openid-connect/token`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Authorization: `Bearer ${accessToken}`,
+          },
+          body: `grant_type=urn:ietf:params:oauth:grant-type:uma-ticket&client_id=backend-client&client_secret=${secret}&audience=backend-client&permission=${id}&response_mode=permissions`,
+        });
+    
+        const r = await response.json();
+        console.log("token",r);
+        if (r && r.length > 0 ) {
+          // Fetch data from your API using the obtained umaTicketData or any other logic you need
+          const response = await fetch(`https://yq9jgzyjta.execute-api.ap-southeast-2.amazonaws.com/test/der/pentest/scan-history`);
+          const result = await response.json();
+    
+          // Filter the results for the specific asset ID
+          const filteredData = derId
+            ? result.filter(record => record[11] === derId)
+            : result.filter(record => record[11] === 'DER_1');
+    
+          setData(filteredData);
+        } else {
+          console.error('Unexpected umaTicketData format:', r);
+          // Handle the case where umaTicketData does not match the expected format
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [derId, keycloakInstance]);
+
 
   if (!isAuth) {
     return (
