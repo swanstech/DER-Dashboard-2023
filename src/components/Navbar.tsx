@@ -7,7 +7,7 @@ function NavbarComponent() {
   return (
     <Navbar p="md" hiddenBreakpoint="lg" width={{ sm: 200, lg: 300 }}>
       <Navbar.Section grow mt="xs">
-        <MainLinks />
+        <MainLinks  />
       </Navbar.Section>
       <Navbar.Section mt="sm">
         <ExtendedLinks />

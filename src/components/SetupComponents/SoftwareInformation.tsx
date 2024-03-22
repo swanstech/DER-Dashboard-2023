@@ -51,7 +51,7 @@ export default function SoftwareInfoTable({derId}) {
     }
 
     fetchData();
-  }, []);
+  }, [derId]);
 
   useEffect(() => {
     if (softwareData && softwareData.data) {

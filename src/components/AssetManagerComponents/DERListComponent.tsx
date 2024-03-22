@@ -4,6 +4,7 @@ import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 import { AuthContext } from 'n/contexts/AuthContext';
+import { isGeneratorFunction } from 'util/types';
 
 const API_KEY = process.env.API_KEY || "";
 
@@ -31,15 +32,26 @@ const getRandomLastScanTime = (): string => {
 }
 
 const handleStatusClick = (derId: string) => {
-  router.push(`/security-ops-monitoring?derId=${derId}`);
+  router.push({
+    pathname: '/security-ops-monitoring',
+    query: { derId: derId },
+  });
+
+  
 };
 
 const handleRowClick = (derId: string) => {
-  router.push(`/settings?derId=${derId}`);
+  router.push({
+    pathname: '/settings',
+    query: { derId: derId },
+  });
 };
 
 const handleVulnerabilityScanClick = (derId: string) => {
-  router.push(`/penetration-testing?derId=${derId}`);
+  router.push({
+    pathname: '/penetration-testing',
+    query: { derId: derId },
+  });
 };
 
 const getColorForDate = (dateStr: string): string => {
@@ -69,12 +81,15 @@ const OperationalStatusIcon: React.FC<{ status: 'up' | 'down' | 'amber', onClick
   return <span style={style} onClick={onClick}>{symbol}</span>;
 };
 
-export const DERTable: React.FC = () => {
+export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
   const router = useRouter();
   const [data, setData] = useState<DERData[]>([]);
-  const { userRoles } = useContext(AuthContext);
-  const isSecurityAuditor = userRoles.includes('der-security-auditor');
-  console.log('userRoles:', userRoles);
+ // const { userRoles } = useContext(AuthContext);
+  const isSecurityAuditor = userRoles.includes('Security Admin');
+  const isEngineer = userRoles.includes('Engineer');
+  const GeneralManager = userRoles.includes('General Manager');
+  const isAuditor = userRoles.includes('Auditor');
+  //console.log('userRoles:', userRoles);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -113,23 +128,43 @@ export const DERTable: React.FC = () => {
 
   const rows = data.map((row) => (
     <tr key={row.der_id}>
-      <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
-        {row.der_id}
-      </td>
-      <td style={{ cursor: 'pointer' }} onClick={() => handleRowClick(row.der_id)}>
-        {row.der_name}
-      </td>
+       
+       {(isEngineer || GeneralManager) ? (
+       <>
+       <td style={{ cursor: 'pointer' }}>
+       <Link  href={`/settings?derId=${row.der_id}`}>
+       {row.der_id}
+     </Link>
+     </td>
+     <td style={{ cursor: 'pointer' }}>
+       <Link  href={`/settings?derId=${row.der_id}`}>
+       {row.der_name}
+     </Link>
+     </td></>
+    ):
+    ( <><td style={{ cursor: 'pointer' }} >
+    {row.der_id}
+  </td><td style={{ cursor: 'pointer' }} >
+      {row.der_name}
+    </td></>)}
+    
       <td>{row.der_type}</td>
       <td>{formatDate(row.manufacture_date)}</td>
       <td>{row.manufacturer_info}</td>
       <td>{row.manufacturer_model_number}</td>
       <td>{row.manufacturer_hw_version}</td>
       <td>{row.location}</td>
+      
+      {(isSecurityAuditor || GeneralManager) ? (
       <td>
         <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
+    ):
+    (<td>
+       {row.operationalStatus} 
+    </td>)}
       <td>
-      {isSecurityAuditor ? (
+      {(isAuditor || GeneralManager) ? (
         <Button onClick={() => handleVulnerabilityScanClick(row.der_id)} size="xs">
           Scan
         </Button>

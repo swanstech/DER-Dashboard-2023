@@ -9,8 +9,11 @@ export const initKeycloak = () => {
   const keycloakConfig = {
     url: 'http://localhost:8080', // Keycloak server URL without trailing slash
     realm: 'swanstech', // Replace with your realm
-    clientId: 'frontend-client', // Replace with your client ID
+    clientId: 'frontend-client',
+   
   };
+
+ 
 
   return new Keycloak(keycloakConfig);
 };

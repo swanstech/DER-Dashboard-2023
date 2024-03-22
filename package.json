@@ -22,6 +22,7 @@
     "@tabler/icons-react": "^2.32.0",
     "axios": "^1.6.2",
     "echarts": "^5.4.3",
+    "fs": "^0.0.1-security",
     "keycloak": "^1.2.0",
     "keycloak-js": "^23.0.1",
     "n": "^9.1.0",
@@ -30,6 +31,7 @@
     "node-bom": "^0.2.4",
     "papaparse": "^5.4.1",
     "react": "18.2.0",
+    "react-datepicker": "^6.2.0",
     "react-dom": "18.2.0",
     "tabler-icons-react": "^1.56.0",
     "zod": "^3.21.4"

@@ -7,26 +7,56 @@ import { useRouter } from 'next/router';
 import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
+import axios from 'axios';
+
+
 
 export default function Settings() {
   const router = useRouter();
   const { derId } = router.query;
   const [isAuth, setIsAuth] = useState(false);
-  const [userRoles, setUserRoles] = useState<string[]>([]);
-  const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
-  const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
+  const [userRolesList, setUserRoles] = useState<string[]>([]);
+  const [scopesArrayList, setScopes] = useState<string[]>([]);
+  const [userProfileName, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
+  const [keycloakInstanceObject, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
+  let lastUserActivityTimestamp = Date.now();
 
+  // Update the user activity timestamp whenever there is user interaction
+  const updateUserActivityTimestamp = () => {
+    lastUserActivityTimestamp = Date.now();
+  };
   useEffect(() => {
+
+    document.addEventListener("mousemove", updateUserActivityTimestamp);
+    document.addEventListener("keydown", updateUserActivityTimestamp);
+    // const refreshToken = async (keycloak: Keycloak.KeycloakInstance) => {
+    //   try {
+    //     const isSessionActive = !keycloak.isTokenExpired(5); // Check if the session is active for the next 5 seconds
+
+    //     if (isSessionActive) {
+    //       await keycloak.updateToken(5); // 5 seconds before the token expires
+    //       const roles = keycloak.tokenParsed?.realm_access?.roles || [];
+    //       setUserRoles(roles);
+
+    //       // You can update user profile or take other actions if needed
+
+    //       console.log('Token refreshed successfully.');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error refreshing token:', error);
+    //     // Handle the error appropriately, e.g., redirect to login
+    //   }
+    // };
     const initializeKeycloak = async () => {
       try {
         // Initialize Keycloak
         const keycloak = initKeycloak();
 
+
         if (!keycloak) {
           console.error('Keycloak object is null');
           return;
         }
-
         await keycloak.init({ onLoad: 'check-sso' });
 
         if (!keycloak.authenticated) {
@@ -37,46 +67,90 @@ export default function Settings() {
           const roles = keycloak.tokenParsed?.realm_access?.roles || [];
           setUserRoles(roles);
           setKeycloak(keycloak);
-          if (roles.includes('Engineer') || roles.includes("Auditor") || roles.includes("Security Admin") || roles.includes("General Manager")) {
+          if (roles.includes('Engineer') || roles.includes('General Manager')) {
 
             // Extract user profile information
+
             const fullName = keycloak.tokenParsed?.name || "";
             const email = keycloak.tokenParsed?.email || "";
             setUserProfile({ fullName, email });
             // User is authenticated
             setIsAuth(true);
+
+            // Make API call to your backend api with access token
+            try {
+              const response = await axios.post('/api/settings', {
+                // other request data
+              }, {
+                headers: {
+                  'Authorization': `Bearer ${keycloak.token}`
+                }
+              });
+              console.log("called");
+              console.log('API Response:', response.data);
+              // Assuming response.data is an array of objects with 'scopes' property
+              let scopesArray = response.data
+                .map(item => item.scopes.map(scope => scope.replace('scopes:', '')))
+                .flat();
+              setScopes(scopesArray);
+
+              // Now, scopesArray contains all the scopes from the response.data array
+              console.log('All Scopes:', scopesArray);
+
+              // Do something with the API response
+            } catch (apiError) {
+              console.error('API Error:', apiError);
+              // Handle API error appropriately
+            }
             // You can now use the roles as needed
             console.log('User roles:', roles);
-             // Redirect to Keycloak login every 10 minutes
-             const redirectInterval = setInterval(() => {
-              keycloak.logout(); // Logout and redirect to login page
-            }, 10 * 60 * 1000);
+            // Redirect to Keycloak login every 10 minutes
+            const inactivityCheckInterval = setInterval(() => {
+              const currentTime = Date.now();
+              const inactiveDuration = currentTime - lastUserActivityTimestamp;
+
+              // Set the inactivity timeout to 10 minutes (10 * 60 * 1000 milliseconds)
+              const inactivityTimeout = 10 * 60 * 1000;
+
+              if (inactiveDuration >= inactivityTimeout) {
+                // If the user has been inactive for more than 10 minutes, log them out
+                keycloak.logout();
+                clearInterval(inactivityCheckInterval); // Stop checking for inactivity
+              }
+            }, 60 * 1000);
 
             // Cleanup function to clear the interval when the component is unmounted
-            return () => clearInterval(redirectInterval);
+            return () => {
+              document.removeEventListener("mousemove", updateUserActivityTimestamp);
+              document.removeEventListener("keydown", updateUserActivityTimestamp);
+              clearInterval(inactivityCheckInterval);
+            };
           }
           console.log('User roles:', roles);
+
         }
-      } catch (error) {
+
+      }
+      catch (error) {
         console.error('Keycloak initialization error:', error);
         // Handle the error appropriately 
       }
-    };
 
+    }
     initializeKeycloak();
-  }, [router]);
+  }, []);
 
-  if (!isAuth ) {
+  if (!isAuth) {
     return (
       <><div className="page-layout">
         <HeaderComponent
-          userRoles={userRoles}
-          userProfile={userProfile}
-          keycloakInstance={keycloakInstance} />
+          userRoles={userRolesList}
+          userProfile={userProfileName}
+          keycloakInstance={keycloakInstanceObject} />
         <div className="auth-error-message">
           <p>You are not authenticated.</p>
           <p>You do not have the required role to access this page.</p>
-          <p>Pls Logout and login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
+          <p>Pls Login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
         </div>
       </div>
         <style jsx>{`
@@ -103,7 +177,7 @@ export default function Settings() {
   }
   return (
     <div className="page-layout">
-      <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance}/>
+      <HeaderComponent userRoles={userRolesList} userProfile={userProfileName} keycloakInstance={keycloakInstanceObject} />
       <div className="top">
         <div className="left">
           <div className="left-heading">
@@ -128,7 +202,7 @@ export default function Settings() {
           <ChartCandle size="3rem" color='green' />
           <h2>Command Centre</h2>
         </div>
-        <InverterCommandCenter />
+        <InverterCommandCenter scopesArray={scopesArrayList} />
       </div>
       <div className="footer">
         <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>

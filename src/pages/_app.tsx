@@ -29,11 +29,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         withNormalizeCSS
         theme={{ colorScheme }}
       >
-         {/* <AuthProvider>  */}
+          <AuthProvider>   
           <BaseAppShell>
             <Component {...pageProps} />
           </BaseAppShell>
-        {/* </AuthProvider> */}
+         </AuthProvider> 
       </MantineProvider>
     </ColorSchemeProvider>
   );

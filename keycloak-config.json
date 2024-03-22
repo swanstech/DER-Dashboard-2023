@@ -1,0 +1,18 @@
+{
+    "realm": "swanstech",
+    "auth-server-url": "http://localhost:8080",
+    "ssl-required": "external",
+    "resource": "backend-client",
+    "verify-token-audience": true,
+    "credentials": {
+      "secret": "rLbU2MS29qqMosgElCne0yR5FpHUgQ1X",
+      "//secret":"tQFvZBNksjeWjFsraNCcSgHbNVJEKIUh"
+    },
+    "bearerOnly": false,
+  "standardFlowEnabled": true,
+  "implicitFlowEnabled": false,
+    "confidential-port": 0,
+    "policy-enforcer": {
+      "credentials": {}
+    }
+  }

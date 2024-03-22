@@ -1,16 +1,17 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RangeSlider, Slider, Button, Alert } from '@mantine/core';
 import {Bolt, FilePower, ChargingPile, CloudStorm, Battery, CircleHalf, BatteryCharging, AlertCircle} from 'tabler-icons-react';
 import { AuthContext } from 'n/contexts/AuthContext';
 
-export default function InverterCommandCenter() {
+export default function InverterCommandCenter({scopesArray}) {
 
-  const { userRoles } = useContext(AuthContext);
-  const isSecurityAdmin = userRoles.includes('der-engineer');
+ // const { userRoles } = useContext(AuthContext);
+ 
 
-  
+ 
   const [editMode, setEditMode] = useState(false);
-  const [alertVisible, setAlertVisible] = useState(false);
+  
+  //const [alertVisible, setAlertVisible] = useState(false);
 
   const [activePowerRate, setActivePowerRate] = useState([250, 800]);
   const [pfPowerValue, setPFPowerValue] = useState(50);
@@ -19,6 +20,11 @@ export default function InverterCommandCenter() {
   const [maxChargeRate, setMaxChargeRate] = useState([50, 100]);
   const [maxDischargeRate, setMaxDischargeRate] = useState([50, 100]);
   const [storageCapacity, setStorageCapacity] = useState(50);
+  useEffect(() => {
+    if (scopesArray.includes('write')) {
+      setEditMode(true);
+    }
+  }, [scopesArray]);
 
   const activePowerMarks = [
     { value: 250, label: '250W' },
@@ -63,27 +69,29 @@ export default function InverterCommandCenter() {
     { value: 100, label: '100Wh' },
     { value: 150, label: '150Wh' },
   ];
+  // if (scopesArray.includes('edit')) {
+  //   // If not in edit mode and 'edit' scope is not present, do nothing
+  //   setEditMode(true);
+  // }
 
   const handleEditSaveButton = () => {
-    if (!editMode) {
-      setAlertVisible(true);
-      setTimeout(() => {
-        setAlertVisible(false);
-      }, 3000);
-    }
-    setEditMode(!editMode);
-  }
+    
+    
+  };
   return (
     <div className='command-center'>
-      {isSecurityAdmin && (
+      {editMode && (
         <div className="edit-button">
-          <Button variant="outline" onClick={handleEditSaveButton}>
-            {editMode ? "Save" : "Edit"}
+          <Button variant="outline" >
+            {editMode ? "Edit" : "View"}
+          </Button>
+          <Button variant="outline" >
+            Save
           </Button>
         </div>
       )}
 
-      {alertVisible && <Alert icon={<AlertCircle size="1rem" />} title="Safety Alert!" color="red">
+      { <Alert icon={<AlertCircle size="1rem" />} title="Safety Alert!" color="red">
         You are going to make changes to the inverter settings. Please make sure you know what you are doing.
       </Alert>}
 

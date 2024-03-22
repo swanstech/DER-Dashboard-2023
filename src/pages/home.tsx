@@ -14,6 +14,7 @@ import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
 
+
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
 const Home: React.FC = () => {
@@ -22,17 +23,50 @@ const Home: React.FC = () => {
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
+  let lastUserActivityTimestamp = Date.now();
 
+  // Update the user activity timestamp whenever there is user interaction
+  const updateUserActivityTimestamp = () => {
+    lastUserActivityTimestamp = Date.now();
+  };
   useEffect(() => {
+
+    document.addEventListener("mousemove", updateUserActivityTimestamp);
+    document.addEventListener("keydown", updateUserActivityTimestamp);
+
+
+    // const refreshToken = async (keycloak: Keycloak.KeycloakInstance) => {
+    //   try {
+    //     const isSessionActive = !keycloak.isTokenExpired(5); // Check if the session is active for the next 5 seconds
+
+    //     if (isSessionActive) {
+    //       await keycloak.updateToken(5); // 5 seconds before the token expires
+    //       const roles = keycloak.tokenParsed?.realm_access?.roles || [];
+    //       setUserRoles(roles);
+
+    //       // You can update user profile or take other actions if needed
+
+    //       console.log('Token refreshed successfully.');
+    //     }
+    //   } catch (error) {
+    //     console.error('Error refreshing token:', error);
+    //     // Handle the error appropriately, e.g., redirect to login
+    //   }
+    // };
     const initializeKeycloak = async () => {
       try {
         // Initialize Keycloak
         const keycloak = initKeycloak();
 
+
         if (!keycloak) {
           console.error('Keycloak object is null');
           return;
         }
+
+        // keycloak.onTokenExpired = () => {
+        //   refreshToken(keycloak);
+        // };
 
         await keycloak.init({ onLoad: 'check-sso' });
 
@@ -44,39 +78,55 @@ const Home: React.FC = () => {
           const roles = keycloak.tokenParsed?.realm_access?.roles || [];
           setUserRoles(roles);
           setKeycloak(keycloak);
-
-          if (roles.includes('Engineer') || roles.includes("Auditor") || roles.includes("Security Admin") || roles.includes("General Manager")) {
+          if (roles.includes('Engineer') || roles.includes('General Manager') || roles.includes("Auditor") || roles.includes("Security Admin")) {
 
             // Extract user profile information
+
             const fullName = keycloak.tokenParsed?.name || "";
             const email = keycloak.tokenParsed?.email || "";
             setUserProfile({ fullName, email });
-
             // User is authenticated
             setIsAuth(true);
 
+            // You can now use the roles as needed
+            console.log('User roles:', roles);
             // Redirect to Keycloak login every 10 minutes
-            const redirectInterval = setInterval(() => {
-              keycloak.logout(); // Logout and redirect to login page
-            }, 10 * 60 * 1000);
+            const inactivityCheckInterval = setInterval(() => {
+              const currentTime = Date.now();
+              const inactiveDuration = currentTime - lastUserActivityTimestamp;
+
+              // Set the inactivity timeout to 10 minutes (10 * 60 * 1000 milliseconds)
+              const inactivityTimeout = 10 * 60 * 1000;
+
+              if (inactiveDuration >= inactivityTimeout) {
+                // If the user has been inactive for more than 10 minutes, log them out
+                keycloak.logout();
+                clearInterval(inactivityCheckInterval); // Stop checking for inactivity
+              }
+            }, 60 * 1000);
 
             // Cleanup function to clear the interval when the component is unmounted
-            return () => clearInterval(redirectInterval);
+            return () => {
+              document.removeEventListener("mousemove", updateUserActivityTimestamp);
+              document.removeEventListener("keydown", updateUserActivityTimestamp);
+              clearInterval(inactivityCheckInterval);
+            };
           }
-
-          // You can now use the roles as needed
           console.log('User roles:', roles);
+
         }
-      } catch (error) {
+
+      }
+      catch (error) {
         console.error('Keycloak initialization error:', error);
         // Handle the error appropriately 
       }
-    };
 
+    }
     initializeKeycloak();
-  }, [router]);
-
-  if (!isAuth ) {
+  }, []);
+ 
+  if (!isAuth) {
     return (
       <><div className="page-layout">
         <HeaderComponent
@@ -86,7 +136,7 @@ const Home: React.FC = () => {
         <div className="auth-error-message">
           <p>You are not authenticated.</p>
           <p>You do not have the required role to access this page.</p>
-          <p>Pls Logout and login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
+          <p>Pls Login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
         </div>
       </div>
         <style jsx>{`
@@ -114,6 +164,7 @@ const Home: React.FC = () => {
   }
   return (
     <div className="page-layout">
+      {/* Pass userRoles to MainLinks component */}
 
       <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
       <div className="top">
@@ -233,3 +284,7 @@ const Home: React.FC = () => {
 }
 
 export default Home;
+
+
+
+

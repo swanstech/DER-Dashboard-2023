@@ -56,7 +56,7 @@ export default function HardwareInfoTable({derId}) {
 
     // Execute the fetch function
     fetchData();
-  }, []); // Empty dependency array means this useEffect runs once when the component mounts
+  }, [derId]); // Empty dependency array means this useEffect runs once when the component mounts
 
   // Filtering the fetched data based on device ID
   useEffect(() => {
