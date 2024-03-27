@@ -78,7 +78,7 @@ export default function Settings() {
             setIsAuth(true);
 
             // Make API call to your backend api with access token
-            console.log(keycloak.token);
+            
             try {
               const response = await axios.post('/api/settings', {
                 // other request data
