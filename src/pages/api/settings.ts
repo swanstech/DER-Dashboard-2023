@@ -78,7 +78,11 @@ export default async function handler(req, res) {
     if (error.response && error.response.status === 403) {
       // Send the entire error.response.data as the response
       res.status(403).json(error.response.data);
-    } else {
+    } 
+    else if (error.response && error.response.status === 401)
+    {
+      res.status(401).json(error.response.data);
+    }else {
       // Handle other errors with a generic 500 status and message
       res.status(500).json({ error: error.message });
     }
