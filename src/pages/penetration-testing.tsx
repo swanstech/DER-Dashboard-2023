@@ -393,7 +393,6 @@ export default function PenetrationTesting() {
         });
     
         const r = await response.json();
-        console.log("token",r);
         if (r && r.length > 0 ) {
           // Fetch data from your API using the obtained umaTicketData or any other logic you need
           const response = await fetch(`https://yq9jgzyjta.execute-api.ap-southeast-2.amazonaws.com/test/der/pentest/scan-history`);
