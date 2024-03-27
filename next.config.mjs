@@ -17,22 +17,6 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
-  source: '*',
-    // @ts-ignore
-    headers: [
-      {
-        key: 'Access-Control-Allow-Origin',
-        value: '*',
-      },
-      {
-        key: 'Access-Control-Allow-Methods',
-        value: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      },
-      {
-        key: 'Access-Control-Allow-Headers',
-        value: 'Origin, X-Requested-With, Content-Type, Accept',
-      },
-    ],
 };
 
 export default config;
