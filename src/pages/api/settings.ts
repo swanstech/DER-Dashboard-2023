@@ -25,7 +25,6 @@ async function getResourceSet(accessToken) {
 export default async function handler(req, res) {
   try {
     const authorizationHeader = req.headers.authorization;
-    console.log("auth headrer",authorizationHeader);
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
@@ -53,7 +52,7 @@ export default async function handler(req, res) {
     // if (Array.isArray(resourceSet) && resourceSet.length > 0) {
     //   // Extract the first value from the resourceSet as the id
     //   const id = resourceSet[0];
-      console.log(accessToken);
+     
       const id = "res:settings";
       const umaTicketResponse = await axios.post(
         `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`,
