@@ -25,7 +25,7 @@ async function getResourceSet(accessToken) {
 export default async function handler(req, res) {
   try {
     const authorizationHeader = req.headers.authorization;
-
+    console.log("auth headrer",authorizationHeader);
     if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
