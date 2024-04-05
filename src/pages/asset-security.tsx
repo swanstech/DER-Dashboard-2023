@@ -50,13 +50,13 @@ const DERSPage: React.FC = () => {
           const roles = keycloak.tokenParsed?.realm_access?.roles || [];
           setUserRoles(roles);
           setKeycloak(keycloak);
+          const fullName = keycloak.tokenParsed?.name || "";
+          const email = keycloak.tokenParsed?.email || "";
+          setUserProfile({ fullName, email });
           if (roles.includes('Engineer') || roles.includes('General Manager') || roles.includes("Auditor") || roles.includes("Security Admin")) {
 
             // Extract user profile information
 
-            const fullName = keycloak.tokenParsed?.name || "";
-            const email = keycloak.tokenParsed?.email || "";
-            setUserProfile({ fullName, email });
             // User is authenticated
             setIsAuth(true);
 
