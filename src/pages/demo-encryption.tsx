@@ -92,6 +92,27 @@ export default function DemoEncryption() {
 
   };
 
+  const handleSaveEncryption = () => {
+
+    fetch('/api/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type as JSON
+      },
+      body: JSON.stringify({ data: encryptedText }), // Convert JSON data object to a string
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      setEncryptedText(data.output); // Handle the response from the API route
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+  };
+
+
   const handleStart = () => {
 
     fetch('/api/start', {
@@ -146,7 +167,7 @@ export default function DemoEncryption() {
               <textarea placeholder="Enter text to encrypt..." rows={20} value={encryptedText} onChange={() => {}}></textarea>
               <button onClick={handleStartEncryption}>Encrypt</button>
 
-              <button onClick={handleStartEncryption}>Save</button>
+              <button onClick={handleSaveEncryption}>Save</button>
             </div>
           </div>
         </div>
