@@ -34,17 +34,23 @@ const data = [
     to: "/energy-monitoring",
   },
   {
-    icon: <Network size="1rem" />,
+    icon: <Bolt size="1rem" />,
     color: "orange",
-    label: "Network Security",
-    to: "/network-security",
+    label: "Demo Encryption",
+    to: "/demo-encryption",
   },
-  {
-    icon: <BellRinging size="1rem" />,
-    color: "teal",
-    label: "Alarms",
-    to: "/notifications",
-  },
+  // {
+  //   icon: <Network size="1rem" />,
+  //   color: "orange",
+  //   label: "Network Security",
+  //   to: "/network-security",
+  // },
+  // {
+  //   icon: <BellRinging size="1rem" />,
+  //   color: "teal",
+  //   label: "Alarms",
+  //   to: "/notifications",
+  // },
   {
     icon: <Bolt size="1rem" />,
     color: "grape",

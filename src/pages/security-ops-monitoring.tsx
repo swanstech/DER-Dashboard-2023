@@ -3,11 +3,12 @@ import { BatteryAutomotive, ChartCandle, FileAnalytics } from 'tabler-icons-reac
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
 import TechnicalSpecifications from '../components/SetupComponents/TechnicalSpecifications';
 import NetworkMonitoringLogs from 'n/components/SetupComponents/NetworkMonitoringLogs';
-import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInformation';
+//import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInformation';
 import { useRouter } from 'next/router';
 import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
+import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInfoTable';
 
 export default function SecOpsMonitoring() {
   const router = useRouter();
@@ -16,6 +17,9 @@ export default function SecOpsMonitoring() {
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
+  const [derLiveData, setDerLiveData] = useState<any[]>([]); // State to hold DER live data records
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   let lastUserActivityTimestamp = Date.now();
 
   // Update the user activity timestamp whenever there is user interaction
@@ -76,6 +80,8 @@ export default function SecOpsMonitoring() {
           if (roles.includes('General Manager') || roles.includes('Security Admin')) {
             // User is authenticated
             setIsAuth(true);
+            fetchDerLiveData();
+            
 
             // You can now use the roles as needed
             console.log('User roles:', roles);
@@ -112,6 +118,21 @@ export default function SecOpsMonitoring() {
       }
 
     }
+    const fetchDerLiveData = async () => {
+      try {
+        const response = await fetch('https://a71kn6une4.execute-api.ap-southeast-2.amazonaws.com/dev/device/liveData');
+        if (!response.ok) {
+          throw new Error('Failed to fetch data');
+        }
+        const data = await response.json();
+        setDerLiveData(data);
+        setLoading(false);
+      } catch (error) {
+        setError('Error fetching data');
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      }
+    };
     initializeKeycloak();
   }, []);
 
@@ -165,9 +186,11 @@ export default function SecOpsMonitoring() {
         <div className="right">
           <div className="right-heading">
             <FileAnalytics size="3rem" color='green' />
-            <h3>Compliance Specifications</h3>
+            <h3>DER Live Data Records</h3>
           </div>
-          <ComplianceInfoTable />
+          {loading && <p>Loading...</p>}
+          {error && <p>{error}</p>}
+          {!loading && !error && <ComplianceInfoTable data={derLiveData} />}
         </div>
       </div>
       <div className="bottom">
