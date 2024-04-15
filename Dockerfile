@@ -4,17 +4,25 @@ FROM node:16
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the current directory contents into the container at /usr/src/app
-COPY . .
+# Copy the package.json and package-lock.json to install dependencies
+COPY package*.json ./
 
-# Install any needed packages specified in package.json
+# Install dependencies
 RUN npm install
 
-# Build the Next.js application
-RUN npm run build
+# Install Python and required packages
+RUN apt-get update && apt-get install -y python3 python3-pip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
-# Make port 3000 available to the world outside this container
+# Copy all files from the current directory into the container
+COPY . .
+
+# Copy the Python files from the der-dashboard-demo directory into the container
+COPY /home/sysadmin_arnav/Desktop/DER_Dashboard/der-dashboard-demo /usr/src/app/python_files
+
+# Expose the port used by the application
 EXPOSE 3000
 
-# Run the app when the container launches
+# Command to start the application
 CMD ["npm", "start"]
