@@ -374,8 +374,6 @@ export default function PenetrationTesting() {
   const [currentPage, setCurrentPage] = useState(1);
   const recordsPerPage = 3;
   const totalPages = 5;
- 
-
 
   useEffect(() => {
     const fetchData = async () => {
