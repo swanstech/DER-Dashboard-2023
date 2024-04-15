@@ -31,7 +31,7 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
       <table style={tableStyle}>
         <thead>
           <tr>
-            <th style={headerCellStyle}>ID</th>
+            {/* <th style={headerCellStyle}>ID</th> */}
             <th style={headerCellStyle}>Created On</th>
             <th style={headerCellStyle}>Active Power</th>
             <th style={headerCellStyle}>Reactive Power</th>
@@ -45,7 +45,7 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
         <tbody>
           {data.map((record, index) => (
             <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#f2f2f2' }}>
-              <td style={cellStyle}>{record.DerID.S}</td>
+              {/* <td style={cellStyle}>{record.DerID.S}</td> */}
               <td style={cellStyle}>{record.CreatedOn.S}</td>
               <td style={cellStyle}>{record.DerActivePower.N}</td>
               <td style={cellStyle}>{record.DerReactivePower.N}</td>
