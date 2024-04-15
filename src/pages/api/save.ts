@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             const currentDir = process.cwd();
-            const absolutePathToPythonScript = '/usr/src/app/cloud_tx.py';
+            const absolutePathToPythonScript = '/usr/src/app/python_files/cloud_tx.py';
         
 
             // Execute the Python script with the provided data as command-line arguments

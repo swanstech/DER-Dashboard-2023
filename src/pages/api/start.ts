@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'GET') {
         const currentDir = process.cwd();
         
-        const absolutePathToPythonScript = '/usr/src/app/get_der_data.py';
+        const absolutePathToPythonScript = '/usr/src/app/python_files/get_der_data.py';
         
 
         // Execute the Python script
