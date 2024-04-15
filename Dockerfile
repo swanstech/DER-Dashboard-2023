@@ -4,10 +4,10 @@ FROM node:16
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy the package.json and package-lock.json to install dependencies
-COPY package*.json ./
+# Copy the current directory contents into the container at /usr/src/app
+COPY . .
 
-# Install dependencies
+# Install any needed packages specified in package.json
 RUN npm install
 
 # Install Python and required packages
@@ -15,11 +15,11 @@ RUN apt-get update && apt-get install -y python3 python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy all files from the current directory into the container
-COPY . .
+# Build the Next.js application
+RUN npm run build
 
-# Expose the port used by the application
+# Make port 3000 available to the world outside this container
 EXPOSE 3000
 
-# Command to start the application
+# Run the app when the container launches
 CMD ["npm", "start"]
