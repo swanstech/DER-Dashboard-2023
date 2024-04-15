@@ -8,8 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === 'GET') {
         const currentDir = process.cwd();
         
-        const relativePathToPythonScript = '../der-dashboard-demo/get_der_data.py';
-        const absolutePathToPythonScript = path.join(currentDir, relativePathToPythonScript);
+        const relativePathToPythonScript = 'Desktop/DER_Dashboard/der-dashboard-demo/get_der_data.py';
+        const absolutePathToPythonScript = path.join(process.env.HOME, relativePathToPythonScript);
 
         // Execute the Python script
         exec(`python3 ${absolutePathToPythonScript}`, (error, stdout, stderr) => {
