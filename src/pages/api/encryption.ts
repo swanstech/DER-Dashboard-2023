@@ -12,8 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             const currentDir = process.cwd();
-            const relativePathToPythonScript = 'DER_Dashboard/der-dashboard-demo/encryption.py';
-            const absolutePathToPythonScript = path.join(process.env.HOME, 'Desktop', relativePathToPythonScript);
+            const absolutePathToPythonScript = '/usr/src/app/encryption.py';
 
             // Execute the Python script with the provided data as command-line arguments
             exec(`python3 ${absolutePathToPythonScript} '${JSON.stringify(data)}'`, (error, stdout, stderr) => {
