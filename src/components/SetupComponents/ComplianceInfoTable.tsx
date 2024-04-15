@@ -47,7 +47,7 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
             <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#f2f2f2' }}>
               {/* <td style={cellStyle}>{record.DerID.S}</td> */}
               <td style={cellStyle}>{record.CreatedOn.S}</td>
-              {record.DerActivePower ? record.DerActivePower.N : (record.DERActivePower ? record.DERActivePower.N : 'N/A')}
+              <td style={cellStyle}>{record.DerActivePower ? record.DerActivePower.N : (record.DERActivePower ? record.DERActivePower.N : 'N/A')}</td>
               <td style={cellStyle}>{record.DerReactivePower.N}</td>
               <td style={cellStyle}>{record.DerPowerFactor.N}</td>
               <td style={cellStyle}>{record.DerVoltage.N}</td>
