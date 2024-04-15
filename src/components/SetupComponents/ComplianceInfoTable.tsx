@@ -37,7 +37,7 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
             <th style={headerCellStyle}>Reactive Power</th>
             <th style={headerCellStyle}>Power Factor</th>
             <th style={headerCellStyle}>Voltage</th>
-            <th style={headerCellStyle}>Current</th>
+            {/* <th style={headerCellStyle}>Current</th> */}
             <th style={headerCellStyle}>Apparent Power</th>
             <th style={headerCellStyle}>Frequency</th>
           </tr>
@@ -47,13 +47,13 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
             <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#f2f2f2' }}>
               {/* <td style={cellStyle}>{record.DerID.S}</td> */}
               <td style={cellStyle}>{record.CreatedOn.S}</td>
-              <td style={cellStyle}>{record.DERActivePower.N}</td>
-              <td style={cellStyle}>{record.DerReactivePower.N}</td>
-              <td style={cellStyle}>{record.DerPowerFactor.N}</td>
-              <td style={cellStyle}>{record.DerVoltage.N}</td>
-              <td style={cellStyle}>{record.DerCurrent.N}</td>
-              <td style={cellStyle}>{record.DerApparentPower.N}</td>
-              <td style={cellStyle}>{record.DerFrequency.N}</td>
+              <td style={cellStyle}>{record.DERActivePower.S}</td>
+              <td style={cellStyle}>{record.DerReactivePower.S}</td>
+              <td style={cellStyle}>{record.DerPowerFactor.S}</td>
+              <td style={cellStyle}>{record.DerVoltage.S}</td>
+              {/* <td style={cellStyle}>{record.DerCurrent.S}</td> */}
+              <td style={cellStyle}>{record.DerApparentPower.S}</td>
+              <td style={cellStyle}>{record.DerFrequency.S}</td>
             </tr>
           ))}
         </tbody>
