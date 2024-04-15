@@ -18,9 +18,6 @@ RUN apt-get update && apt-get install -y python3 python3-pip \
 # Copy all files from the current directory into the container
 COPY . .
 
-# Copy the Python files from the der-dashboard-demo directory into the container
-COPY /home/sysadmin_arnav/Desktop/DER_Dashboard/der-dashboard-demo /usr/src/app/python_files
-
 # Expose the port used by the application
 EXPOSE 3000
 
