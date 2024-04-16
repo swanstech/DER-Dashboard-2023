@@ -94,7 +94,7 @@ COPY . .
 RUN npm install
 
 # Install Python packages
-RUN pip3 install pymodbus boto3 AWSIoTPythonSDK
+RUN pip3 install pymodbus==2.4.0 boto3==1.34.72 AWSIoTPythonSDK
 
 # Print Python version
 RUN python3 --version
