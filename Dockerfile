@@ -15,9 +15,10 @@ COPY . .
 RUN npm install
 
 #Install Python and required packages
-RUN apt-get update && apt-get install -y python3 python3-pip \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+# RUN apt-get update && apt-get install -y python3 python3-pip \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
+RUN apt-get install python3.10
 
 # RUN sudo apt-get update \
 #     && apt-get install -y python3.9 python3.9-distutils python3.9-dev python3-pip \
