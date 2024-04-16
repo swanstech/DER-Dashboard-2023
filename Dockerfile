@@ -172,8 +172,8 @@ COPY . .
 RUN npm install
 
 # Install Python packages
-RUN pip3 install pymodbus==2.4.0 boto3==1.34.72 AWSIoTPythonSDK appdirs apturl attrs Automat bcrypt blinker botocore Brlapi certifi chardet Click colorama constantly cryptography cupshelpers dbus-python defer distro distro-info duplicity entrypoints fasteners future httplib2 hyperlink idna incremental jmespath keyring language-selector launchpadlib lazr.restfulclient lazr.uri lockfile louis lxml macaroonbakery monotonic netifaces numpy oauthlib olefile packaging pandas paramiko pexpect Pillow pip protobuf psycopg2-binary pyasn1 pyasn1-modules pycairo pycups PyGObject PyHamcrest PyJWT pymacaroons pyNaCl pyOpenSSL pyRFC3339 pyserial pyserial-asyncio pyshark python-apt python-dateutil python-debian pytz pyxdg PyYAML reportlab requests requests-unixsocket s3transfer scapy SecretStorage service-identity setuptools simplejson six systemd-python termcolor Twisted tzdata ubuntu-drivers-common ubuntu-pro-client unattended-upgrades urllib3 usb-creator wadllib wheel xkit
-
+RUN pip3 install pymodbus==2.4.0 boto3==1.34.72 AWSIoTPythonSDK \
+    certifi chardet idna urllib3
 # Print Python version
 RUN python3 --version
 
