@@ -73,6 +73,9 @@ RUN pyenv install 3.8.10
 # Set Python 3.8.10 as the global version
 RUN pyenv global 3.8.10
 
+# Update PATH to include pyenv shims
+ENV PATH="$PYENV_ROOT/shims:$PATH"
+
 # Set environment variables for AWS credentials
 ENV AWS_ACCESS_KEY_ID=AKIAXNKZET2FRUOO6NJY
 ENV AWS_SECRET_ACCESS_KEY=N8c1VivIbIk1nFPdKlV7NQbiUURAuDhIltg50GUbc
