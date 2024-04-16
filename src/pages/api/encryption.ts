@@ -15,12 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const absolutePathToPythonScript = '/usr/src/app/python_files/encryption.py';
 
             // Encode the JSON data to base64
-            const encodedData = Buffer.from(JSON.stringify(data)).toString('base64');
+            const encodedData = Buffer.from(JSON.stringify(data));
             console.log("data ",data);
             console.log("encoded data ",encodedData);
 
             // Execute the Python script with the provided data as command-line arguments
-            exec(`python3 ${absolutePathToPythonScript} ${JSON.stringify(data)}`, (error, stdout, stderr) => {
+            exec(`python3 ${absolutePathToPythonScript} ${encodedData}`, (error, stdout, stderr) => {
             // exec(`python3 ${absolutePathToPythonScript} ${data}`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error executing encryption script: ${error}`);
