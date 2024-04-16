@@ -37,6 +37,25 @@ FROM node:16
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
+    curl \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install pyenv
+RUN curl https://pyenv.run | bash
+
+# Add pyenv to PATH
+ENV PYENV_ROOT="/root/.pyenv"
+ENV PATH="$PYENV_ROOT/bin:$PATH"
+
+# Install Python 3.8.10
+RUN pyenv install 3.8.10
+
+# Set Python 3.8.10 as the global version
+RUN pyenv global 3.8.10
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     build-essential \
