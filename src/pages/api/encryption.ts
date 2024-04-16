@@ -1,6 +1,7 @@
 import { exec } from 'child_process';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
+import { encode } from 'punycode';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === 'POST') {
@@ -15,7 +16,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const absolutePathToPythonScript = '/usr/src/app/python_files/encryption.py';
 
             // Encode the JSON data to base64
-            const encodedData = JSON.stringify(data).replace(/'/g, '"').replace(/\n/g, '');
+           
+            let encodedData = data.replace(/'/g, '"');
             console.log("data ",data);
             console.log("encoded data ",encodedData);
 
