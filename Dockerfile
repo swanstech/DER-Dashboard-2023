@@ -14,15 +14,15 @@ COPY . .
 # Install any needed packages specified in package.json
 RUN npm install
 
-# Install Python and required packages
-# RUN apt-get update && apt-get install -y python3 python3-pip \
-#     && apt-get clean \
-#     && rm -rf /var/lib/apt/lists/*
-
-RUN sudo apt-get update \
-    && apt-get install -y python3.9 python3.9-distutils python3.9-dev python3-pip \
+#Install Python and required packages
+RUN apt-get update && apt-get install -y python3 python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
+# RUN sudo apt-get update \
+#     && apt-get install -y python3.9 python3.9-distutils python3.9-dev python3-pip \
+#     && apt-get clean \
+#     && rm -rf /var/lib/apt/lists/*
 # Install Python packages
 RUN pip3 install pymodbus boto3 AWSIoTPythonSDK
 
