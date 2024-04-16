@@ -19,6 +19,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       let encodedData = data.replace(/'/g, '"');
       encodedData = encodedData.replace(/\n/g, '');
+      encodedData = JSON.stringify(encodedData);
       console.log("data ", data);
       console.log("encoded data ", encodedData);
 
