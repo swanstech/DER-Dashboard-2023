@@ -15,7 +15,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const absolutePathToPythonScript = '/usr/src/app/python_files/encryption.py';
 
             // Execute the Python script with the provided data as command-line arguments
-            exec(`python3 ${absolutePathToPythonScript} '${JSON.stringify(data)}'`, (error, stdout, stderr) => {
+            // exec(`python3 ${absolutePathToPythonScript} '${JSON.stringify(data)}'`, (error, stdout, stderr) => {
+            exec(`python3 ${absolutePathToPythonScript} ${data}`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error executing encryption script: ${error}`);
                     res.status(500).json({ error: 'Internal server error' });
