@@ -38,8 +38,6 @@ FROM node:16
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     curl \
-    python3 \
-    python3-pip \
     build-essential \
     libssl-dev \
     zlib1g-dev \
@@ -75,6 +73,12 @@ RUN pyenv global 3.8.10
 
 # Update PATH to include pyenv shims
 ENV PATH="$PYENV_ROOT/shims:$PATH"
+
+# Activate Python 3.8.10 environment
+RUN eval "$(pyenv init --path)"
+
+# Install pip3
+RUN python3 -m ensurepip
 
 # Set environment variables for AWS credentials
 ENV AWS_ACCESS_KEY_ID=AKIAXNKZET2FRUOO6NJY
