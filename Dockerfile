@@ -57,6 +57,19 @@ RUN apt-get update && apt-get install -y \
     python-openssl \
     git
 
+# Install pyenv
+RUN curl https://pyenv.run | bash
+
+# Add pyenv to PATH
+ENV PYENV_ROOT="/root/.pyenv"
+ENV PATH="$PYENV_ROOT/bin:$PATH"
+
+# Install Python 3.8.10
+RUN pyenv install 3.8.10
+
+# Set Python 3.8.10 as the global version
+RUN pyenv global 3.8.10
+
 # Set environment variables for AWS credentials
 ENV AWS_ACCESS_KEY_ID=AKIAXNKZET2FRUOO6NJY
 ENV AWS_SECRET_ACCESS_KEY=N8c1VivIbIk1nFPdKlV7NQbiUURAuDhIltg50GUbc
