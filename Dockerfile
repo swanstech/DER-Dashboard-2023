@@ -15,9 +15,11 @@ COPY . .
 RUN npm install
 
 # Install Python and required packages
-RUN apt-get update && apt-get install -y python3.9 python3.9-distutils python3.9-dev python3-pip \
+RUN apt-get update && apt-get install -y software-properties-common \
+    && add-apt-repository ppa:deadsnakes/ppa \
+    && apt-get update && apt-get install -y python3.10 python3.10-distutils python3.10-dev python3-pip \
     && apt-get clean \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/
 # Install Python packages
 RUN pip3 install pymodbus boto3 AWSIoTPythonSDK
 
