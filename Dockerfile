@@ -89,6 +89,9 @@ RUN npm install
 # Install Python packages
 RUN pip3 install pymodbus boto3 AWSIoTPythonSDK
 
+# Print Python version
+RUN python3 --version
+
 # Build the Next.js application
 RUN npm run build
 
