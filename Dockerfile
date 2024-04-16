@@ -177,6 +177,8 @@ RUN pip3 install pymodbus==2.4.0 boto3==1.34.72 AWSIoTPythonSDK \
 # Print Python version
 RUN python3 --version
 
+RUN pip3 list
+
 # Build the Next.js application
 RUN npm run build
 
