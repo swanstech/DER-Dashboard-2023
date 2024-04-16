@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             }
             
             const currentDir = process.cwd();
-            const absolutePathToPythonScript = '/python_files/encryption.py';
+            const absolutePathToPythonScript = '/usr/src/app/python_files/encryption.py';
 
             // Encode the JSON data to base64
             const encodedData = Buffer.from(JSON.stringify(data)).toString('base64');
