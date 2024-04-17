@@ -18,6 +18,8 @@ export default function DemoEncryption() {
   const [encryptedText, setEncryptedText] = useState<string>('');
   const [startText, setStartText] = useState<string>('');
   let lastUserActivityTimestamp = Date.now();
+  const [saveResponse, setSaveResponse] = useState<{ success: boolean; message: string } | null>(null); // Add state for save response
+  const [showPopup, setShowPopup] = useState(false);
 
   // Update the user activity timestamp whenever there is user interaction
   const updateUserActivityTimestamp = () => {
@@ -92,24 +94,29 @@ export default function DemoEncryption() {
 
   };
 
-  const handleSaveEncryption = () => {
 
+  const handleSaveEncryption = () => {
     fetch('/api/save', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json', // Specify the content type as JSON
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ data: encryptedText }), // Convert JSON data object to a string
+      body: JSON.stringify({ data: encryptedText }),
     })
-    .then(response => response.json())
-    .then(data => {
-      console.log(data);
-      setEncryptedText(data.output); // Handle the response from the API route
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });
+      .then(response => response.json())
+      .then(data => {
+        setSaveResponse({ success: true, message: data.output }); // Set save response
+        setShowPopup(true); // Show popup
+      })
+      .catch(error => {
+        setSaveResponse({ success: false, message: error.message }); // Set save error response
+        setShowPopup(true); // Show popup
+      });
+  };
 
+  // Function to handle closing the popup
+  const handleClosePopup = () => {
+    setShowPopup(false);
   };
 
 
@@ -158,6 +165,11 @@ export default function DemoEncryption() {
               <h2>Start Reading</h2>
               <textarea placeholder="Enter text to read..." rows={20} value={startText} onChange={() => {}}></textarea>
               <button onClick={handleStart}>Start</button>
+              
+              <button id="refreshButton" onClick={() => {setStartText(''); setEncryptedText(''); setShowPopup(false)}}>Refresh</button>
+
+      {/* Popup */}
+      
 
             </div>
           </div>
@@ -168,6 +180,12 @@ export default function DemoEncryption() {
               <button onClick={handleStartEncryption}>Encrypt</button>
 
               <button onClick={handleSaveEncryption}>Save</button>
+              {showPopup && (
+        <div className={`popup ${saveResponse && saveResponse.success ? 'success' : 'error'}`}>
+          <p>{saveResponse ? saveResponse.message : ''}</p>
+          <button onClick={handleClosePopup}>Close</button>
+        </div>
+      )}
             </div>
           </div>
         </div>
