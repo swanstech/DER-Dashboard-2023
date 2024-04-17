@@ -1,13 +1,44 @@
 import React, { useEffect, useRef } from 'react';
 import * as echarts from 'echarts';
 
-const AssetManagerPieChart = () => {
+const AssetManagerPieChart = ({ derData }) => {
   const chartRef = useRef(null);
+  console.log(derData);
 
   useEffect(() => {
-    if (chartRef.current) {
+    if (chartRef.current && derData.length > 0) {
+      const operationalStatusCounts = {
+        up: 0,
+        down: 0,
+        amber: 0
+      };
+
+      // Calculate the counts for each operational status
+      derData.forEach((der) => {
+        switch (der.operationalStatus) {
+          
+          case 'up':
+            console.log(der.operationalStatus);
+            operationalStatusCounts.up++;
+            break;
+          case 'down':
+            console.log(der.operationalStatus);
+            operationalStatusCounts.down++;
+            break;
+          case 'amber':
+            console.log(der.operationalStatus);
+            operationalStatusCounts.amber++;
+            break;
+          default:
+            console.log(der.operationalStatus);
+            break;
+        }
+      });
+
+      // Initialize ECharts instance
       const chartInstance = echarts.init(chartRef.current);
 
+      // Define chart options
       const option = {
         title: {
           text: 'DER Status',
@@ -24,11 +55,11 @@ const AssetManagerPieChart = () => {
           {
             name: 'Assets',
             type: 'pie',
-            radius: '75%',
+            radius: '70%',
             data: [
-              { value: 9, name: 'Up', itemStyle: { color: 'green' } },
-              { value: 2, name: 'Down', itemStyle: { color: 'red' } },
-              { value: 3, name: 'Maintenance', itemStyle: { color: '#FFBF00' } }, // Amber color
+              { value: operationalStatusCounts.up, name: 'Up', itemStyle: { color: 'green' } },
+              { value: operationalStatusCounts.down, name: 'Down', itemStyle: { color: 'red' } },
+              { value: operationalStatusCounts.amber, name: 'Maintenance', itemStyle: { color: '#FFBF00' } }, // Amber color
             ],
             emphasis: {
               itemStyle: {
@@ -41,15 +72,16 @@ const AssetManagerPieChart = () => {
         ]
       };
 
+      // Set chart options
       chartInstance.setOption(option);
 
       // Attach the click event listener
       chartInstance.on('click', () => {
-        // Redirect to the 'der-list' page on any pie chart section click
+        // Redirect to the 'asset-security' page on any pie chart section click
         window.location.href = '/asset-security'; // Or use your routing method here
       });
     }
-  }, []);
+  }, [derData]); // Re-render the chart whenever derData changes
 
   return (
     <div ref={chartRef} style={{ width: '100%', height: '400px' }} />
