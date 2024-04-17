@@ -5,6 +5,8 @@ import Link from 'next/link';
 import router, { useRouter } from 'next/router';
 import { AuthContext } from 'n/contexts/AuthContext';
 import { isGeneratorFunction } from 'util/types';
+import AssetManagerPieChart from '../HomePageComponents/AssetManagerPieChart';
+import Home from 'n/pages/home';
 
 const API_KEY = process.env.API_KEY || "";
 
@@ -65,10 +67,7 @@ const getColorForDate = (dateStr: string): string => {
   return 'green';
 };
 
-const getRandomOperationalStatus = (): 'up' | 'down' | 'amber' => {
-  const statuses: ('up' | 'down' | 'amber')[] = ['up', 'down', 'amber'];
-  return statuses[Math.floor(Math.random() * statuses.length)];
-};
+
 
 const OperationalStatusIcon: React.FC<{ status: 'up' | 'down' | 'amber', onClick: () => void }> = ({ status, onClick }) => {
   const style = {
@@ -94,30 +93,13 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('/api/deviceInfo', {
+        const response = await axios.get('/api/derdata', {
           headers: { 'x-api-key': API_KEY }
         });
 
-        const processedData = response.data.data.map((item: any) => {
-          const values = Object.values(item)[0];
-          return {
-            der_id: values[0],
-            der_name: values[1],
-            der_type: values[2],
-            manufacturer_id: values[3],
-            manufacturer_serial_number: values[4],
-            manufacture_date: values[5],
-            manufacturer_info: values[6],
-            manufacturer_model_number: values[7],
-            manufacturer_hw_version: values[8],
-            sw_version: values[9],
-            sw_activation_date: values[10],
-            location: values[11],
-            operationalStatus: getRandomOperationalStatus(),
-          };
-        });
-
-        setData(processedData);
+        if (response.data && Array.isArray(response.data)) {
+          setData(response.data);
+        }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -194,7 +176,10 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
       <tbody>
         {rows}
       </tbody>
+     
+     
     </Table>
+    
   );
 };
 
