@@ -1,10 +1,6 @@
 # # Use an official Node runtime as a parent image
 # FROM node:16
 
-# #AWS credentials
-# ENV AWS_ACCESS_KEY_ID=AKIAXNKZET2FRUOO6NJY
-# ENV AWS_SECRET_ACCESS_KEY=N8c1VivIbIk1nFPdKlV7NQbiUURAuDhIltg50GUbc
-
 # # Set the working directory in the container
 # WORKDIR /usr/src/app
 
