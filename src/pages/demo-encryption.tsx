@@ -102,7 +102,7 @@ export default function DemoEncryption() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ encryptedText }),
+      body: JSON.stringify({ data: encryptedText }),
     })
       .then(response => response.json())
       .then(data => {
