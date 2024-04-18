@@ -17,6 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
             console.log(data);
             // Execute the Python script with the provided data as command-line arguments
+            console.log(`python3 ${absolutePathToPythonScript} ${data}`);
             exec(`python3 ${absolutePathToPythonScript} ${data}`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error executing encryption script: ${error}`);
