@@ -159,8 +159,8 @@ RUN eval "$(pyenv init --path)"
 RUN python3 -m ensurepip
 
 # Set environment variables for AWS credentials
-ENV AWS_ACCESS_KEY_ID=AKIAXNKZET2FRUOO6NJY
-ENV AWS_SECRET_ACCESS_KEY=N8c1VivIbIk1nFPdKlV7NQbiUURAuDhIltg50GUbc
+ENV AWS_AccessKeyID=AKIAXNKZET2FRUOO6NJY
+ENV AWS_SecretAccessKey=N8c1VivIbIk1nFPdKlV7NQbiUURAuDhIltg50GUbc
 
 # Set the working directory in the container
 WORKDIR /usr/src/app
