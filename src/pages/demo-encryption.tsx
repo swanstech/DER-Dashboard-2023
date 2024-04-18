@@ -85,7 +85,7 @@ export default function DemoEncryption() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
+      console.log(data.output);
       setEncryptedText(data.output); // Handle the response from the API route
     })
     .catch(error => {
@@ -127,7 +127,7 @@ export default function DemoEncryption() {
   })
   .then(response => response.json())
   .then(data => {
-      console.log(data);
+      console.log(data.output);
       setStartText(data.output) // Handle the response from the API route
   })
   .catch(error => {
