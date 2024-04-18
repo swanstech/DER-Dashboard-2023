@@ -14,11 +14,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const currentDir = process.cwd();
             const absolutePathToPythonScript = '/usr/src/app/python_files/cloud_tx.py';
         
-
-            console.log(data);
+            let encodedata = data.replace(/\n/g, '');
+            console.log(encodedata);
             // Execute the Python script with the provided data as command-line arguments
-            console.log(`python3 ${absolutePathToPythonScript} '${data}'`);
-            exec(`python3 ${absolutePathToPythonScript} '${data}'`, (error, stdout, stderr) => {
+            console.log(`python3 ${absolutePathToPythonScript} '${encodedata}'`);
+            exec(`python3 ${absolutePathToPythonScript} '${encodedata}'`, (error, stdout, stderr) => {
                 if (error) {
                     console.error(`Error executing encryption script: ${error}`);
                     res.status(500).json({ error: 'Internal server error' });
