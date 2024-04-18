@@ -96,6 +96,7 @@ export default function DemoEncryption() {
 
 
   const handleSaveEncryption = () => {
+    console.log(encryptedText);
     fetch('/api/save', {
       method: 'POST',
       headers: {
@@ -136,9 +137,6 @@ export default function DemoEncryption() {
 
   };
 
-  const handleSave = () => {
-    // Handle save logic
-  };
 
   if (!isAuth) {
     return (
