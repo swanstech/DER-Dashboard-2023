@@ -15,6 +15,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             const absolutePathToPythonScript = '/usr/src/app/python_files/cloud_tx.py';
         
 
+            console.log(data);
             // Execute the Python script with the provided data as command-line arguments
             exec(`python3 ${absolutePathToPythonScript} ${data}`, (error, stdout, stderr) => {
                 if (error) {
