@@ -15,20 +15,30 @@ const mapContainerStyle = {
   height: '400px',
 };
 
-const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY; // Ensure this is the correct env variable
-
 const GoogleMapComponent: React.FC<GoogleMapProps> = ({
   center,
   zoom,
   markers = []
 }) => {
   const [isClient, setIsClient] = useState(false);
+  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string | undefined>(undefined);
 
   useEffect(() => {
-    setIsClient(true);  // component has mounted on the client side
+    setIsClient(true);  // Component has mounted on the client side
+    console.log(process.env.GOOGLE_MAPS_API_KEY);
+    const apiKey ="AIzaSyCS0itRoE5H98DwE53ZoB4Zg0wU54v9MWE";
+    if (apiKey) {
+      setGoogleMapsApiKey(apiKey);
+    } else {
+      console.error("Google Maps API key not found in environment variables.");
+    }
   }, []);
 
-  return isClient && googleMapsApiKey ? (
+  if (!isClient || !googleMapsApiKey) {
+    return null; // Return null if not on client or API key not available
+  }
+
+  return (
     <LoadScriptNext googleMapsApiKey={googleMapsApiKey}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
@@ -44,7 +54,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({
         ))}
       </GoogleMap>
     </LoadScriptNext>
-  ) : null;
+  );
 };
 
 export default GoogleMapComponent;
