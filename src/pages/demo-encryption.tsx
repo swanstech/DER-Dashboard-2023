@@ -106,7 +106,7 @@ export default function DemoEncryption() {
     })
       .then(response => response.json())
       .then(data => {
-        setSaveResponse({ success: true, message: data.output }); // Set save response
+        setSaveResponse({ success: true, message: "Record is saved" }); // Set save response
         setShowPopup(true); // Show popup
       })
       .catch(error => {
