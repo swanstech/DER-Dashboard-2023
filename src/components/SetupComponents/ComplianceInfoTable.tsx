@@ -7,7 +7,7 @@ interface ComplianceInfoTableProps {
 const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
   const tableStyle: CSSProperties = {
     borderCollapse: 'collapse',
-    width: '80%',
+    width: '90%',
     border: '1px solid #ddd',
     margin: '2px'
   };
@@ -16,8 +16,13 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
     backgroundColor: '#f2f2f2',
     border: '1px solid #ddd',
     padding: '4px', // Reduced padding to make header cells smaller
-    textAlign: 'left',
-    width: '10%' // Adjusted width of header cells
+    textAlign: 'left'
+  };
+
+  // Adjusted width for the "Created On" header cell
+  const createdOnHeaderCellStyle: CSSProperties = {
+    ...headerCellStyle,
+    width: '20%' // Adjust the width as needed
   };
 
   const cellStyle: CSSProperties = {
@@ -26,18 +31,21 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
     textAlign: 'left'
   };
 
+  // Function to truncate text to 6 characters
+  const truncateText = (text: string) => {
+    return text.length > 6 ? text.substring(0, 6) : text;
+  };
+
   return (
     <div>
       <table style={tableStyle}>
         <thead>
           <tr>
-            {/* <th style={headerCellStyle}>ID</th> */}
-            <th style={headerCellStyle}>Created On</th>
+            <th style={createdOnHeaderCellStyle}>Created On</th>
             <th style={headerCellStyle}>Active Power</th>
             <th style={headerCellStyle}>Reactive Power</th>
             <th style={headerCellStyle}>Power Factor</th>
             <th style={headerCellStyle}>Voltage</th>
-            {/* <th style={headerCellStyle}>Current</th> */}
             <th style={headerCellStyle}>Apparent Power</th>
             <th style={headerCellStyle}>Frequency</th>
           </tr>
@@ -45,15 +53,13 @@ const ComplianceInfoTable: React.FC<ComplianceInfoTableProps> = ({ data }) => {
         <tbody>
           {data.map((record, index) => (
             <tr key={index} style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#f2f2f2' }}>
-              {/* <td style={cellStyle}>{record.DerID.S}</td> */}
               <td style={cellStyle}>{record.CreatedOn.S}</td>
-              <td style={cellStyle}>{record.DERActivePower.S}</td>
-              <td style={cellStyle}>{record.DerReactivePower.S}</td>
-              <td style={cellStyle}>{record.DerPowerFactor.S}</td>
-              <td style={cellStyle}>{record.DerVoltage.S}</td>
-              {/* <td style={cellStyle}>{record.DerCurrent.S}</td> */}
-              <td style={cellStyle}>{record.DerApparentPower.S}</td>
-              <td style={cellStyle}>{record.DerFrequency.S}</td>
+              <td style={cellStyle}>{truncateText(record.DERActivePower.S)}</td>
+              <td style={cellStyle}>{truncateText(record.DerReactivePower.S)}</td>
+              <td style={cellStyle}>{truncateText(record.DerPowerFactor.S)}</td>
+              <td style={cellStyle}>{truncateText(record.DerVoltage.S)}</td>
+              <td style={cellStyle}>{truncateText(record.DerApparentPower.S)}</td>
+              <td style={cellStyle}>{truncateText(record.DerFrequency.S)}</td>
             </tr>
           ))}
         </tbody>

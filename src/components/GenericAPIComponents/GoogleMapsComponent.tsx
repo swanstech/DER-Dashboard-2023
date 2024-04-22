@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { GoogleMap, LoadScriptNext, Marker } from '@react-google-maps/api';
 
 type GoogleMapProps = {
@@ -20,12 +20,12 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({
   zoom,
   markers = []
 }) => {
-  const [isClient, setIsClient] = useState(false);
-  const [googleMapsApiKey, setGoogleMapsApiKey] = useState<string | undefined>(undefined);
+  const [isClient, setIsClient] = React.useState(false);
+  const [googleMapsApiKey, setGoogleMapsApiKey] = React.useState<string | undefined>(undefined);
 
-  useEffect(() => {
+  React.useEffect(() => {
     setIsClient(true);  // Component has mounted on the client side
-    console.log(process.env.GOOGLE_MAPS_API_KEY);
+    // const apiKey = process.env.GOOGLE_MAPS_API_KEY;
     const apiKey ="AIzaSyCS0itRoE5H98DwE53ZoB4Zg0wU54v9MWE";
     if (apiKey) {
       setGoogleMapsApiKey(apiKey);
@@ -52,6 +52,10 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({
             label={marker.label}
           />
         ))}
+        {/* Add three new markers */}
+        <Marker position={{ lat: -37.72135400149699, lng: 145.57058723375837 }} label="Smart Engery Lab" />
+        <Marker position={{ lat: -37.721404, lng: 145.570466 }} label="Solar Equip" />
+        <Marker position={{ lat : -37.721468313328025, lng : 145.5710111259745}} label="Mount Toolebewong" />
       </GoogleMap>
     </LoadScriptNext>
   );

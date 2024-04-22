@@ -208,20 +208,10 @@ const Home: React.FC = () => {
             <Map2 size="3rem" color='green' />
             <h6>DER Maps</h6>
           </div>
-          {/* <GoogleMapComponent
-            center={{ lat: 37.7749, lng: -122.4194 }}
-            zoom={10}
-            markers={[
-              { lat: 37.7749, lng: -122.4194, label: 'A' },
-            ]}
-          /> */}
           <GoogleMapComponent
-    center={{ lat: -37.8136, lng: 144.9631 }}
-    zoom={10}
-    markers={[
-        { lat: -37.8136, lng: 144.9631, label: 'A' },
-    ]}
-/>
+        center={{ lat: -37.72135400149699, lng: 145.57058723375837 }}
+        zoom={19} // Default zoom level
+      />
         </div>
       </div>
       <div className="footer">
