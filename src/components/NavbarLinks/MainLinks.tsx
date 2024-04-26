@@ -33,12 +33,12 @@ const data = [
     label: "Energy Monitoring",
     to: "/energy-monitoring",
   },
-  {
-    icon: <Bolt size="1rem" />,
-    color: "orange",
-    label: "Demo Encryption",
-    to: "/demo-encryption",
-  },
+  // {
+  //   icon: <Bolt size="1rem" />,
+  //   color: "orange",
+  //   label: "Demo Encryption",
+  //   to: "/demo-encryption",
+  // },
   // {
   //   icon: <Network size="1rem" />,
   //   color: "orange",

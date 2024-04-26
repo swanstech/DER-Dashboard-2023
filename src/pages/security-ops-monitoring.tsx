@@ -281,6 +281,7 @@ import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
 import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInfoTable';
+import ComplianceInformation from 'n/components/SetupComponents/ComplianceInformation';
 
 export default function SecOpsMonitoring() {
   const router = useRouter();
@@ -410,11 +411,23 @@ export default function SecOpsMonitoring() {
           </div>
           <TechnicalSpecifications derId={derId} />
         </div>
-        <div className="right">
+         <div className="right">
           <div className="right-heading">
             <FileAnalytics size="3rem" color='green' />
-            <h3>DER Live Data Records</h3>
+            <h3>Compliance Information</h3>
           </div>
+         <ComplianceInformation />
+          
+        </div>
+    
+      </div>
+      <div className="bottom">
+        <div className="bottom-heading">
+          <ChartCandle size="3rem" color='green' />
+          <h2>DER Live Data Records</h2>
+        </div>
+        <div className='bottom-b'>
+          {/* <NetworkMonitoringLogs derId={derId ? (derId as string) : 'DER_1'} /> */}
           {loading && <p>Loading...</p>}
           {error && <p>{error}</p>}
           {!loading && !error && (
@@ -435,15 +448,6 @@ export default function SecOpsMonitoring() {
               </div>
             </>
           )}
-        </div>
-      </div>
-      <div className="bottom">
-        <div className="bottom-heading">
-          <ChartCandle size="3rem" color='green' />
-          <h2>Network Monitoring and logs</h2>
-        </div>
-        <div className='bottom-b'>
-          <NetworkMonitoringLogs derId={derId ? (derId as string) : 'DER_1'} />
         </div>
         <div className="footer">
           <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
@@ -472,7 +476,7 @@ export default function SecOpsMonitoring() {
           padding: 8px;
         }
         .left, .right {
-          flex: 0 0 40%; /* 40% width for left panel */
+          flex: 0 0 50%; /* 40% width for left panel */
           margin: 8px;
           padding: 16px;
           border-radius: 8px;
@@ -481,7 +485,7 @@ export default function SecOpsMonitoring() {
           flex-direction: column;
         }
         .right {
-          flex: 0 0 60%; /* 60% width for right panel */
+          flex: 0 0 50%; /* 60% width for right panel */
         }
         .left-heading, .bottom-heading, .right-heading {
           display: flex;
