@@ -53,8 +53,7 @@ const GoogleMapComponent: React.FC<GoogleMapProps> = ({
           />
         ))}
         {/* Add three new markers */}
-        <Marker position={{ lat: -37.72135400149699, lng: 145.57058723375837 }} label="Smart Engery Lab" />
-        <Marker position={{ lat: -37.721404, lng: 145.570466 }} label="Solar Equip" />
+
         <Marker position={{ lat : -37.721468313328025, lng : 145.5710111259745}} label="Mount Toolebewong" />
       </GoogleMap>
     </LoadScriptNext>
