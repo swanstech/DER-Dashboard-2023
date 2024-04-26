@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Fetch data from the device endpoint
     const response = await axios.get(`${API_URL}/device`, {
       headers: {
-        'x-api-key': "4BjKWhneKq2byqMJ7bT3R89G39P9FqpS6xGZORre"
+        'x-api-key': API_KEY
       }
     });
 

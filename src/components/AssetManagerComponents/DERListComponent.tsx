@@ -94,7 +94,7 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
     const fetchData = async () => {
       try {
         const response = await axios.get('/api/derdata', {
-          headers: { 'x-api-key': "4BjKWhneKq2byqMJ7bT3R89G39P9FqpS6xGZORre" }
+          headers: { 'x-api-key': API_KEY }
         });
 
         if (response.data && Array.isArray(response.data)) {
