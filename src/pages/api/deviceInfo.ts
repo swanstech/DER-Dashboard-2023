@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const response = await axios.get(`${API_URL}/device`, {
       headers: {
-        'x-api-key': API_KEY
+        'x-api-key': "4BjKWhneKq2byqMJ7bT3R89G39P9FqpS6xGZORre"
       }
     });
     return res.status(200).json(response.data);
