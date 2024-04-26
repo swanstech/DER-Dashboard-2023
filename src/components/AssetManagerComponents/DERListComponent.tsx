@@ -84,10 +84,10 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
   const router = useRouter();
   const [data, setData] = useState<DERData[]>([]);
  // const { userRoles } = useContext(AuthContext);
-  const isSecurityAuditor = userRoles.includes('Security Admin');
-  const isEngineer = userRoles.includes('Engineer');
-  const GeneralManager = userRoles.includes('General Manager');
-  const isAuditor = userRoles.includes('Auditor');
+  // const isSecurityAuditor = userRoles.includes('Security Admin');
+  // const isEngineer = userRoles.includes('Engineer');
+  // const GeneralManager = userRoles.includes('General Manager');
+  // const isAuditor = userRoles.includes('Auditor');
   //console.log('userRoles:', userRoles);
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
   const rows = data.map((row) => (
     <tr key={row.der_id}>
        
-       {(isEngineer || GeneralManager) ? (
+       
        <>
        <td style={{ cursor: 'pointer' }}>
        <Link  href={`/settings?derId=${row.der_id}`}>
@@ -123,13 +123,7 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
        {row.der_name}
      </Link>
      </td></>
-    ):
-    ( <><td style={{ cursor: 'pointer' }} >
-    {row.der_id}
-  </td><td style={{ cursor: 'pointer' }} >
-      {row.der_name}
-    </td></>)}
-    
+  
       <td>{row.der_type}</td>
       <td>{formatDate(row.manufacture_date)}</td>
       <td>{row.manufacturer_info}</td>
@@ -137,16 +131,13 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
       <td>{row.manufacturer_hw_version}</td>
       <td>{row.location}</td>
       
-      {(isSecurityAuditor || GeneralManager) ? (
+      
       <td>
         <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
-    ):
-    (<td>
-       {row.operationalStatus} 
-    </td>)}
+    
       <td>
-      {(isAuditor || GeneralManager) ? (
+      {(userRoles == undefined) ? (
         <Button onClick={() => handleVulnerabilityScanClick(row.der_id)} size="xs">
           Scan
         </Button>

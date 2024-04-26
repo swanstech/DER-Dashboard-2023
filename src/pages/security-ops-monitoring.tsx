@@ -306,6 +306,8 @@ export default function SecOpsMonitoring() {
     document.addEventListener("mousemove", updateUserActivityTimestamp);
     document.addEventListener("keydown", updateUserActivityTimestamp);
 
+    
+
     const initializeKeycloak = async () => {
       try {
         // Initialize Keycloak
@@ -331,7 +333,7 @@ export default function SecOpsMonitoring() {
           if (roles.includes('General Manager') || roles.includes('Security Admin')) {
             // User is authenticated
             setIsAuth(true);
-            fetchDerLiveData();
+            
 
             // Redirect to Keycloak login every 10 minutes
             const inactivityCheckInterval = setInterval(() => {
@@ -381,6 +383,8 @@ export default function SecOpsMonitoring() {
       }
     };
     //initializeKeycloak();
+
+    fetchDerLiveData();
   }, []);
 
 
