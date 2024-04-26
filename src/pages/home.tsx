@@ -449,7 +449,7 @@ const Home: React.FC = () => {
           </div>
           <GoogleMapComponent
         center={{ lat: -37.72135400149699, lng: 145.57058723375837 }}
-        zoom={20} // Default zoom level
+        zoom={19} // Default zoom level
       />
         </div>
       </div>
