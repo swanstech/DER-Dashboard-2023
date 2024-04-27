@@ -11,7 +11,7 @@ const MonthlyEnergyUsage = () => {
       const option = {
         title: {
           text: 'Monthly Distribution of Electricity',
-          subtext: 'Fake Data',
+          subtext: 'Live Data',
         },
         tooltip: {
           trigger: 'axis',

@@ -11,7 +11,7 @@ const DailyEnergyUsage = () => {
       const option = {
         title: {
           text: ' Daily Distribution of Electricity',
-          subtext: 'Fake Data',
+          subtext: 'Live Data',
         },
         tooltip: {
           trigger: 'axis',

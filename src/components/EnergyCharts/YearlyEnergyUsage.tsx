@@ -11,7 +11,7 @@ const YearlyEnergyUsage = () => {
       const option = {
         title: {
           text: 'Yearly Distribution of Electricity',
-          subtext: 'Fake Data',
+          subtext: 'Live Data',
         },
         tooltip: {
           trigger: 'axis',
