@@ -63,6 +63,35 @@ const data = [
     label: 'Settings', 
     to: "/settings" 
   },
+  // New categories
+  {
+    icon: <Bolt size="1rem" />,
+    color: "green",
+    label: "Microgrid",
+    to: "/microgrid",
+    // Example roles
+  },
+  {
+    icon: <Bolt size="1rem" />,
+    color: "cyan",
+    label: "DERs Overall Equipments",
+    to: "/ders-overall-equipments",
+   
+  },
+  {
+    icon: <Bolt size="1rem" />,
+    color: "yellow",
+    label: "N/W",
+    to: "/network",
+    
+  },
+  {
+    icon: <Bolt size="1rem" />,
+    color: "pink",
+    label: "Security",
+    to: "/security",
+    
+  },
 ];
 
 interface MainLinkProps {
@@ -105,7 +134,6 @@ function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
 
 export function MainLinks() {
   const { userRoles } = useContext(AuthContext);
-  //console.log("user roles",userRoles);
 
   const links = data.filter(link => {
     // If 'roles' is not defined, show the link to everyone
@@ -118,7 +146,3 @@ export function MainLinks() {
 
   return <div>{links}</div>;
 }
-
-
-
-
