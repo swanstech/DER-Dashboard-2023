@@ -14,7 +14,7 @@ import axios from 'axios';
 export default function Settings() {
   const router = useRouter();
   const { derId } = router.query;
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   const [userRolesList, setUserRoles] = useState<string[]>([]);
   const [scopesArrayList, setScopes] = useState<string[]>([]);
   const [userProfileName, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
@@ -137,7 +137,7 @@ export default function Settings() {
       }
 
     }
-    initializeKeycloak();
+    //initializeKeycloak();
   }, []);
 
   if (!isAuth) {

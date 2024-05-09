@@ -8,11 +8,12 @@ import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
 import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInfoTable';
+import ComplianceInformation from 'n/components/SetupComponents/ComplianceInformation';
 
 export default function SecOpsMonitoring() {
   const router = useRouter();
   const { derId } = router.query;
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
@@ -107,7 +108,7 @@ export default function SecOpsMonitoring() {
         setLoading(false);
       }
     };
-    initializeKeycloak();
+    //initializeKeycloak();
   }, []);
 
   if (!isAuth) {
@@ -173,14 +174,13 @@ export default function SecOpsMonitoring() {
         <div className="right">
           <div className="right-heading">
             <FileAnalytics size="3rem" color='green' />
-            <h3>DER Live Data Records</h3>
+            <h3>Compliance Information</h3>
           </div>
-          {loading && <p>Loading...</p>}
-          {error && <p>{error}</p>}
-          {!loading && !error && (
+  
             <>
-              <ComplianceInfoTable data={currentRecords} />
-              <div className="pagination">
+              {/* <ComplianceInfoTable data={currentRecords} /> */}
+              <ComplianceInformation  />
+              {/* <div className="pagination">
                 <button onClick={prevPage} disabled={currentPage === 1}>
                   Previous
                 </button>
@@ -192,9 +192,9 @@ export default function SecOpsMonitoring() {
                 <button onClick={nextPage} disabled={currentPage === totalPages}>
                   Next
                 </button>
-              </div>
+              </div> */}
             </>
-          )}
+        
         </div>
       </div>
       <div className="bottom">
