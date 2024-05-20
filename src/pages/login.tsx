@@ -14,6 +14,8 @@ import YearlyEnergyUsage from 'n/components/EnergyCharts/YearlyEnergyUsage';
 import GoogleMapComponent from 'n/components/GenericAPIComponents/GoogleMapsComponent';
 import WeatherComponent from 'n/components/GenericAPIComponents/WeatherComponent';
 import { IconLogin } from '@tabler/icons-react';
+import axios from 'axios';
+import DERSPage from './asset-security';
 const Login: React.FC = () => {
   const router = useRouter();
   const [isAuth, setIsAuth] = useState(false);
@@ -21,6 +23,17 @@ const Login: React.FC = () => {
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
   let lastUserActivityTimestamp = Date.now();
+  const [derData, setDerData] = useState<any[]>([]); // State to store DER data
+
+  // Function to fetch DER data from the API
+  const fetchDerData = async () => {
+    try {
+      const response = await axios.get('/api/derdata'); // Assuming this is the correct API endpoint
+      setDerData(response.data); // Set the DER data in state
+    } catch (error) {
+      console.error('Error fetching DER data:', error);
+    }
+  };
 
   // Update the user activity timestamp whenever there is user interaction
   const updateUserActivityTimestamp = () => {
@@ -148,7 +161,7 @@ const Login: React.FC = () => {
             <Activity size="3rem" color='green' />
             <h6>DER Asset Manager</h6>
           </div>
-          <AssetManagerPieChart />
+          <AssetManagerPieChart derData={derData} />
         </div>
         <div className="right">
           {/* Top-right section with Tabs */}

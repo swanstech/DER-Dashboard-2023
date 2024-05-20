@@ -13,6 +13,7 @@ import { useRouter } from 'next/router';
 import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
+import axios from 'axios';
 
 
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
@@ -24,35 +25,29 @@ const Home: React.FC = () => {
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
   let lastUserActivityTimestamp = Date.now();
+  const [derData, setDerData] = useState<any[]>([]); // State to store DER data
+
+  // Function to fetch DER data from the API
+  const fetchDerData = async () => {
+    try {
+      const response = await axios.get('/api/derdata'); // Assuming this is the correct API endpoint
+      setDerData(response.data); // Set the DER data in state
+    } catch (error) {
+      console.error('Error fetching DER data:', error);
+    }
+  };
 
   // Update the user activity timestamp whenever there is user interaction
   const updateUserActivityTimestamp = () => {
     lastUserActivityTimestamp = Date.now();
   };
+
   useEffect(() => {
 
     document.addEventListener("mousemove", updateUserActivityTimestamp);
     document.addEventListener("keydown", updateUserActivityTimestamp);
+    fetchDerData();
 
-
-    // const refreshToken = async (keycloak: Keycloak.KeycloakInstance) => {
-    //   try {
-    //     const isSessionActive = !keycloak.isTokenExpired(5); // Check if the session is active for the next 5 seconds
-
-    //     if (isSessionActive) {
-    //       await keycloak.updateToken(5); // 5 seconds before the token expires
-    //       const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-    //       setUserRoles(roles);
-
-    //       // You can update user profile or take other actions if needed
-
-    //       console.log('Token refreshed successfully.');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error refreshing token:', error);
-    //     // Handle the error appropriately, e.g., redirect to login
-    //   }
-    // };
     const initializeKeycloak = async () => {
       try {
         // Initialize Keycloak
@@ -63,10 +58,6 @@ const Home: React.FC = () => {
           console.error('Keycloak object is null');
           return;
         }
-
-        // keycloak.onTokenExpired = () => {
-        //   refreshToken(keycloak);
-        // };
 
         await keycloak.init({ onLoad: 'check-sso' });
 
@@ -172,7 +163,7 @@ const Home: React.FC = () => {
             <Activity size="3rem" color='green' />
             <h6>DER Asset Manager</h6>
           </div>
-          <AssetManagerPieChart />
+          <AssetManagerPieChart derData ={derData}/>
         </div>
         <div className="right">
           {/* Top-right section with Tabs */}

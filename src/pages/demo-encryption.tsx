@@ -5,6 +5,8 @@ import { IconLogin } from '@tabler/icons-react';
 import HeaderComponent from 'n/components/Header';
 import { BatteryAutomotive, ChartCandle } from 'tabler-icons-react';
 import { Title } from '@mantine/core';
+import { exec } from 'child_process';
+import * as path from 'path';
 
 
 export default function DemoEncryption() {
@@ -13,7 +15,11 @@ export default function DemoEncryption() {
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
+  const [encryptedText, setEncryptedText] = useState<string>('');
+  const [startText, setStartText] = useState<string>('');
   let lastUserActivityTimestamp = Date.now();
+  const [saveResponse, setSaveResponse] = useState<{ success: boolean; message: string } | null>(null); // Add state for save response
+  const [showPopup, setShowPopup] = useState(false);
 
   // Update the user activity timestamp whenever there is user interaction
   const updateUserActivityTimestamp = () => {
@@ -69,7 +75,65 @@ export default function DemoEncryption() {
   }, []);
 
   const handleStartEncryption = () => {
-    // Handle start encryption logic
+
+    fetch('/api/encryption', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json', // Specify the content type as JSON
+      },
+      body: JSON.stringify({ data: startText }), // Convert JSON data object to a string
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      setEncryptedText(data.output); // Handle the response from the API route
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+
+  };
+
+
+  const handleSaveEncryption = () => {
+    fetch('/api/save', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ data: encryptedText }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        setSaveResponse({ success: true, message: data.output }); // Set save response
+        setShowPopup(true); // Show popup
+      })
+      .catch(error => {
+        setSaveResponse({ success: false, message: error.message }); // Set save error response
+        setShowPopup(true); // Show popup
+      });
+  };
+
+  // Function to handle closing the popup
+  const handleClosePopup = () => {
+    setShowPopup(false);
+  };
+
+
+  const handleStart = () => {
+
+    fetch('/api/start', {
+      method: 'GET',
+  })
+  .then(response => response.json())
+  .then(data => {
+      console.log(data);
+      setStartText(data.output) // Handle the response from the API route
+  })
+  .catch(error => {
+      console.error('Error:', error);
+  });
+
   };
 
   const handleSave = () => {
@@ -91,42 +155,53 @@ export default function DemoEncryption() {
 
   return (
     <><Title order={1} align="center" mb={20}>
-    <ChartCandle size="2.5rem" color='green' />Demo Encryption
-  </Title>
-    <div className="page-layout">
-          <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
-          <div className="top">
-              <div className="left">
-                  <div className="start-reading">
-                      <h2>Start Reading</h2>
-                      <textarea placeholder="Enter text to read..." rows={20}></textarea>
-                      <button onClick={handleStartEncryption}>Start</button>
+      <ChartCandle size="2.5rem" color='green' />Demo Encryption
+    </Title>
+      <div className="page-layout">
+        <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
+        <div className="top">
+          <div className="left">
+            <div className="start-reading">
+              <h2>Start Reading</h2>
+              <textarea placeholder="Enter text to read..." rows={20} value={startText} onChange={() => {}}></textarea>
+              <button onClick={handleStart}>Start</button>
+              
+              <button id="refreshButton" onClick={() => {setStartText(''); setEncryptedText(''); setShowPopup(false)}}>Refresh</button>
 
-                  </div>
-              </div>
-              <div className="right">
-                  <div className="encryption">
-                      <h2>Encrypt</h2>
-                      <textarea placeholder="Enter text to encrypt..." rows={20}></textarea>
-                      <button onClick={handleStartEncryption}>Encrypt</button>
+      {/* Popup */}
+      
 
-                      <button onClick={handleStartEncryption}>Save</button>
-                  </div>
-              </div>
+            </div>
           </div>
-          <div className="bottom">
-              {/* <div className="bottom-heading">
+          <div className="right">
+            <div className="encryption">
+              <h2>Encrypt</h2>
+              <textarea placeholder="Enter text to encrypt..." rows={20} value={encryptedText} onChange={() => {}}></textarea>
+              <button onClick={handleStartEncryption}>Encrypt</button>
+
+              <button onClick={handleSaveEncryption}>Save</button>
+              {showPopup && (
+        <div className={`popup ${saveResponse && saveResponse.success ? 'success' : 'error'}`}>
+          <p>{saveResponse ? saveResponse.message : ''}</p>
+          <button onClick={handleClosePopup}>Close</button>
+        </div>
+      )}
+            </div>
+          </div>
+        </div>
+        <div className="bottom">
+          {/* <div className="bottom-heading">
       <h2>Save</h2>
     </div>
     <div className='bottom-b'>
       <button onClick={handleSave}>Save</button>
     </div> */}
 
-              <div className="footer">
-                  <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
-              </div>
+          <div className="footer">
+            <p>Powered by <img src="/images/SwansForesight.jpg" width="70px" height="60px" alt="Swanforesight Logo" /></p>
           </div>
-          <style jsx>{`
+        </div>
+        <style jsx>{`
         /* Your existing styles go here */
 
         /* Styles for Start Reading and Encrypt sections */
