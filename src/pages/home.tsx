@@ -188,7 +188,7 @@ const Home: React.FC = () => {
               <Tabs.Tab value="yearly">Yearly</Tabs.Tab>
             </Tabs.List>
             <Tabs.Panel value="daily" pt="xs">
-              <div className="chart-container"><DailyEnergyUsage /></div>
+              <div className="chart-container"><DailyEnergyUsage derId='DER_1' /></div>
             </Tabs.Panel>
             <Tabs.Panel value="weekly" pt="xs">
               <div className="chart-container"><WeeklyEnergyUsage /></div>

@@ -1,17 +1,55 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as echarts from 'echarts';
+import axios from 'axios';
 
-const DailyEnergyUsage = () => {
-  const chartRef = useRef(null);
+interface EnergyUsageData {
+  event_id: string;
+  der_id: string;
+  der_voltage: number;
+  der_current: number;
+  der_frequency: number;
+  der_active_power: number;
+  der_apparent_power: number;
+  der_reactive_power: number;
+  createdon: string;
+}
+
+interface Props {
+  derId: string;
+}
+
+const DailyEnergyUsageChart: React.FC<Props> = ({ derId }) => {
+  const chartRef = useRef<HTMLDivElement>(null);
+  const [data, setData] = useState<EnergyUsageData[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [uniqueDates, setUniqueDates] = useState<string[]>([]);
 
   useEffect(() => {
-    if (chartRef.current) {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get<EnergyUsageData[]>('https://htstnzr9f9.execute-api.ap-southeast-2.amazonaws.com/test/der-live-data');
+        const dates = response.data.map(entry => entry.createdon.substring(0, 10)); // Extracting only date part
+        const uniqueDates = Array.from(new Set(dates)); // Getting unique dates
+        setUniqueDates(uniqueDates);
+        setData(response.data.filter(entry => entry.der_id === derId));
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+  }, [derId]);
+
+  useEffect(() => {
+    if (chartRef.current && data.length > 0) {
       const chartInstance = echarts.init(chartRef.current);
+
+      const filteredData = selectedDate ? data.filter(entry => entry.createdon.startsWith(selectedDate)) : data;
 
       const option = {
         title: {
-          text: ' Daily Distribution of Electricity',
-          subtext: 'Fake Data',
+          text: 'Daily Distribution of Electricity',
+          subtext: 'DER Live Data',
         },
         tooltip: {
           trigger: 'axis',
@@ -28,33 +66,12 @@ const DailyEnergyUsage = () => {
         xAxis: {
           type: 'category',
           boundaryGap: false,
-          data: [
-            '00:00',
-            '01:15',
-            '02:30',
-            '03:45',
-            '05:00',
-            '06:15',
-            '07:30',
-            '08:45',
-            '10:00',
-            '11:15',
-            '12:30',
-            '13:45',
-            '15:00',
-            '16:15',
-            '17:30',
-            '18:45',
-            '20:00',
-            '21:15',
-            '22:30',
-            '23:45',
-          ],
+          data: filteredData.map(entry => entry.createdon),
         },
         yAxis: {
           type: 'value',
           axisLabel: {
-            formatter: '{value} W',
+            formatter: '{value} V',
           },
           axisPointer: {
             snap: true,
@@ -64,79 +81,52 @@ const DailyEnergyUsage = () => {
           show: false,
           dimension: 0,
           pieces: [
-            {
-              lte: 6,
-              color: 'green',
-            },
-            {
-              gt: 6,
-              lte: 8,
-              color: 'red',
-            },
-            {
-              gt: 8,
-              lte: 14,
-              color: 'green',
-            },
-            {
-              gt: 14,
-              lte: 17,
-              color: 'red',
-            },
-            {
-              gt: 17,
-              color: 'green',
-            },
+            { lte: 6, color: 'green' },
+            { gt: 6, lte: 8, color: 'red' },
+            { gt: 8, lte: 14, color: 'green' },
+            { gt: 14, lte: 17, color: 'red' },
+            { gt: 17, color: 'green' },
           ],
         },
         series: [
           {
-            name: 'Electricity',
+            name: 'Voltage',
             type: 'line',
             smooth: true,
-            data: Array.from({length: 19}, () => Math.floor(Math.random() * 1000)),
-            markArea: {
-              itemStyle: {
-                color: 'rgba(255, 173, 177, 0.4)',
-              },
-              data: [
-                [
-                  {
-                    name: 'Morning Peak',
-                    xAxis: '07:30',
-                  },
-                  {
-                    xAxis: '10:00',
-                  },
-                ],
-                [
-                  {
-                    name: 'Evening Peak',
-                    xAxis: '17:30',
-                  },
-                  {
-                    xAxis: '21:15',
-                  },
-                ],
-              ],
-            },
+            data: filteredData.map(entry => entry.der_voltage),
           },
         ],
       };
 
       chartInstance.setOption(option);
+
+      // Dispose the chart instance on component unmount
+      return () => {
+        chartInstance.dispose();
+      };
     }
-  }, []);
+  }, [data, selectedDate]);
+
+  const handleDateSelect = (date: string) => {
+    setSelectedDate(date);
+  };
 
   return (
-<div
-      ref={chartRef}
-      style={{
-        width: '100%', // Adjusted width to be 100% of the parent container
-        height: '400px',
-      }}
-    />
+    <div>
+      <div>
+        <select value={selectedDate || ''} onChange={(e) => handleDateSelect(e.target.value)}>
+          <option value="">Select Date</option>
+          {uniqueDates.map((date, index) => (
+            <option key={index} value={date}>{date}</option>
+          ))}
+        </select>
+      </div>
+      <div
+        ref={chartRef}
+        style={{ width: '100%', height: '400px' }}
+      />
+    </div>
   );
 };
 
-export default DailyEnergyUsage;
+export default DailyEnergyUsageChart;

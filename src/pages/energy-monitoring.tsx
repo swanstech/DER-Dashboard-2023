@@ -19,7 +19,7 @@ export default function EnergyMonitor() {
           <Tabs.Tab value="yearly" icon={<IconCalendar size="0.8rem" />}>Yearly</Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="daily" pt="xs">
-          <DailyEnergyUsage/>
+          {/* <DailyEnergyUsage/> */}
         </Tabs.Panel>
   
         <Tabs.Panel value="weekly" pt="xs">
