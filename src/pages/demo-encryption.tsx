@@ -1,3 +1,6 @@
+// This page is responsible for encryption and decryption functionality 
+// This is written by Sakshi 
+
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { initKeycloak } from '../../keycloak-config';
@@ -27,6 +30,7 @@ export default function DemoEncryption() {
   };
 
   useEffect(() => {
+
     document.addEventListener("mousemove", updateUserActivityTimestamp);
     document.addEventListener("keydown", updateUserActivityTimestamp);
 

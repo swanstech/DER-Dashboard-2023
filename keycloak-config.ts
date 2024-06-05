@@ -1,3 +1,6 @@
+//This piece of code connects with the keycloak and makes sure the authentication is done properly (redirection to keycloak login page if session is not active)
+//This is written and modified by Sakshi 
+
 import Keycloak, { KeycloakProfile } from 'keycloak-js';
 
 export const initKeycloak = () => {
@@ -7,13 +10,11 @@ export const initKeycloak = () => {
   }
 
   const keycloakConfig = {
-    url: 'http://localhost:8080', // Keycloak server URL without trailing slash
+    url: 'https://3.104.109.16:8443/auth', // Keycloak server URL without trailing slash
     realm: 'swanstech', // Replace with your realm
     clientId: 'frontend-client',
    
   };
-
- 
 
   return new Keycloak(keycloakConfig);
 };

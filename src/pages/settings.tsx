@@ -1,3 +1,6 @@
+// This page is responsible for the Settings page 
+// This is written by Sakshi 
+
 import React, { useEffect, useState } from 'react';
 import { BatteryAutomotive, ChartCandle, Activity } from 'tabler-icons-react';
 import VoltageInformation from 'n/components/VoltageDataComponents/VoltageInfoComponent';
@@ -29,24 +32,6 @@ export default function Settings() {
 
     document.addEventListener("mousemove", updateUserActivityTimestamp);
     document.addEventListener("keydown", updateUserActivityTimestamp);
-    // const refreshToken = async (keycloak: Keycloak.KeycloakInstance) => {
-    //   try {
-    //     const isSessionActive = !keycloak.isTokenExpired(5); // Check if the session is active for the next 5 seconds
-
-    //     if (isSessionActive) {
-    //       await keycloak.updateToken(5); // 5 seconds before the token expires
-    //       const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-    //       setUserRoles(roles);
-
-    //       // You can update user profile or take other actions if needed
-
-    //       console.log('Token refreshed successfully.');
-    //     }
-    //   } catch (error) {
-    //     console.error('Error refreshing token:', error);
-    //     // Handle the error appropriately, e.g., redirect to login
-    //   }
-    // };
     const initializeKeycloak = async () => {
       try {
         // Initialize Keycloak

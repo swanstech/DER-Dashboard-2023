@@ -1,4 +1,7 @@
 // pages/api/settings.js
+
+// This page is responsible for bringing scopes and permissions for the settings page for the user role
+// This is written by Sakshi 
 import axios from 'axios';
 import fs from 'fs';
 const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'));
@@ -30,28 +33,6 @@ export default async function handler(req, res) {
     }
     const accessToken = authorizationHeader.split(' ')[1];
     const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'));
-
-    // const response = await axios.post(
-    //   `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/protocol/openid-connect/token`,
-    //   `grant_type=password&client_id=${keycloakConfig.resource}&client_secret=${keycloakConfig.credentials.secret}&username=${username}&password=${password}`,
-    //   {
-    //     headers: {
-    //       'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //   }
-    // );
-
-    //ßconst accessToken = response.data.access_token;
-    // Make a GET request to the resource_set endpoint
-    //const resourceSet = await getResourceSet(accessToken);
-
-    // Log resource set for debugging
-    //console.log('Resource Set:', resourceSet);
-
-    // Check if the resourceSet is not null and has at least one element
-    // if (Array.isArray(resourceSet) && resourceSet.length > 0) {
-    //   // Extract the first value from the resourceSet as the id
-    //   const id = resourceSet[0];
      
       const id = "res:settings";
       const umaTicketResponse = await axios.post(

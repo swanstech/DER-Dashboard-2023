@@ -1,3 +1,6 @@
+// This page is responsible for showing the data in the HOME page
+// Some parts are modified by Sakshi such as adding Google Map API and making pie chart dynamic
+
 import React, { useEffect, useState } from 'react';
 import { Tabs } from '@mantine/core';
 import { Activity, CloudStorm, Map2 } from 'tabler-icons-react';
@@ -41,6 +44,8 @@ const Home: React.FC = () => {
   const updateUserActivityTimestamp = () => {
     lastUserActivityTimestamp = Date.now();
   };
+
+  // Added by Sakshi
 
   useEffect(() => {
 
@@ -116,6 +121,7 @@ const Home: React.FC = () => {
     initializeKeycloak();
   }, []);
  
+  // Modified by Sakshi 
   if (!isAuth) {
     return (
       <><div className="page-layout">

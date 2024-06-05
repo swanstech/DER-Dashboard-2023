@@ -1,3 +1,6 @@
+// This page is responsible for bringing the device Info from the Postgres database
+// This is written by Sakshi 
+
 import { NextApiRequest, NextApiResponse } from 'next';
 import axios from 'axios';
 

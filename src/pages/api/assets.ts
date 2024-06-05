@@ -1,4 +1,6 @@
 // pages/api/settings.js
+// This page is responsible for bringing the scopes and permissions based on the the user for the settings page
+// This is written by Sakshi 
 import axios from 'axios';
 import fs from 'fs';
 const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'));

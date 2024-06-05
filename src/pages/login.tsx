@@ -1,4 +1,5 @@
-
+// This page is responsible for redirected to the keycloak login page
+// This is written by Sakshi 
 import React, { useEffect, useState } from 'react';
 import { Container, Title, Text, Paper, Tabs } from '@mantine/core';
 import UserMenu from '../components/UserMenu';

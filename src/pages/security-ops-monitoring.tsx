@@ -1,3 +1,6 @@
+// This page is responsible for sec ops page
+// This is written by Sakshi 
+
 import React, { useEffect, useState } from 'react';
 import { BatteryAutomotive, ChartCandle, FileAnalytics } from 'tabler-icons-react';
 import InverterCommandCenter from '../components/CommandCenterComponents/CommandCenter';
