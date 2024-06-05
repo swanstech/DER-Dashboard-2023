@@ -1,3 +1,6 @@
+// This page is responsible for running the python script responsible for encryption 
+// This is written by Sakshi 
+
 import { exec } from 'child_process';
 import { NextApiRequest, NextApiResponse } from 'next';
 import path from 'path';
