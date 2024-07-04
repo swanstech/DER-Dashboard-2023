@@ -51,7 +51,7 @@ const handleRowClick = (derId: string) => {
 
 const handleVulnerabilityScanClick = (derId: string) => {
   router.push({
-    pathname: '/penetration-testing',
+    pathname: '/vulnerability-scan',
     query: { derId: derId },
   });
 };

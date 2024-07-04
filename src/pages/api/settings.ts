@@ -6,24 +6,6 @@ import axios from 'axios';
 import fs from 'fs';
 const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'));
 
-// Function to introspect the token using Keycloak Introspection endpoint
-async function getResourceSet(accessToken) {
-    try {
-      const response = await axios.get(
-        `${keycloakConfig['auth-server-url']}/realms/${keycloakConfig.realm}/authz/protection/resource_set?uri=/settings`,
-        {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        }
-      );
-  
-      return response.data;
-    } catch (error) {
-      console.error('Error during resource set request:', error.message);
-      throw error;
-    }
-  }
 
 export default async function handler(req, res) {
   try {
@@ -32,6 +14,7 @@ export default async function handler(req, res) {
       return res.status(401).json({ error: 'Unauthorized' });
     }
     const accessToken = authorizationHeader.split(' ')[1];
+    console.log(accessToken);
     const keycloakConfig = JSON.parse(fs.readFileSync('keycloak-config.json', 'utf8'));
      
       const id = "res:settings";
