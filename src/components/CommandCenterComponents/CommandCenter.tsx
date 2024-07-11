@@ -21,7 +21,7 @@ export default function InverterCommandCenter({scopesArray}) {
   const [maxDischargeRate, setMaxDischargeRate] = useState([50, 100]);
   const [storageCapacity, setStorageCapacity] = useState(50);
   useEffect(() => {
-    if (scopesArray.includes('write')) {
+    if (scopesArray.includes('  ')) {
       setEditMode(true);
     }
   }, [scopesArray]);

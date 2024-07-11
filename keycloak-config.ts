@@ -10,7 +10,7 @@ export const initKeycloak = () => {
   }
 
   const keycloakConfig = {
-    url: 'https://3.104.109.16:8443/auth', // Keycloak server URL without trailing slash
+    url: 'http://localhost:8080', // Keycloak server URL without trailing slash
     realm: 'swanstech', // Replace with your realm
     clientId: 'frontend-client',
    
