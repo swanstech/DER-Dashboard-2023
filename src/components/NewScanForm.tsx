@@ -2,29 +2,37 @@ import { useState } from "react";
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const NewScanForm = ({derId}) => {
+
+const NewScanForm = ({derId, token}) => {
   const [selectedScope, setSelectedScope] = useState('');
   const [selectedReason, setSelectedReason] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [testName, setTestName] = useState('');
   const [description, setDescription] = useState('');
+  const [expectedOutcome, setExpectedOutcome] = useState('');
+  const [customerId, setCustomerId] = useState('d96e0382-8e88-4092-a4c1-0b4c179d06c2');
   const [responseMessage, setResponseMessage] = useState('');
 
+
   const handleSubmit = () => {
-    // Prepare the payload
     const payload = {
-      asset_id: derId,
-      created_date: selectedDate.toISOString().slice(0, -5), // Exclude timezone info
-      status: selectedDate > new Date() ? "Scheduled" : "Pending", // Set status based on date
+      test_id: "T_" + Date.now(),
+      customer_id: customerId,
       test_name: testName,
       description: description,
+      test_expected_outcome: expectedOutcome,
+      test_main_contact_id: "MC_10",
+      asset_id: derId,
+      status: "OPEN",
+      created_by: "joshua.hee",
     };
-  
-    // Make a POST request to the API
-    fetch("https://t3rld8ocdl.execute-api.ap-southeast-2.amazonaws.com/test/der/pentest/new-scan", {
+
+
+    fetch("https://sfvqg6lsf9.execute-api.ap-southeast-2.amazonaws.com/testing/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "Authorization": token,
       },
       body: JSON.stringify(payload),
     })
@@ -35,19 +43,20 @@ const NewScanForm = ({derId}) => {
       return response.json();
     })
     .then(data => {
-      setResponseMessage("Scan submitted successfully! Response: " + JSON.stringify(data));
-      // You may also want to reset the form fields after successful submission
+      setResponseMessage("Test request submitted successfully!");
       setTestName('');
       setDescription('');
+      setExpectedOutcome('');
       setSelectedScope('');
       setSelectedReason('');
       setSelectedDate(new Date());
     })
     .catch(error => {
-      setResponseMessage("Error submitting scan: " + error.message);
+      setResponseMessage("Error submitting request: " + error.message);
     });
   };
-  
+
+
   return (
     <>
       <style>
@@ -61,33 +70,18 @@ const NewScanForm = ({derId}) => {
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
           }
-
-          h2 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-          }
-
-          label {
-            display: block;
-            margin-bottom: 8px;
-          }
-
+          label { display: block; margin-bottom: 8px; }
           .form-row {
             display: flex;
             justify-content: space-between;
             flex-wrap: wrap;
           }
-
           .form-row > * {
             width: calc(50% - 8px);
             margin-bottom: 16px;
           }
-
-          .form-row textarea {
-            width: 100%;
-          }
-
-          button {
+          .form-row textarea { width: 100%; }
+          .submit-button {
             background-color: #007bff;
             color: #fff;
             padding: 10px;
@@ -95,6 +89,8 @@ const NewScanForm = ({derId}) => {
             border-radius: 4px;
             cursor: pointer;
           }
+          .success-message { color: green; margin-top: 10px; }
+          .error-message { color: red; margin-top: 10px; }
         `}
       </style>
       <div className="new-scan-form-container">
@@ -117,13 +113,19 @@ const NewScanForm = ({derId}) => {
             <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
           <div>
+            <label>Expected Outcome:</label>
+            <textarea value={expectedOutcome} onChange={(e) => setExpectedOutcome(e.target.value)} />
+          </div>
+          <div>
+            <label>Customer:</label>
+            <select value={customerId} onChange={(e) => setCustomerId(e.target.value)}>
+              <option value="d96e0382-8e88-4092-a4c1-0b4c179d06c2">Acme Corporation</option>
+              <option value="75a0d786-75b9-42b7-9617-d7f8f2882ec4">Globex Energy</option>
+            </select>
+          </div>
+          <div>
             <label>Test Scope:</label>
-            <select
-              id="scope"
-              name="scope"
-              value={selectedScope}
-              onChange={(e) => setSelectedScope(e.target.value)}
-            >
+            <select value={selectedScope} onChange={(e) => setSelectedScope(e.target.value)}>
               <option value="">Select Test Scope</option>
               <option value="Website penetration testing">Website penetration testing</option>
               <option value="API penetration testing">API penetration testing</option>
@@ -134,12 +136,7 @@ const NewScanForm = ({derId}) => {
           </div>
           <div>
             <label>Test Reasons:</label>
-            <select
-              id="reasons"
-              name="reasons"
-              value={selectedReason}
-              onChange={(e) => setSelectedReason(e.target.value)}
-            >
+            <select value={selectedReason} onChange={(e) => setSelectedReason(e.target.value)}>
               <option value="">Select Reason</option>
               <option value="Security Standard Compliance">Security Standard Compliance</option>
               <option value="Periodic test">Periodic test</option>
@@ -153,10 +150,13 @@ const NewScanForm = ({derId}) => {
         <button className="submit-button" onClick={handleSubmit}>
           Submit
         </button>
-        <div>{responseMessage}</div>
+        <div className={responseMessage.includes("Error") ? "error-message" : "success-message"}>
+          {responseMessage}
+        </div>
       </div>
     </>
   );
 };
+
 
 export default NewScanForm;
