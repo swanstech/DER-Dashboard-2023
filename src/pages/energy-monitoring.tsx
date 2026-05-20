@@ -1,12 +1,13 @@
 import { Tabs } from '@mantine/core';
 import { IconCalendar } from '@tabler/icons-react';
+import dynamic from 'next/dynamic';
 
-import DailyEnergyUsage from '../components/EnergyCharts/DailyEnergyUsage'
-import WeeklyEnergyUsage from '../components/EnergyCharts/WeeklyEnergyUsage';
-import MonthlyEnergyUsage from '../components/EnergyCharts/MonthlyEnergyUsage';
-import YearlyEnergyUsage from '../components/EnergyCharts/YearlyEnergyUsage';
-import VoltageReadingChart from 'n/components/EnergyCharts/VoltageReading';
-import FrequencyChart from 'n/components/EnergyCharts/FrequencyReading';
+const DailyEnergyUsage = dynamic(() => import('../components/EnergyCharts/DailyEnergyUsage'), { ssr: false });
+const WeeklyEnergyUsage = dynamic(() => import('../components/EnergyCharts/WeeklyEnergyUsage'), { ssr: false });
+const MonthlyEnergyUsage = dynamic(() => import('../components/EnergyCharts/MonthlyEnergyUsage'), { ssr: false });
+const YearlyEnergyUsage = dynamic(() => import('../components/EnergyCharts/YearlyEnergyUsage'), { ssr: false });
+const VoltageReadingChart = dynamic(() => import('n/components/EnergyCharts/VoltageReading'), { ssr: false });
+const FrequencyChart = dynamic(() => import('n/components/EnergyCharts/FrequencyReading'), { ssr: false });
 
 export async function getServerSideProps() {
   return { props: {} };
@@ -66,13 +67,13 @@ export default function EnergyMonitor() {
         .footer {
           text-align: center;
           padding: 8px;
-          background-color: #f5f5f5; /* Add a background color to the footer */
+          background-color: #f5f5f5;
          }
         .page-layout {
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          height: 100vh; /* full height of the viewport */
+          height: 100vh;
           padding: 8px;
           box-sizing: border-box;
         }
@@ -94,7 +95,7 @@ export default function EnergyMonitor() {
           margin: 8px;
           padding: 16px;
           border-radius: 8px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
           display: flex;
           flex-direction: column;
         }
@@ -107,8 +108,5 @@ export default function EnergyMonitor() {
         }
       `}</style>
     </body>
-
-
-
   );
 }
