@@ -12,6 +12,10 @@ import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
 import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInfoTable';
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 export default function SecOpsMonitoring() {
   const router = useRouter();
   const { derId } = router.query;

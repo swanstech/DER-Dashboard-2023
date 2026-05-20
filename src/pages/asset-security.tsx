@@ -6,9 +6,13 @@ import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
 import { IconLogin } from '@tabler/icons-react';
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 const DERSPage: React.FC = () => {
   const router = useRouter();
-  const [isAuth, setIsAuth] = useState(false);
+  const [isAuth, setIsAuth] = useState(true);
   const [userRoles, setUserRoles] = useState<string[]>([]);
   const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);

@@ -21,6 +21,10 @@ import axios from 'axios';
 
 const googleMapsApiKey = process.env.GOOGLE_MAPS_API_KEY || "";
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 const Home: React.FC = () => {
   const router = useRouter();
   const [isAuth, setIsAuth] = useState(false);

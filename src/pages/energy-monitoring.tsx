@@ -8,6 +8,10 @@ import YearlyEnergyUsage from '../components/EnergyCharts/YearlyEnergyUsage';
 import VoltageReadingChart from 'n/components/EnergyCharts/VoltageReading';
 import FrequencyChart from 'n/components/EnergyCharts/FrequencyReading';
 
+export async function getServerSideProps() {
+  return { props: {} };
+}
+
 export default function EnergyMonitor() {
   return (
     <body>
@@ -81,7 +85,6 @@ export default function EnergyMonitor() {
         }
         .bottom {
           display: flex;
-          flex-direction: column;
           flex: 1;
           padding: 2px;
           justify-content: space-between;
