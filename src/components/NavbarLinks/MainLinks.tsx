@@ -11,7 +11,7 @@ import {
 } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import Link from "next/link";
-import { AuthContext } from '../../contexts/AuthContext'; // Adjust the path as necessary
+import { AuthContext } from '../../contexts/AuthContext';
 
 const data = [
   { icon: <HomeBolt size="1rem" />, color: "blue", label: "Home", to: "/home" },
@@ -33,6 +33,10 @@ const data = [
     label: "Energy Monitoring",
     to: "/energy-monitoring",
   },
+  { icon: <BellRinging size="1rem" />,
+    color: "red",
+    label: "Alerts",
+    to: "/der-alerts" },
   {
     icon: <Bolt size="1rem" />,
     color: "orange",
@@ -57,11 +61,11 @@ const data = [
     label: "Vulnerability Scan",
     to: "/vulnerability-scan"
   },
-  { 
-    icon: <Settings size="1rem" />, 
-    color: 'lime', 
-    label: 'Settings', 
-    to: "/settings" 
+  {
+    icon: <Settings size="1rem" />,
+    color: 'lime',
+    label: 'Settings',
+    to: "/settings"
   },
 ];
 
