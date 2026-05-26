@@ -62,9 +62,8 @@ export const KNOWN_FLEET: readonly FleetEntry[] = [
     device_type: 'inverter',
     protocol: 'Modbus FC3',
     device_host: '192.168.11.239',
-    knownIssue:
-      'Modbus TCP responds on unit_id 247, but the telemetry register map ' +
-      'is not yet known. Awaiting register survey before enabling polling.',
+    // Enabled with FoxESS H3-style register candidates. If discovery
+    // finds no plausible reads, restore the knownIssue copy here.
   },
   {
     device_id: 'wallbox-cooper-sb-01',
@@ -95,6 +94,16 @@ export const KNOWN_FLEET: readonly FleetEntry[] = [
     knownIssue:
       'Local HTTP API returns 401 Unauthorized. SolaX dataloggers need the ' +
       'inverter serial number in the request body before they reply.',
+  },
+  {
+    device_id: 'solis-wifi-dongle-01',
+    manufacturer: 'Solis',
+    device_type: 'inverter',
+    protocol: 'Modbus FC4',
+    device_host: '192.168.11.214',
+    // Speculative entry — present in the original discovery script but
+    // never probed from the lab host. Discovery layer will surface real
+    // status (offline if unreachable, online if it responds).
   },
 ];
 
