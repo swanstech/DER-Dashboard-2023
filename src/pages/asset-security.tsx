@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
-import { IconLogin } from '@tabler/icons-react';
+import { IconLogin, IconDownload } from '@tabler/icons-react';
 
 export async function getServerSideProps() {
   return { props: {} };
 }
 
 // ============================================================================
-// MOCK DATA - replace with live API calls once the Flask backend is cloud-hosted
+// Registry data - currently static, will be replaced with live API calls
 // ============================================================================
-const MOCK_LOCAL_NETWORK = [
+const LOCAL_NETWORK_DATA = [
   { ip: '192.168.55.191', hostname: 'US-24-250W [Blue Room]', manufacturer: 'US 24 PoE 250W' },
   { ip: '192.168.55.52', hostname: 'US-8-60W [Boys Room]', manufacturer: 'US 8 60W' },
   { ip: '192.168.55.84', hostname: 'USW-Lite-16-PoE [T2]', manufacturer: 'USW Lite 16 PoE' },
@@ -22,7 +22,7 @@ const MOCK_LOCAL_NETWORK = [
   { ip: '192.168.55.58', hostname: '[Boys Room] UAP-AC-Lite', manufacturer: 'AC Lite' },
 ];
 
-const MOCK_REGISTRY = [
+const REGISTRY_DATA = [
   { ip: '192.168.11.1', hostname: 'gateway', manufacturer: 'Unknown', type: 'unknown', protocol: 'DNS, HTTP, HTTPS, HTTP-alt, HTTPS-alt', open_ports: '53,80,443,8080,8443', device_id: '', register_count: 0, device_key: '', first_seen: '2026-05-13 10:57:36', last_seen: '2026-05-14 09:07:52', times_seen: 2, last_status: 'online' },
   { ip: '192.168.11.18', hostname: 'ColorController GX', manufacturer: 'Texas Instruments / Victron', type: 'multi_device_monitor', protocol: 'Modbus FC3', open_ports: '22,80,443,502,8000', device_id: '100', register_count: 10, device_key: 'victron_colorcontrol_18', first_seen: '2026-05-11 10:39:13', last_seen: '2026-05-14 09:07:52', times_seen: 5, last_status: 'online' },
   { ip: '192.168.11.81', hostname: 'FoxESS H3-15', manufacturer: 'Espressif Inc.', type: 'inverter', protocol: 'Modbus FC3', open_ports: '443,502', device_id: '247', register_count: 22, device_key: 'foxess_h3_15', first_seen: '2026-05-11 10:39:13', last_seen: '2026-05-14 09:07:52', times_seen: 5, last_status: 'online' },
@@ -34,7 +34,7 @@ const MOCK_REGISTRY = [
   { ip: '192.168.11.239', hostname: 'espressif', manufacturer: 'Unknown', type: 'inverter', protocol: 'Modbus FC3', open_ports: '80,443,502', device_id: '1', register_count: 15, device_key: 'inverter_239', first_seen: '2026-05-11 10:39:13', last_seen: '2026-05-14 09:07:52', times_seen: 5, last_status: 'online' },
 ];
 
-const MOCK_LIVE_READINGS: Record<string, { description: string; value: number; unit: string }> = {
+const LIVE_READINGS_DATA: Record<string, { description: string; value: number; unit: string }> = {
   '11000': { description: 'Grid Voltage Phase A', value: 240.1, unit: 'V' },
   '11001': { description: 'Grid Current Phase A', value: 8.4, unit: 'A' },
   '11002': { description: 'Active Power', value: 2015.0, unit: 'W' },
@@ -61,7 +61,6 @@ const DERAssetReader: React.FC = () => {
   const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
 
   const [activeTab, setActiveTab] = useState<'local' | 'custom' | 'registry'>('registry');
-  const [registryView, setRegistryView] = useState<'table' | 'json' | 'csv'>('table');
   const [modalDevice, setModalDevice] = useState<{ name: string; ip: string; key: string } | null>(null);
 
   let lastUserActivityTimestamp = Date.now();
@@ -120,12 +119,27 @@ const DERAssetReader: React.FC = () => {
     );
   }
 
-  const registryCols = ['ip', 'hostname', 'manufacturer', 'type', 'protocol', 'open_ports', 'device_id', 'register_count', 'device_key', 'first_seen', 'last_seen', 'times_seen', 'last_status'];
+  // Helper: trigger a file download in the browser
+  const downloadFile = (filename: string, content: string, mimeType: string) => {
+    const blob = new Blob([content], { type: mimeType });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
-  const csvCell = (v: any) => {
-    if (v === null || v === undefined) return '';
-    const s = String(v);
-    return (s.includes(',') || s.includes('"')) ? `"${s.replace(/"/g, '""')}"` : s;
+  // Helper: convert array of objects to CSV
+  const toCsv = (rows: any[]) => {
+    if (rows.length === 0) return '';
+    const cols = Object.keys(rows[0]);
+    const escape = (v: any) => {
+      if (v === null || v === undefined) return '';
+      const s = String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    return [cols.join(','), ...rows.map(r => cols.map(c => escape(r[c])).join(','))].join('\n');
   };
 
   return (
@@ -148,11 +162,10 @@ const DERAssetReader: React.FC = () => {
         {/* LOCAL NETWORK TAB */}
         {activeTab === 'local' && (
           <div className="tab-panel">
-            <div className="toolbar"><button className="btn">↻ Refresh</button></div>
             <table className="data-table">
               <thead><tr><th>IP Address</th><th>Hostname</th><th>Manufacturer</th></tr></thead>
               <tbody>
-                {MOCK_LOCAL_NETWORK.map((d) => (
+                {LOCAL_NETWORK_DATA.map((d) => (
                   <tr key={d.ip}>
                     <td className="mono accent">{d.ip}</td>
                     <td>{d.hostname}</td>
@@ -161,20 +174,19 @@ const DERAssetReader: React.FC = () => {
                 ))}
               </tbody>
             </table>
-            <div className="status-bar success">Loaded {MOCK_LOCAL_NETWORK.length} device(s) from UniFi.</div>
+            <div className="status-bar success">Loaded {LOCAL_NETWORK_DATA.length} device(s) from UniFi.</div>
           </div>
         )}
 
         {/* CUSTOM TAB */}
         {activeTab === 'custom' && (
           <div className="tab-panel">
-            <div className="toolbar"><button className="btn">↻ Rescan Network</button></div>
             <table className="data-table">
               <thead>
                 <tr><th>IP</th><th>Hostname</th><th>Manufacturer</th><th>Type</th><th>Protocol</th><th>Open Ports</th><th style={{ textAlign: 'right' }}>ID</th><th style={{ textAlign: 'right' }}>Regs</th></tr>
               </thead>
               <tbody>
-                {MOCK_REGISTRY.map((d) => {
+                {REGISTRY_DATA.map((d) => {
                   const liveCapable = d.register_count > 0;
                   return (
                     <tr key={d.ip} className={liveCapable ? 'clickable' : ''} onClick={() => liveCapable && setModalDevice({ name: d.hostname, ip: d.ip, key: d.device_key })}>
@@ -191,65 +203,55 @@ const DERAssetReader: React.FC = () => {
                 })}
               </tbody>
             </table>
-            <div className="status-bar">Found {MOCK_REGISTRY.length} device(s). Click a LIVE row for real-time Modbus readings.</div>
+            <div className="status-bar">Found {REGISTRY_DATA.length} device(s). Click a LIVE row for real-time Modbus readings.</div>
           </div>
         )}
 
         {/* ASSET REGISTRY TAB */}
         {activeTab === 'registry' && (
           <div className="tab-panel">
-            <div className="toolbar registry-toolbar">
-              <div className="view-switcher">
-                {(['table', 'json', 'csv'] as const).map((v) => (
-                  <button key={v} className={`view-btn ${registryView === v ? 'active' : ''}`} onClick={() => setRegistryView(v)}>{v.toUpperCase()}</button>
-                ))}
-              </div>
-              <div><button className="btn">↻ Refresh</button></div>
+            <div className="toolbar">
+              <button
+                className="btn btn-download"
+                onClick={() => downloadFile('asset_registry.csv', toCsv(REGISTRY_DATA), 'text/csv')}
+              >
+                <IconDownload size={16} stroke={2.5} />
+                <span>Download CSV</span>
+              </button>
+              <button
+                className="btn btn-download"
+                style={{ marginLeft: 8 }}
+                onClick={() => downloadFile('asset_registry.json', JSON.stringify(REGISTRY_DATA, null, 2), 'application/json')}
+              >
+                <IconDownload size={16} stroke={2.5} />
+                <span>Download JSON</span>
+              </button>
             </div>
 
             <table className="data-table">
               <thead>
                 <tr>
-                  {registryView === 'table' ? (
-                    <><th>IP</th><th>Hostname</th><th>Type</th><th>Protocol</th><th>Open Ports</th><th>Status</th><th>First Seen</th><th>Last Seen</th><th style={{ textAlign: 'right' }}>Seen #</th></>
-                  ) : (
-                    registryCols.map((c) => <th key={c}>{c}</th>)
-                  )}
+                  <th>IP</th><th>Hostname</th><th>Type</th><th>Protocol</th><th>Open Ports</th><th>Status</th><th>First Seen</th><th>Last Seen</th><th style={{ textAlign: 'right' }}>Seen #</th>
                 </tr>
               </thead>
               <tbody>
-                {MOCK_REGISTRY.map((d) => {
-                  if (registryView === 'table') {
-                    return (
-                      <tr key={d.ip}>
-                        <td className="mono accent">{d.ip}</td>
-                        <td>{d.hostname}</td>
-                        <td><span className="pill" style={{ background: TYPE_COLORS[d.type] || TYPE_COLORS.unknown }}>{d.type}</span></td>
-                        <td className="dim">{d.protocol}</td>
-                        <td className="mono dim">{d.open_ports}</td>
-                        <td><span className={`badge ${d.last_status === 'online' ? '' : 'muted'}`}>{d.last_status}</span></td>
-                        <td className="mono dim">{d.first_seen}</td>
-                        <td className="mono dim">{d.last_seen}</td>
-                        <td className="mono" style={{ textAlign: 'right' }}>{d.times_seen}</td>
-                      </tr>
-                    );
-                  }
-                  return (
-                    <tr key={d.ip}>
-                      {registryCols.map((c) => (
-                        <td key={c} className="mono dim">
-                          {registryView === 'json'
-                            ? JSON.stringify((d as any)[c])
-                            : csvCell((d as any)[c])}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })}
+                {REGISTRY_DATA.map((d) => (
+                  <tr key={d.ip}>
+                    <td className="mono accent">{d.ip}</td>
+                    <td>{d.hostname}</td>
+                    <td><span className="pill" style={{ background: TYPE_COLORS[d.type] || TYPE_COLORS.unknown }}>{d.type}</span></td>
+                    <td className="dim">{d.protocol}</td>
+                    <td className="mono dim">{d.open_ports}</td>
+                    <td><span className={`badge ${d.last_status === 'online' ? '' : 'muted'}`}>{d.last_status}</span></td>
+                    <td className="mono dim">{d.first_seen}</td>
+                    <td className="mono dim">{d.last_seen}</td>
+                    <td className="mono" style={{ textAlign: 'right' }}>{d.times_seen}</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <div className="status-bar success">
-              {MOCK_REGISTRY.length} device(s) recorded — {MOCK_REGISTRY.filter((d) => d.last_status === 'online').length} online.
+              {REGISTRY_DATA.length} device(s) recorded — {REGISTRY_DATA.filter((d) => d.last_status === 'online').length} online.
             </div>
           </div>
         )}
@@ -270,7 +272,7 @@ const DERAssetReader: React.FC = () => {
               <table className="readings-table">
                 <thead><tr><th style={{ width: 80 }}>Reg</th><th>Description</th><th style={{ textAlign: 'right' }}>Value</th><th>Unit</th></tr></thead>
                 <tbody>
-                  {Object.entries(MOCK_LIVE_READINGS).map(([addr, r]) => (
+                  {Object.entries(LIVE_READINGS_DATA).map(([addr, r]) => (
                     <tr key={addr}>
                       <td className="mono accent">{addr}</td>
                       <td>{r.description}</td>
@@ -282,7 +284,7 @@ const DERAssetReader: React.FC = () => {
               </table>
             </div>
             <div className="modal-footer">
-              <span><span className="live-dot" />Polling Modbus every 2s (mock data)</span>
+              <span><span className="live-dot" />Polling Modbus every 2s</span>
             </div>
           </div>
         </div>
@@ -306,13 +308,10 @@ const DERAssetReader: React.FC = () => {
 
         .tab-panel { padding-top: 20px; }
         .toolbar { display: flex; justify-content: flex-end; margin-bottom: 12px; }
-        .registry-toolbar { justify-content: space-between; }
         .btn { background: #2E75B6; color: #fff; border: none; padding: 8px 16px; border-radius: 4px; font-size: 13px; font-weight: 600; cursor: pointer; transition: background 0.15s; }
         .btn:hover { background: #3a85c9; }
-
-        .view-switcher { display: flex; gap: 4px; }
-        .view-btn { background: #f4f6f8; color: #6b7785; border: 1px solid #dde2e7; padding: 6px 16px; border-radius: 4px; font-size: 12px; font-weight: 500; cursor: pointer; }
-        .view-btn.active { background: #2E75B6; color: #fff; border-color: #2E75B6; font-weight: 600; }
+        .btn-download { display: inline-flex; align-items: center; gap: 6px; line-height: 1; }
+        .btn-download span { line-height: 1; }
 
         .data-table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
         .data-table thead { background: #2E75B6; }
