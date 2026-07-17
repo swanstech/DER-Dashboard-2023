@@ -2,6 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const LAMBDA_URL = process.env.LAMBDA_URL || '';
+const LAMBDA_API_KEY = process.env.LAMBDA_API_KEY || '';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (!LAMBDA_URL) {
@@ -11,7 +12,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const response = await fetch(LAMBDA_URL, {
       method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+        ...(LAMBDA_API_KEY ? { 'x-api-key': LAMBDA_API_KEY } : {}),
+      },
       signal: AbortSignal.timeout(10000),
     });
 
