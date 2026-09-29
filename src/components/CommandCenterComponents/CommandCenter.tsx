@@ -1,14 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { RangeSlider, Slider, Button, Alert } from '@mantine/core';
 import {Bolt, FilePower, ChargingPile, CloudStorm, Battery, CircleHalf, BatteryCharging, AlertCircle} from 'tabler-icons-react';
-import { AuthContext } from 'n/contexts/AuthContext';
 
 export default function InverterCommandCenter({scopesArray}) {
 
- // const { userRoles } = useContext(AuthContext);
- 
-
- 
   const [editMode, setEditMode] = useState(false);
   
   //const [alertVisible, setAlertVisible] = useState(false);

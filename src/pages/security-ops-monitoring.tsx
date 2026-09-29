@@ -7,9 +7,7 @@ import InverterCommandCenter from '../components/CommandCenterComponents/Command
 import TechnicalSpecifications from '../components/SetupComponents/TechnicalSpecifications';
 import NetworkMonitoringLogs from 'n/components/SetupComponents/NetworkMonitoringLogs';
 import { useRouter } from 'next/router';
-import { initKeycloak } from '../../keycloak-config';
 import HeaderComponent from 'n/components/Header';
-import { IconLogin } from '@tabler/icons-react';
 import ComplianceInfoTable from 'n/components/SetupComponents/ComplianceInfoTable';
 
 export async function getServerSideProps() {
@@ -19,86 +17,13 @@ export async function getServerSideProps() {
 export default function SecOpsMonitoring() {
   const router = useRouter();
   const { derId } = router.query;
-  const [isAuth, setIsAuth] = useState(false);
-  const [userRoles, setUserRoles] = useState<string[]>([]);
-  const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
-  const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
   const [derLiveData, setDerLiveData] = useState<any[]>([]); // State to hold DER live data records
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage] = useState(6); // Number of records per page
 
-  let lastUserActivityTimestamp = Date.now();
-
-  // Update the user activity timestamp whenever there is user interaction
-  const updateUserActivityTimestamp = () => {
-    lastUserActivityTimestamp = Date.now();
-  };
-
   useEffect(() => {
-    document.addEventListener("mousemove", updateUserActivityTimestamp);
-    document.addEventListener("keydown", updateUserActivityTimestamp);
-
-    const initializeKeycloak = async () => {
-      try {
-        // Initialize Keycloak
-        const keycloak = initKeycloak();
-
-        if (!keycloak) {
-          console.error('Keycloak object is null');
-          return;
-        }
-
-        await keycloak.init({ onLoad: 'check-sso' });
-
-        if (!keycloak.authenticated) {
-          // If not authenticated, redirect to Keycloak login
-          keycloak.login({ redirectUri: window.location.origin + router.pathname });
-        } else {
-          const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-          setUserRoles(roles);
-          setKeycloak(keycloak);
-          const fullName = keycloak.tokenParsed?.name || "";
-          const email = keycloak.tokenParsed?.email || "";
-          setUserProfile({ fullName, email });
-          if (roles.includes('General Manager') || roles.includes('Security Admin')) {
-            // User is authenticated
-            setIsAuth(true);
-            fetchDerLiveData();
-
-            // Redirect to Keycloak login every 10 minutes
-            const inactivityCheckInterval = setInterval(() => {
-              const currentTime = Date.now();
-              const inactiveDuration = currentTime - lastUserActivityTimestamp;
-
-              // Set the inactivity timeout to 10 minutes (10 * 60 * 1000 milliseconds)
-              const inactivityTimeout = 10 * 60 * 1000;
-
-              if (inactiveDuration >= inactivityTimeout) {
-                // If the user has been inactive for more than 10 minutes, log them out
-                keycloak.logout();
-                clearInterval(inactivityCheckInterval); // Stop checking for inactivity
-              }
-            }, 60 * 1000);
-
-            // Cleanup function to clear the interval when the component is unmounted
-            return () => {
-              document.removeEventListener("mousemove", updateUserActivityTimestamp);
-              document.removeEventListener("keydown", updateUserActivityTimestamp);
-              clearInterval(inactivityCheckInterval);
-            };
-          }
-        }
-
-      }
-      catch (error) {
-        console.error('Keycloak initialization error:', error);
-        // Handle the error appropriately 
-      }
-
-    }
-
     const fetchDerLiveData = async () => {
       try {
         const response = await fetch('https://a71kn6une4.execute-api.ap-southeast-2.amazonaws.com/dev/device/liveData');
@@ -114,46 +39,8 @@ export default function SecOpsMonitoring() {
         setLoading(false);
       }
     };
-    initializeKeycloak();
+    fetchDerLiveData();
   }, []);
-
-  if (!isAuth) {
-    return (
-      <>
-        <div className="page-layout">
-          <HeaderComponent
-            userRoles={userRoles}
-            userProfile={userProfile}
-            keycloakInstance={keycloakInstance} />
-          <div className="auth-error-message">
-            <p>You are not authenticated.</p>
-            <p>You do not have the required role to access this page.</p>
-            <p>Pls Login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
-          </div>
-        </div>
-        <style jsx>{`
-          .page-layout {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 50vh; /* full height of the viewport */
-            padding: 8px;
-            box-sizing: border-box;
-          }
-          .auth-error-message {
-            text-align: center;
-            margin: auto;
-            max-width: 400px;
-            padding: 30px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background-color: #f8d7da;
-            color: #721c24;
-          }
-        `}</style>
-      </>
-    );
-  }
 
   // Logic for pagination
   const indexOfLastRecord = currentPage * recordsPerPage;
@@ -168,7 +55,7 @@ export default function SecOpsMonitoring() {
 
   return (
     <div className="page-layout">
-      <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
+      <HeaderComponent />
       <div className="top">
         <div className="left">
           <div className="left-heading">

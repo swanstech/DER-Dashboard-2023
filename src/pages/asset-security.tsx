@@ -1,8 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { initKeycloak } from '../../keycloak-config';
+import React, { useState } from 'react';
 import HeaderComponent from 'n/components/Header';
-import { IconLogin, IconDownload } from '@tabler/icons-react';
+import { IconDownload } from '@tabler/icons-react';
 
 export async function getServerSideProps() {
   return { props: {} };
@@ -54,70 +52,8 @@ const TYPE_COLORS: Record<string, string> = {
 };
 
 const DERAssetReader: React.FC = () => {
-  const router = useRouter();
-  const [isAuth, setIsAuth] = useState(true);
-  const [userRoles, setUserRoles] = useState<string[]>([]);
-  const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
-  const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
-
   const [activeTab, setActiveTab] = useState<'local' | 'custom' | 'registry'>('registry');
   const [modalDevice, setModalDevice] = useState<{ name: string; ip: string; key: string } | null>(null);
-
-  let lastUserActivityTimestamp = Date.now();
-  const updateUserActivityTimestamp = () => { lastUserActivityTimestamp = Date.now(); };
-
-  useEffect(() => {
-    document.addEventListener('mousemove', updateUserActivityTimestamp);
-    document.addEventListener('keydown', updateUserActivityTimestamp);
-
-    const initializeKeycloak = async () => {
-      try {
-        const keycloak = initKeycloak();
-        if (!keycloak) { console.error('Keycloak object is null'); return; }
-        await keycloak.init({ onLoad: 'check-sso' });
-        if (!keycloak.authenticated) {
-          keycloak.login({ redirectUri: window.location.origin + router.pathname });
-        } else {
-          const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-          setUserRoles(roles);
-          setKeycloak(keycloak);
-          const fullName = keycloak.tokenParsed?.name || '';
-          const email = keycloak.tokenParsed?.email || '';
-          setUserProfile({ fullName, email });
-          if (roles.includes('Engineer') || roles.includes('General Manager') || roles.includes('Auditor') || roles.includes('Security Admin')) {
-            setIsAuth(true);
-          }
-        }
-      } catch (error) {
-        console.error('Keycloak initialization error:', error);
-      }
-    };
-    initializeKeycloak();
-
-    return () => {
-      document.removeEventListener('mousemove', updateUserActivityTimestamp);
-      document.removeEventListener('keydown', updateUserActivityTimestamp);
-    };
-  }, []);
-
-  if (!isAuth) {
-    return (
-      <>
-        <div className="page-layout">
-          <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
-          <div className="auth-error-message">
-            <p>You are not authenticated.</p>
-            <p>You do not have the required role to access this page.</p>
-            <p>Pls Login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
-          </div>
-        </div>
-        <style jsx>{`
-          .page-layout { display: flex; flex-direction: column; justify-content: space-between; height: 50vh; padding: 8px; box-sizing: border-box; }
-          .auth-error-message { text-align: center; margin: auto; max-width: 400px; padding: 30px; border: 1px solid #ddd; border-radius: 8px; background-color: #f8d7da; color: #721c24; }
-        `}</style>
-      </>
-    );
-  }
 
   // Helper: trigger a file download in the browser
   const downloadFile = (filename: string, content: string, mimeType: string) => {
@@ -144,7 +80,7 @@ const DERAssetReader: React.FC = () => {
 
   return (
     <div className="page-layout">
-      <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
+      <HeaderComponent />
 
       <div className="reader-container">
         <div className="reader-header">

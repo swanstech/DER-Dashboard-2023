@@ -12,16 +12,9 @@ import {
   Box,
   Flex, Image
 } from "@mantine/core";
-import UserMenu from "./UserMenu";
 import { useRouter } from "next/router";
 
-interface HeaderComponentProps {
-  userRoles: string[];
-  userProfile: { fullName: string; email: string } | null;
-  keycloakInstance: Keycloak.KeycloakInstance | null;
-}
-
-function HeaderComponent({ userRoles, userProfile , keycloakInstance}: HeaderComponentProps) {
+function HeaderComponent() {
   const router = useRouter();
   const [opened, setOpened] = useState(false);
 
@@ -81,8 +74,6 @@ function HeaderComponent({ userRoles, userProfile , keycloakInstance}: HeaderCom
             {dark ? <IconSun size="1.1rem" /> : <IconMoonStars size="1.1rem" />}
           </ActionIcon>
           
-          {/* Pass userRoles and userProfile to UserMenu */}
-          <UserMenu userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
         </Flex>
       </Flex>
 

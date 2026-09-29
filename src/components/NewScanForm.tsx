@@ -3,7 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 
-const NewScanForm = ({derId, token}) => {
+const NewScanForm = ({derId}) => {
   const [selectedScope, setSelectedScope] = useState('');
   const [selectedReason, setSelectedReason] = useState('');
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -32,7 +32,6 @@ const NewScanForm = ({derId, token}) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": token,
       },
       body: JSON.stringify(payload),
     })

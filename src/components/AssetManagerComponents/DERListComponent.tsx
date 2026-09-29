@@ -1,12 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Button, Table } from '@mantine/core';
 import Link from 'next/link';
 import router, { useRouter } from 'next/router';
-import { AuthContext } from 'n/contexts/AuthContext';
-import { isGeneratorFunction } from 'util/types';
-import AssetManagerPieChart from '../HomePageComponents/AssetManagerPieChart';
-import Home from 'n/pages/home';
 
 const API_KEY = process.env.API_KEY || "";
 
@@ -80,15 +76,9 @@ const OperationalStatusIcon: React.FC<{ status: 'up' | 'down' | 'amber', onClick
   return <span style={style} onClick={onClick}>{symbol}</span>;
 };
 
-export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
+export const DERTable: React.FC = () => {
   const router = useRouter();
   const [data, setData] = useState<DERData[]>([]);
- // const { userRoles } = useContext(AuthContext);
-  const isSecurityAuditor = userRoles.includes('Security Admin');
-  const isEngineer = userRoles.includes('Engineer');
-  const GeneralManager = userRoles.includes('General Manager');
-  const isAuditor = userRoles.includes('Auditor');
-  //console.log('userRoles:', userRoles);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -111,8 +101,6 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
   const rows = data.map((row) => (
     <tr key={row.der_id}>
        
-       {(isEngineer || GeneralManager) ? (
-       <>
        <td style={{ cursor: 'pointer' }}>
        <Link  href={`/settings?derId=${row.der_id}`}>
        {row.der_id}
@@ -122,14 +110,7 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
        <Link  href={`/settings?derId=${row.der_id}`}>
        {row.der_name}
      </Link>
-     </td></>
-    ):
-    ( <><td style={{ cursor: 'pointer' }} >
-    {row.der_id}
-  </td><td style={{ cursor: 'pointer' }} >
-      {row.der_name}
-    </td></>)}
-    
+     </td>
       <td>{row.der_type}</td>
       <td>{formatDate(row.manufacture_date)}</td>
       <td>{row.manufacturer_info}</td>
@@ -137,22 +118,13 @@ export const DERTable: React.FC<{ userRoles: string[] }> = ({ userRoles }) => {
       <td>{row.manufacturer_hw_version}</td>
       <td>{row.location}</td>
       
-      {(isSecurityAuditor || GeneralManager) ? (
       <td>
         <OperationalStatusIcon status={row.operationalStatus} onClick={() => handleStatusClick(row.der_id)} />
       </td>
-    ):
-    (<td>
-       {row.operationalStatus} 
-    </td>)}
       <td>
-      {(isAuditor || GeneralManager) ? (
         <Button onClick={() => handleVulnerabilityScanClick(row.der_id)} size="xs">
           Scan
         </Button>
-      ) : (
-        getRandomLastScanTime() // Display last scan time for non-security admins
-      )}
     </td>
     </tr>
   ));
