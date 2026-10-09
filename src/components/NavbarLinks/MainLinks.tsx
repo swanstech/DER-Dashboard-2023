@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import {
   HomeBolt,
   BoxSeam,
@@ -11,7 +11,6 @@ import {
 } from "tabler-icons-react";
 import { ThemeIcon, UnstyledButton, Group, Text } from "@mantine/core";
 import Link from "next/link";
-import { AuthContext } from '../../contexts/AuthContext';
 
 const data = [
   { icon: <HomeBolt size="1rem" />, color: "blue", label: "Home", to: "/home" },
@@ -108,15 +107,7 @@ function RenderMainLink({ icon, color, label, to }: MainLinkProps) {
 }
 
 export function MainLinks() {
-  const { userRoles } = useContext(AuthContext);
-  //console.log("user roles",userRoles);
-
-  const links = data.filter(link => {
-    // If 'roles' is not defined, show the link to everyone
-    if (!link["roles"]) return true;
-    // Otherwise, show the link only if the user has one of the required roles
-    return link["roles"].some(role => userRoles.includes(role));
-  }).map((link) => (
+  const links = data.map((link) => (
     <RenderMainLink {...link} key={link.label} />
   ));
 

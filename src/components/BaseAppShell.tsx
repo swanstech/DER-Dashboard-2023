@@ -1,17 +1,9 @@
 import { AppShell, useMantineTheme } from "@mantine/core";
 import HeaderComponent from "../components/Header";
 import NavbarComponent from "../components/Navbar";
-import Keycloak from "keycloak-js";
-import { initKeycloak } from "keycloak-config";
 
 function BaseAppShell({ children }: any) {
   const theme = useMantineTheme();
-
-  interface BaseAppProps {
-    userRoles: string[];
-    userProfile: { fullName: string; email: string } | null;
-    keycloakInstance: Keycloak.KeycloakInstance | null;
-  }
 
   return (
     <AppShell
@@ -26,10 +18,7 @@ function BaseAppShell({ children }: any) {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       navbar={<NavbarComponent />}
-      header={<HeaderComponent userRoles={[]} userProfile={{
-        fullName: "",
-        email: ""
-      }} keycloakInstance={initKeycloak()} />}
+      header={<HeaderComponent />}
     >
       {children}
     </AppShell>

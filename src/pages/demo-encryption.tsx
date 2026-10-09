@@ -1,10 +1,7 @@
 // This page is responsible for encryption and decryption functionality 
 // This is written by Sakshi 
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { initKeycloak } from '../../keycloak-config';
-import { IconLogin } from '@tabler/icons-react';
+import React, { useState } from 'react';
 import HeaderComponent from 'n/components/Header';
 import { BatteryAutomotive, ChartCandle } from 'tabler-icons-react';
 import { Title } from '@mantine/core';
@@ -12,71 +9,11 @@ import { exec } from 'child_process';
 import * as path from 'path';
 
 export default function DemoEncryption() {
-  const router = useRouter();
-  const [isAuth, setIsAuth] = useState(false);
-  const [userRoles, setUserRoles] = useState<string[]>([]);
-  const [userProfile, setUserProfile] = useState<{ fullName: string; email: string } | null>(null);
-  const [keycloakInstance, setKeycloak] = useState<Keycloak.KeycloakInstance | null>(null);
   const [encryptedText, setEncryptedText] = useState<string>('');
   const [startText, setStartText] = useState<string>('');
-  let lastUserActivityTimestamp = Date.now();
   const [saveResponse, setSaveResponse] = useState<{ success: boolean; message: string } | null>(null); // Add state for save response
   const [showPopup, setShowPopup] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // State to track loading
-
-  // Update the user activity timestamp whenever there is user interaction
-  const updateUserActivityTimestamp = () => {
-    lastUserActivityTimestamp = Date.now();
-  };
-
-  useEffect(() => {
-
-    document.addEventListener("mousemove", updateUserActivityTimestamp);
-    document.addEventListener("keydown", updateUserActivityTimestamp);
-
-    const initializeKeycloak = async () => {
-      try {
-        // Initialize Keycloak
-        const keycloak = initKeycloak();
-
-        if (!keycloak) {
-          console.error('Keycloak object is null');
-          return;
-        }
-
-        await keycloak.init({ onLoad: 'check-sso' });
-
-        if (!keycloak.authenticated) {
-          // If not authenticated, redirect to Keycloak login
-          keycloak.login({ redirectUri: window.location.origin + router.pathname });
-        } else {
-          const roles = keycloak.tokenParsed?.realm_access?.roles || [];
-          setUserRoles(roles);
-          setKeycloak(keycloak);
-          const fullName = keycloak.tokenParsed?.name || "";
-          const email = keycloak.tokenParsed?.email || "";
-          setUserProfile({ fullName, email });
-
-          if (roles.includes('General Manager') || roles.includes('Security Admin')) {
-            // User is authenticated
-            setIsAuth(true);
-          }
-        }
-
-      } catch (error) {
-        console.error('Keycloak initialization error:', error);
-        // Handle the error appropriately 
-      }
-    };
-
-    initializeKeycloak();
-
-    return () => {
-      document.removeEventListener("mousemove", updateUserActivityTimestamp);
-      document.removeEventListener("keydown", updateUserActivityTimestamp);
-    };
-
-  }, []);
 
   const handleStartEncryption = () => {
 
@@ -145,25 +82,12 @@ export default function DemoEncryption() {
     });
   };
 
-  if (!isAuth) {
-    return (
-      <div className="page-layout">
-        <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
-        <div className="auth-error-message">
-          <p>You are not authenticated.</p>
-          <p>You do not have the required role to access this page.</p>
-          <p>Please login with the correct role by clicking on the <IconLogin size={45} /> icon at the right hand side of the Header.</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <><Title order={1} align="center" mb={20}>
       <ChartCandle size="2.5rem" color='green' />Demo Encryption
     </Title>
       <div className="page-layout">
-        <HeaderComponent userRoles={userRoles} userProfile={userProfile} keycloakInstance={keycloakInstance} />
+        <HeaderComponent />
         <div className="top">
           <div className="left">
             <div className="start-reading">

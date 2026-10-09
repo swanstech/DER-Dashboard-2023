@@ -1,6 +1,5 @@
 import { Table } from '@mantine/core';
-import { AuthContext } from 'n/contexts/AuthContext';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface DeviceData {
   der_id?: string;
@@ -24,8 +23,6 @@ export default function SoftwareInfoTable({derId}) {
   const [isUpToDate, setIsUpToDate] = useState<boolean | null>(null);
   const deviceId = derId || "DER_1";
   
-  const { userRoles } = useContext(AuthContext);
-  const isSecurityAdmin = userRoles.includes('der-security-admin');
 
   useEffect(() => {
     async function fetchData() {
@@ -94,7 +91,7 @@ export default function SoftwareInfoTable({derId}) {
   }, [softwareData, deviceId]);
 
   const handleIconClick = () => {
-    if (!isSecurityAdmin || !isUpToDate) {
+    if (!isUpToDate) {
       const confirmInstall = window.confirm('Do you want to install the latest version?');
 
       if (confirmInstall) {
@@ -122,11 +119,9 @@ export default function SoftwareInfoTable({derId}) {
           isUpToDate ? (
             <span style={{ color: 'green', fontSize: '1.5em', marginLeft: '5px' }}>🟢</span>
           ) : (
-            isSecurityAdmin && (
-              <a onClick={handleIconClick}>
-                <span style={{ color: 'red', fontSize: '1.5em', marginLeft: '5px', cursor: 'pointer' }}>⚠️</span>
-              </a>
-            )
+            <a onClick={handleIconClick}>
+              <span style={{ color: 'red', fontSize: '1.5em', marginLeft: '5px', cursor: 'pointer' }}>⚠️</span>
+            </a>
           )
         ) : null}
       </td>
